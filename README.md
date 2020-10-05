@@ -1,21 +1,21 @@
 # TERM-PROJECT: KennUWare
 
-An ERP system developed in <Java 8,,,?> 
+An ERP system developed in Java 11 
 
 ##  Component TEAM:  
-team_
+Manufacturing
 
 
 ## Team
 
-- Jane Doe (role)
+- Noah Kalunowski (Dev Ops)
 
 - John Doe (role)
 
 
 ##Prerequisites
 
-<Java 8>
+<Java 11>
 
 - IntelliJ - as developer platform
 
