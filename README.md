@@ -12,6 +12,8 @@ Manufacturing
 
 - Kobe Oley (Design & Req Coordinator)
 
+- Kyle McCoy (Team Coordinator)
+
 
 ##Prerequisites
 
