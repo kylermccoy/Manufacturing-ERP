@@ -10,6 +10,8 @@ Manufacturing
 
 - Noah Kalinowski (Dev Ops)
 
+- Nicholas Pawlak (Dev Ops)
+
 - Kobe Oley (Design & Req Coordinator)
 
 - Kyle McCoy (Team Coordinator)
