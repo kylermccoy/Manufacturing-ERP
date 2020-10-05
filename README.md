@@ -14,6 +14,8 @@ Manufacturing
 
 - Kyle McCoy (Team Coordinator)
 
+- Matthew Correa (Integration-QA/Test and Compliance Coordinator)
+
 
 ##Prerequisites
 
