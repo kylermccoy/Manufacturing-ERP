@@ -10,7 +10,7 @@ Manufacturing
 
 - Noah Kalunowski (Dev Ops)
 
-- John Doe (role)
+- Kobe Oley (Design & Req Coordinator)
 
 
 ##Prerequisites
