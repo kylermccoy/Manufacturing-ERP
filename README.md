@@ -8,7 +8,7 @@ Manufacturing
 
 ## Team
 
-- Noah Kalunowski (Dev Ops)
+- Noah Kalinowski (Dev Ops)
 
 - Kobe Oley (Design & Req Coordinator)
 
