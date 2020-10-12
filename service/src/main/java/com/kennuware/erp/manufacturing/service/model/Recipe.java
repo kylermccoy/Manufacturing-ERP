@@ -1,6 +1,7 @@
 package com.kennuware.erp.manufacturing.service.model;
 
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,7 +17,9 @@ public class Recipe {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
 
-  @OneToMany
-  private List<Item> components;
+  private String name;
+
+  @OneToMany(cascade = CascadeType.ALL)
+  private List<RecipeComponent> components;
 
 }

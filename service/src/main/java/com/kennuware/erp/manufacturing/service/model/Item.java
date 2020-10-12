@@ -5,8 +5,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 @Entity
 public class Item {
 
@@ -16,6 +18,8 @@ public class Item {
 
   private String name;
 
-  private long quantity;
+  public Item(String name) {
+    this.name = name;
+  }
 
 }
