@@ -9,7 +9,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
 public class LoginController {
-    @RequestMapping(value = "/sign_in", method = RequestMethod.GET)
+    @GetMapping(path = "/sign_in")
     public String GetLogin(){
         // INSERT SIGN IN CHECKING HERE!!!
         return "process";

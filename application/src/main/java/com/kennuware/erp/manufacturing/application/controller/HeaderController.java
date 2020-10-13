@@ -9,32 +9,32 @@ import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
 public class HeaderController {
-    @RequestMapping(value = "/process", method = RequestMethod.GET)
+    @GetMapping(path = "/process")
     public String GetProcess(){
         return "process";
     }
 
-    @RequestMapping(value = "/orders", method = RequestMethod.GET)
+    @GetMapping(path = "/orders")
     public String GetOrders(){
         return "orders";
     }
 
-    @RequestMapping(value = "/recalls", method = RequestMethod.GET)
+    @GetMapping(path = "/recalls")
     public String GetRecalls(){
         return "recalls";
     }
 
-    @RequestMapping(value = "/products", method = RequestMethod.GET)
+    @GetMapping(path = "/products")
     public String GetProducts(){
         return "products";
     }
 
-    @RequestMapping(value = "/timesheet", method = RequestMethod.GET)
+    @GetMapping(path = "/timesheet")
     public String GetTimesheet(){
         return "timesheet";
     }
 
-    @RequestMapping(value = "/log", method = RequestMethod.GET)
+    @GetMapping(path = "/log")
     public String GetLog(){
         return "log";
     }
