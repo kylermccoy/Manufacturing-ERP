@@ -8,7 +8,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 
 @Controller
-public class ProcessController {
+public class HeaderController {
     @RequestMapping(value = "/process", method = RequestMethod.GET)
     public String GetProcess(){
         return "process";
