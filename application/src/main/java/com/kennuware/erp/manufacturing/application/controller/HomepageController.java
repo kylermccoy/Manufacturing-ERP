@@ -15,7 +15,7 @@ public class HomepageController {
 
     @GetMapping
     String getHome() {
-        return "process";
+        return "login";
     }
 
 
