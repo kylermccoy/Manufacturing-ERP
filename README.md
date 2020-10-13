@@ -21,16 +21,31 @@ Manufacturing
 
 ##Prerequisites
 
-<Java 11>
+- JDK 11
 
-- IntelliJ - as developer platform
+- IntelliJ - as developer platform (Ultimate preferred)
+
+- MySQL
 
 
 ##How to begin (setup instructions - must keep up to date as project grows in complexity!)
+1. Clone the project  
 
-1. 
+2. In IntelliJ, if open up the **root** of the cloned project. If the
+pom files are not imported automatically, right click each `pom.xml` file and
+add as a maven project. Ensure there are 2 modules under the root folder, 
+"application" and "service".
 
+3. Create the database used by the "service" module 
+```
+mysql> create database manufacturing; -- Creates the new database
+mysql> create user 'springuser'@'%' identified by 'ThePassword'; -- Creates the user
+mysql> grant all on manufacturing.* to 'springuser'@'%'; -- Gives all privileges to the new user on the newly created database
+```
+If necessary, change the connection url in `application.propeties`
 
+##Information
+To view generated OpenAPI 3.0 documentation, visit `localhost:8080/manufacturing/api/swagger/ui` 
 
 ##License
 MIT License
