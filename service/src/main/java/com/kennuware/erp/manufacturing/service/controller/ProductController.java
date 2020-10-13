@@ -68,4 +68,9 @@ public class ProductController {
     return response;
   }
 
+  @GetMapping(path = "/list")
+  List<Product> listEmployees() {
+    return productRepository.findAll();
+  }
+
 }
