@@ -2,8 +2,8 @@ package com.kennuware.erp.manufacturing.service.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.kennuware.erp.manufacturing.service.model.Product;
-import com.kennuware.erp.manufacturing.service.model.repository.ProductRepository;
+import com.kennuware.erp.manufacturing.service.model.Item;
+import com.kennuware.erp.manufacturing.service.model.repository.ItemRepository;
 import java.util.List;
 import javax.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -17,51 +17,51 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
-@RequestMapping(path = "/products")
-public class ProductController {
+@RequestMapping("/items")
+public class ItemController {
 
-  ProductRepository productRepository;
-  ObjectMapper mapper;
+  private final ItemRepository itemRepository;
+  private final ObjectMapper mapper;
 
-  ProductController(ProductRepository productRepository, ObjectMapper mapper) {
-    this.productRepository = productRepository;
+  ItemController(ItemRepository itemRepository, ObjectMapper mapper) {
+    this.itemRepository = itemRepository;
     this.mapper = mapper;
   }
 
   @GetMapping
-  List<Product> listProducts() {
-    return productRepository.findAll();
+  List<Item> listItems() {
+    return itemRepository.findAll();
   }
 
   @GetMapping(path = "/{id}")
-  Product getProduct(@PathVariable long id) {
-    return productRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+  Item getItem(@PathVariable long id) {
+    return itemRepository.findById(id).orElseThrow(EntityNotFoundException::new);
   }
 
   @PostMapping
-  Product addProduct(@RequestBody Product product) {
-    return productRepository.save(product);
+  Item addItem(@RequestBody Item item) {
+    return itemRepository.save(item);
   }
 
   @DeleteMapping(path = "/{id}")
-  ObjectNode deleteProduct(@PathVariable long id) {
+  ObjectNode deleteItem(@PathVariable long id) {
     final ObjectNode response = mapper.createObjectNode();
     final String message;
     final boolean success;
-    // does the product exist in the first place
-    if (productRepository.existsById(id)) {
-      productRepository.deleteById(id);
-      success = !productRepository.existsById(id);
+    // does the item exist in the first place
+    if (itemRepository.existsById(id)) {
+      itemRepository.deleteById(id);
+      success = !itemRepository.existsById(id);
       // did it actually get deleted
       if (!success) {
-        message = "Product was not deleted!";
-        log.error("Product " + id + " was not successfully deleted");
+        message = "Item was not deleted!";
+        log.error("Item " + id + " was not successfully deleted");
       } else {
-        message = "Product was successfully deleted";
+        message = "Item was successfully deleted";
       }
     } else {
       success = false;
-      message = "Product does not exist";
+      message = "Item does not exist";
     }
     response.put("success", success);
     response.put("message", message);

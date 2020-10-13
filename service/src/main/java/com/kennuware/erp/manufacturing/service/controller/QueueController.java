@@ -24,8 +24,8 @@ public class QueueController {
   //TODO: make better use of Optional.orElse
   //TODO: Create a json response object for entity not existing
 
-  final private QueueRepository queueRepository;
-  final private ObjectMapper mapper;
+  private final QueueRepository queueRepository;
+  private final ObjectMapper mapper;
 
   QueueController(QueueRepository queueRepository, ObjectMapper mapper) {
     this.queueRepository = queueRepository;
@@ -142,5 +142,7 @@ public class QueueController {
     q.setOrdersInQueue(Collections.emptyList());q.setRunning(false);
     return queueRepository.save(q);
   }
+
+  //@GetMapping("/skip")
 
 }

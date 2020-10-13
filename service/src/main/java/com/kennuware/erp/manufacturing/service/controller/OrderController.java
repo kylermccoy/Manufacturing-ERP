@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path = "/orders")
 public class OrderController {
 
-  OrderRepository orderRepository;
-  ObjectMapper mapper;
+  private final OrderRepository orderRepository;
+  private final ObjectMapper mapper;
   
   OrderController(OrderRepository orderRepository, ObjectMapper mapper) {
     this.orderRepository = orderRepository;
