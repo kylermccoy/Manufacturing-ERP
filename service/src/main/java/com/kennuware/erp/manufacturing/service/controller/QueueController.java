@@ -2,10 +2,10 @@ package com.kennuware.erp.manufacturing.service.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.kennuware.erp.manufacturing.service.model.Order;
+import com.kennuware.erp.manufacturing.service.model.Request;
 import com.kennuware.erp.manufacturing.service.model.Queue;
-import com.kennuware.erp.manufacturing.service.model.repository.OrderRepository;
 import com.kennuware.erp.manufacturing.service.model.repository.QueueRepository;
+import com.kennuware.erp.manufacturing.service.model.repository.RequestRepository;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -24,15 +24,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class QueueController {
   //TODO: probably refactor a lot of duplicate code
   //TODO: make better use of Optional.orElse
-  //TODO: Create a json response object for entity not existing
+  //TODO: Create a json error response object
 
   private final QueueRepository queueRepository;
-  private final OrderRepository orderRepository;
+  private final RequestRepository requestRepository;
   private final ObjectMapper mapper;
 
-  QueueController(QueueRepository queueRepository, OrderRepository orderRepository, ObjectMapper mapper) {
+  QueueController(QueueRepository queueRepository, RequestRepository requestRepository, ObjectMapper mapper) {
     this.queueRepository = queueRepository;
-    this.orderRepository = orderRepository;
+    this.requestRepository = requestRepository;
     this.mapper = mapper;
   }
 
@@ -41,11 +41,11 @@ public class QueueController {
     return queueRepository.findByName(queueName).orElseThrow(EntityNotFoundException::new);
   }
 
-  @GetMapping("/orders")
-  List<Order> getOrdersInQueue(@RequestParam String queueName) {
+  @GetMapping("/requests")
+  List<Request> getRequestsInQueue(@RequestParam String queueName) {
     Optional<Queue> queue = queueRepository.findByName(queueName);
     if (queue.isPresent()) {
-      return queue.get().getOrdersInQueue();
+      return queue.get().getRequestsInQueue();
     } else {
       return Collections.emptyList();
     }
@@ -99,15 +99,15 @@ public class QueueController {
     return node;
   }
 
-  @PostMapping("/orders")
-  ObjectNode addOrderToQueue(@RequestParam String queueName, @RequestBody Order order) {
+  @PostMapping("/requests")
+  ObjectNode addRequestToQueue(@RequestParam String queueName, @RequestBody Request request) {
     ObjectNode node = mapper.createObjectNode();
     boolean success = false;
     String message = "";
     Optional<Queue> queue = queueRepository.findByName(queueName);
     if (queue.isPresent()) {
       Queue q = queue.get();
-      q.getOrdersInQueue().add(order);
+      q.getRequestsInQueue().add(request);
       queueRepository.save(q);
       success = true;
     } else {
@@ -119,20 +119,20 @@ public class QueueController {
   }
 
   @DeleteMapping("/{id}")
-  ObjectNode removeOrderFromQueue(@PathVariable long id, @RequestParam String queueName) {
+  ObjectNode removeRequestFromQueue(@PathVariable long id, @RequestParam String queueName) {
     ObjectNode node = mapper.createObjectNode();
     boolean success = false;
     String message = "";
     Optional<Queue> queue = queueRepository.findByName(queueName);
     if (queue.isPresent()) {
       Queue q = queue.get();
-      List<Order> ordersInQueue = q.getOrdersInQueue();
-      // see if the order is in the queue
-      if (ordersInQueue.stream().anyMatch(o -> o.getId() == id)) {
-        ordersInQueue.removeIf(o -> o.getId() == id);
+      List<Request> requestsInQueue = q.getRequestsInQueue();
+      // see if the request is in the queue
+      if (requestsInQueue.stream().anyMatch(o -> o.getId() == id)) {
+        requestsInQueue.removeIf(o -> o.getId() == id);
         success = true;
       } else {
-        message = "Order " + id + " was not in queue " + queueName;
+        message = "Request " + id + " was not in queue " + queueName;
       }
       // save the updated list
       queueRepository.save(q);
@@ -148,25 +148,25 @@ public class QueueController {
   Queue createQueue(@RequestParam String queueName) {
     Queue q = new Queue();
     q.setName(queueName);
-    q.setOrdersInQueue(Collections.emptyList());q.setRunning(false);
+    q.setRequestsInQueue(Collections.emptyList());q.setRunning(false);
     return queueRepository.save(q);
   }
 
-  @GetMapping({"/skip", "/completeOrder"})
-  ObjectNode skipCurrentOrder(@RequestParam String queueName) {
+  @GetMapping({"/skip", "/completeRequest"})
+  ObjectNode skipCurrentRequest(@RequestParam String queueName) {
     ObjectNode node = mapper.createObjectNode();
     boolean success = false;
     String message = "";
     Optional<Queue> queue = queueRepository.findByName(queueName);
     if (queue.isPresent()) {
       Queue q = queue.get();
-      List<Order> ordersInQueue = q.getOrdersInQueue();
-      if (ordersInQueue.isEmpty()) {
+      List<Request> requestsInQueue = q.getRequestsInQueue();
+      if (requestsInQueue.isEmpty()) {
         message = "No items in queue.";
       } else {
-        Order skippedOrder = ordersInQueue.remove(0);
-        skippedOrder.setCompleted(true);
-        orderRepository.save(skippedOrder);
+        Request skippedRequest = requestsInQueue.remove(0);
+        skippedRequest.setCompleted(true);
+        requestRepository.save(skippedRequest);
         queueRepository.save(q);
         success = true;
       }

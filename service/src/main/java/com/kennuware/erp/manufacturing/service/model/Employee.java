@@ -17,6 +17,8 @@ public class Employee {
 
   private String username;
 
+  // users dont need to see this
+  @JsonIgnore
   private String password;
 
   private long hoursWorked;
