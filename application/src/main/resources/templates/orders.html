@@ -19,9 +19,9 @@
 
     <h1 style="text-align: center">Orders</h1><br><br>
     <ol th:each="order: ${orders}" style="text-align: center">
-        <li th:text="${order}" style="display: inline"></li>
-        <button type="button" style="background-color: grey; color: white; display: inline">View</button>
-        <button type="button" style="background-color: darkred; color: white; display: inline">Remove</button>
+        <span th:text="OrderID-" style="display: inline; font-size: 20px"></span><li th:text="${order.getId()}" style="display: inline; font-size: 20px; padding-right: 15px"></li>
+        <button type="button" style="background-color: grey; color: white; display: inline; margin: 10px">View</button>
+        <button type="button" style="background-color: darkred; color: white; display: inline; margin: 10px">Remove</button>
     </ol>
 
 
