@@ -21,9 +21,9 @@
 
 <div class="container" style="width: 30%; text-align: center">
     <h2 style="text-align: center">Recipe:</h2>
-    <ol th:each="component: ${product.getRecipe()}" style="text-align: center; display: inline; font-size: 20px">
-        <li><span th:text="${component}" style="display: inline; padding-right: 3em"></span> <span th:text="Quantity" style="display: inline"></span> = <span th:text="${order.getQuantity()}" style="display: inline"></span></li>
-    </ol><br><br>
+    <ul th:each="component: ${product.getRecipe().getComponents()}" style="text-align: center; display: inline; font-size: 20px; list-style-type: none">
+        <li> ItemID#<span th:text="${component.getItem().getId()}" style="display: inline; padding-right: 3em"></span> <span th:text="${component.getItem().getName()}" style="display: inline; padding-right: 3em"></span> <span th:text="Quantity" style="display: inline"></span> = <span th:text="${component.getQuantity()}" style="display: inline"></span></li>
+    </ul><br><br>
 </div>
 
 </body>
