@@ -152,7 +152,7 @@ public class QueueController {
     return queueRepository.save(q);
   }
 
-  @GetMapping("/skip")
+  @GetMapping({"/skip", "/completeOrder"})
   ObjectNode skipCurrentOrder(@RequestParam String queueName) {
     ObjectNode node = mapper.createObjectNode();
     boolean success = false;
