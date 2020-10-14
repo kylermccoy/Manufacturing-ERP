@@ -5,7 +5,9 @@ import com.kennuware.erp.manufacturing.application.model.Product;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.view.RedirectView;
 
 
 @Controller
@@ -28,14 +30,6 @@ public class HeaderController {
         model.addAttribute("recalls", recalls);
         */
         return "recalls";
-    }
-
-    @GetMapping(path = "/products")
-    public String GetProducts(Model model){
-        RestTemplate rt = new RestTemplate();
-        Product[] products = rt.getForObject("http://localhost:8080/manufacturing/api/products", Product[].class);
-        model.addAttribute("products", products);
-        return "products";
     }
 
     @GetMapping(path = "/timesheet")
