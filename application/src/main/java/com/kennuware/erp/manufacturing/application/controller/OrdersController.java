@@ -8,7 +8,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 
 @Controller
-public class HeaderController {
+public class OrdersController {
     @RequestMapping(value = "/order", method = RequestMethod.GET)
     public String GetOrder(){
         return "order";
