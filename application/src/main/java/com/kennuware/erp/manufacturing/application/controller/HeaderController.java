@@ -27,9 +27,12 @@ public class HeaderController {
 
     @GetMapping(path = "/recalls")
     public String GetRecalls(Model model){
+        //UNCOMMENT ONCE RECALL IMPLEMENTATION IS GOOD
+        /*
         RestTemplate rt = new RestTemplate();
         Recall[] recalls = rt.getForObject("http://localhost:8080/manufacturing/api/recalls", Recall[].class);
         model.addAttribute("recalls", recalls);
+        */
         return "recalls";
     }
 
