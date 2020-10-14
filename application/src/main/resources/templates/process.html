@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en"><head>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html" lang="en"><head>
     <meta charset="UTF-8">
     <title>Manufacturing Process</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -17,11 +17,14 @@
     </ul><br><br>
 
     <h1 style="text-align: center">Status: </h1>
-    <h1 style="text-align: center">Order/Recall: </h1><br>
-    <h2 style="text-align: center">Queue:</h2>
-    <ol th:each="order: ${queue}" style="text-align: center">
-        <li th:text="${order.getId()}" style="display: inline; font-size: 20px; margin: 10px; padding: 10px"></li>
-    </ol><br><br>
+    <h1 style="text-align: center">Order/Recall: <span th:text="${queue[0].getId()}"></span></h1><br>
+
+    <div class="container" style="width: 30%; text-align: center">
+        <h2 style="text-align: center">Queue:</h2>
+        <ol th:each="order: ${queue}" style="text-align: center">
+            <li><span th:text="${order.getId()}"></span>, <span th:text="${order.getProduct().getName()}"></span>, <span th:text="${order.getQuantity()}"></span></li>
+        </ol><br><br>
+    </div>
 
     <div style="text-align: center">
     <button type="button" style="background-color: green; color: white">Start Process</button>
