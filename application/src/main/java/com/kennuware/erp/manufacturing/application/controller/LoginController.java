@@ -12,10 +12,11 @@ public class LoginController {
     @GetMapping(path = "/sign_in")
     public String GetLogin(@RequestParam String user, @RequestParam String pass){
         // INSERT SIGN IN CHECKING HERE!!!
-        if (user.equals("") || pass.equals("")) {
+        if (user.isEmpty() || pass.isEmpty()) {
+            return "login";
+        }else if (user.isBlank() || pass.isBlank()) {
             return "login";
         }
-
         return "process";
     }
 }
