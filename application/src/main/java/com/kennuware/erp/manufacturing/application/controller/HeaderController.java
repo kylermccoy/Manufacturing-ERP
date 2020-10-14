@@ -29,6 +29,13 @@ public class HeaderController {
         return "timesheet";
     }
 
+    @GetMapping(path = "/update_timesheet")
+    public String UpdateTimesheet(@RequestParam String hours, Model model){
+        //ADD TIMESHEET FUNCTIONALITY
+        model.addAttribute("hours",hours);
+        return "timesheet";
+    }
+
     @GetMapping(path = "/log")
     public String GetLog(){
         return "log";
