@@ -28,7 +28,7 @@ public class HeaderController {
     @GetMapping(path = "/products")
     public String GetProducts(Model model){
         RestTemplate rt = new RestTemplate();
-        Product[] products = rt.getForObject("http://localhost:8080/manufacturing/api/products/list", Product[].class);
+        Product[] products = rt.getForObject("http://localhost:8080/manufacturing/api/products", Product[].class);
         model.addAttribute("products", products);
         return "products";
     }
