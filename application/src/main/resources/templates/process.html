@@ -19,8 +19,8 @@
     <h1 style="text-align: center">Status: </h1>
     <h1 style="text-align: center">Order/Recall: </h1><br>
     <h2 style="text-align: center">Queue:</h2>
-    <ol>
-        <!--Thymeleaf stuffz-->
+    <ol th:each="order: ${queue}" style="text-align: center">
+        <li th:text="${order.getId()}" style="display: inline; font-size: 20px; margin: 10px; padding: 10px"></li>
     </ol><br><br>
 
     <div style="text-align: center">

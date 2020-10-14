@@ -12,10 +12,6 @@ import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
 public class HeaderController {
-    @GetMapping(path = "/process")
-    public String GetProcess(){
-        return "process";
-    }
 
     @GetMapping(path = "/orders")
     public String GetOrders(Model model){
@@ -52,5 +48,13 @@ public class HeaderController {
     @GetMapping(path = "/log")
     public String GetLog(){
         return "log";
+    }
+
+    @GetMapping(path = "/process")
+    public String GetQueue(Model model){
+        RestTemplate rt = new RestTemplate();
+        Order[] queue = rt.getForObject("http://localhost:8080/manufacturing/api/queue/?queueName=Main Queue", Order[].class);
+        model.addAttribute("queue", queue);
+        return "process";
     }
 }
