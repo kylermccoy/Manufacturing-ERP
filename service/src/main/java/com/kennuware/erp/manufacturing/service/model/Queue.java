@@ -14,7 +14,7 @@ public class Queue {
   private String name;
 
   @OneToMany
-  private List<Order> ordersInQueue;
+  private List<Request> requestsInQueue;
 
   private boolean running;
 
