@@ -28,8 +28,8 @@ public class HeaderController {
     @GetMapping(path = "/products")
     public String GetProducts(Model model){
         RestTemplate rt = new RestTemplate();
-        Product[] product = rt.getForObject("http://localhost:8080/api/products/list", Product[].class);
-        model.addAttribute("products", product);
+        Product[] products = rt.getForObject("http://localhost:8080/manufacturing/api/products/list", Product[].class);
+        model.addAttribute("products", products);
         return "products";
     }
 
