@@ -8,7 +8,7 @@
 <form action="/sign_in" method="post" style="text-align: center">
     <h1>Sign In</h1>
 
-    <h2 id="error" style="color: darkred; text-align: center; visibility: hidden">Username or password invalid. Try again.</h2>
+    <h2 th:if="${failure}" id="error" style="color: darkred; text-align: center">Username or password invalid. Try again.</h2>
     <input type="text" id="user" name="user" placeholder="Username"><br><br>
     <input type="password" id="pass" name="pass" placeholder="Password"><br><br>
     <input type="submit" value="Sign in" />

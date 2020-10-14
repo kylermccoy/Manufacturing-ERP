@@ -10,14 +10,13 @@ import org.springframework.web.servlet.view.RedirectView;
 @Controller
 public class LoginController {
     @RequestMapping(path = "/sign_in")
-    public RedirectView redirectToProcoess(@RequestParam String user, @RequestParam String pass){
+    public String redirectToProcess(@RequestParam String user, @RequestParam String pass, Model model){
         // INSERT SIGN IN CHECKING HERE!!!
-        if (user.isEmpty() || pass.isEmpty()) {
-            return new RedirectView("");
-        }else if (user.isBlank() || pass.isBlank()) {
-            return new RedirectView("");
+        if (user.isBlank() || pass.isBlank()) {
+            model.addAttribute("failure", true);
+            return "login";
         }
-        return new RedirectView("/process");
+        return "process";
     }
 
 }
