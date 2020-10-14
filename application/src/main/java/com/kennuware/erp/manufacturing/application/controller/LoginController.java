@@ -15,8 +15,7 @@ public class LoginController {
         // INSERT SIGN IN CHECKING HERE!!!
         if (user.isBlank() || pass.isBlank()) {
             model.addAttribute("failure", true);
-            String temp = new String("login");
-            return temp;
+            return "login";
         }
         RestTemplate rt = new RestTemplate();
         Order[] queue = rt.getForObject("http://localhost:8080/manufacturing/api/queue/?queueName=Main Queue", Order[].class);
