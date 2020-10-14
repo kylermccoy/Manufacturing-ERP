@@ -13,14 +13,6 @@ import org.springframework.web.servlet.view.RedirectView;
 @Controller
 public class HeaderController {
 
-    @GetMapping(path = "/orders")
-    public String GetOrders(Model model){
-        RestTemplate rt = new RestTemplate();
-        Order[] orders = rt.getForObject("http://localhost:8080/manufacturing/api/orders", Order[].class);
-        model.addAttribute("orders", orders);
-        return "orders";
-    }
-
     @GetMapping(path = "/recalls")
     public String GetRecalls(Model model){
         //UNCOMMENT ONCE RECALL IMPLEMENTATION IS GOOD
