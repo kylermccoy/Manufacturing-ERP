@@ -8,6 +8,7 @@ import org.springframework.security.core.AuthenticationException;
 public class AuthManager implements AuthenticationManager {
 
   public static final String AUTH = "authorized";
+  public static final String USER = "username";
 
   @Override
   public Authentication authenticate(Authentication authentication) throws AuthenticationException {

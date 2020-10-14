@@ -1,6 +1,8 @@
 package com.kennuware.erp.manufacturing.service.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.kennuware.erp.manufacturing.service.auth.AuthManager;
 import com.kennuware.erp.manufacturing.service.model.Employee;
 import com.kennuware.erp.manufacturing.service.model.repository.EmployeeRepository;
@@ -20,11 +22,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class EmployeeController {
 
   EmployeeRepository employeeRepository;
+  ObjectMapper mapper;
   PasswordEncoder encoder;
 
-  EmployeeController(EmployeeRepository repository, PasswordEncoder encoder) {
+  EmployeeController(EmployeeRepository repository, PasswordEncoder encoder, ObjectMapper mapper) {
     this.employeeRepository = repository;
     this.encoder = encoder;
+    this.mapper = mapper;
   }
 
   @PostMapping
@@ -43,6 +47,7 @@ public class EmployeeController {
     employee.setPassword(encoder.encode(pass));
     employee.setHoursWorked(0L);
     session.setAttribute(AuthManager.AUTH, true);
+    session.setAttribute(AuthManager.USER, user);
     return employeeRepository.save(employee);
   }
 
@@ -53,9 +58,38 @@ public class EmployeeController {
     Employee employee = employeeRepository.findByUsername(user);
     boolean success = encoder.matches(pass, employee.getPassword());
     session.setAttribute(AuthManager.AUTH, success);
+    session.setAttribute(AuthManager.USER, user);
     return success;
   }
 
+  @PostMapping("/updateHours")
+  Object updateHours(@RequestParam String user, @RequestParam long hoursWorked, HttpSession session) {
+    if (session != null) {
+      if (user.equals((session.getAttribute(AuthManager.USER)))) {
+        Employee employee = employeeRepository.findByUsername(user);
+        employee.setHoursWorked(hoursWorked);
+        employeeRepository.save(employee);
+      }
+    }
+    ObjectNode node = mapper.createObjectNode();
+    node.put("success", false);
+    node.put("message", "You are not authenticated to update this user's hours");
+    return node;
+  }
 
-
+  @GetMapping("/getHours")
+  Object updateHours(@RequestParam String user, HttpSession session) {
+    ObjectNode node = mapper.createObjectNode();
+    if (session != null) {
+      if (user.equals((session.getAttribute(AuthManager.USER)))) {
+        Employee employee = employeeRepository.findByUsername(user);
+        node.put("name", user);
+        node.put("hours", employee.getHoursWorked());
+        return node;
+      }
+    }
+    node.put("success", false);
+    node.put("message", "You are not authenticated to get this user's hours");
+    return node;
+  }
 }
