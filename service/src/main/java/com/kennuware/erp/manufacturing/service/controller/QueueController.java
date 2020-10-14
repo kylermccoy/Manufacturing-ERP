@@ -9,6 +9,7 @@ import com.kennuware.erp.manufacturing.service.model.repository.QueueRepository;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import javax.persistence.EntityNotFoundException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,6 +37,11 @@ public class QueueController {
   }
 
   @GetMapping
+  Queue getQueue(@RequestParam String queueName) {
+    return queueRepository.findByName(queueName).orElseThrow(EntityNotFoundException::new);
+  }
+
+  @GetMapping("/orders")
   List<Order> getOrdersInQueue(@RequestParam String queueName) {
     Optional<Queue> queue = queueRepository.findByName(queueName);
     if (queue.isPresent()) {
@@ -93,7 +99,7 @@ public class QueueController {
     return node;
   }
 
-  @PostMapping("/add")
+  @PostMapping("/orders")
   ObjectNode addOrderToQueue(@RequestParam String queueName, @RequestBody Order order) {
     ObjectNode node = mapper.createObjectNode();
     boolean success = false;
@@ -146,7 +152,7 @@ public class QueueController {
     return queueRepository.save(q);
   }
 
-  @GetMapping("/skip")
+  @GetMapping({"/skip", "/completeOrder"})
   ObjectNode skipCurrentOrder(@RequestParam String queueName) {
     ObjectNode node = mapper.createObjectNode();
     boolean success = false;
