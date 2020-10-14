@@ -9,7 +9,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
 public class LoginController {
-    @GetMapping(path = "/sign_in")
+    @RequestMapping(value = "/sign_in", method = RequestMethod.POST )
     public String GetLogin(@RequestParam String user, @RequestParam String pass){
         // INSERT SIGN IN CHECKING HERE!!!
         if (user.isEmpty() || pass.isEmpty()) {
