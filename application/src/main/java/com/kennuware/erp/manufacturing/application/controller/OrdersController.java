@@ -3,9 +3,12 @@ package com.kennuware.erp.manufacturing.application.controller;
 import com.kennuware.erp.manufacturing.application.model.Order;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
 public class OrdersController {
@@ -25,5 +28,7 @@ public class OrdersController {
         model.addAttribute("order", order);
         return "order";
     }
+
+
 
 }
