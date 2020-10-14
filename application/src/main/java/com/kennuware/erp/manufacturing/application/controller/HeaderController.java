@@ -2,12 +2,10 @@ package com.kennuware.erp.manufacturing.application.controller;
 
 import com.kennuware.erp.manufacturing.application.model.Order;
 import com.kennuware.erp.manufacturing.application.model.Product;
-import com.kennuware.erp.manufacturing.application.model.Recall;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.servlet.view.RedirectView;
 
 
 @Controller
