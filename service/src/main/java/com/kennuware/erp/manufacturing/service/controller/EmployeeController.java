@@ -64,16 +64,20 @@ public class EmployeeController {
 
   @PostMapping("/updateHours")
   Object updateHours(@RequestParam String user, @RequestParam long hoursWorked, HttpSession session) {
+    boolean success = false;
+    String message = "You are not authenticated to update this user's hours";
     if (session != null) {
       if (user.equals((session.getAttribute(AuthManager.USER)))) {
         Employee employee = employeeRepository.findByUsername(user);
         employee.setHoursWorked(hoursWorked);
         employeeRepository.save(employee);
+        success = true;
+        message = "Hours updated.";
       }
     }
     ObjectNode node = mapper.createObjectNode();
-    node.put("success", false);
-    node.put("message", "You are not authenticated to update this user's hours");
+    node.put("success", success);
+    node.put("message", message);
     return node;
   }
 
