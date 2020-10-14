@@ -1,5 +1,6 @@
 package com.kennuware.erp.manufacturing.application.controller;
 
+import com.kennuware.erp.manufacturing.application.model.Order;
 import com.kennuware.erp.manufacturing.application.model.Product;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,7 +17,10 @@ public class HeaderController {
     }
 
     @GetMapping(path = "/orders")
-    public String GetOrders(){
+    public String GetOrders(Model model){
+        RestTemplate rt = new RestTemplate();
+        Order[] orders = rt.getForObject("http://localhost:8080/manufacturing/api/orders", Order[].class);
+        model.addAttribute("orders", orders);
         return "orders";
     }
 
