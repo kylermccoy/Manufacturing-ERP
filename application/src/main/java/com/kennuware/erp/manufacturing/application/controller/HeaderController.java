@@ -2,6 +2,7 @@ package com.kennuware.erp.manufacturing.application.controller;
 
 import com.kennuware.erp.manufacturing.application.model.Order;
 import com.kennuware.erp.manufacturing.application.model.Product;
+import com.kennuware.erp.manufacturing.application.model.Recall;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,10 @@ public class HeaderController {
     }
 
     @GetMapping(path = "/recalls")
-    public String GetRecalls(){
+    public String GetRecalls(Model model){
+        RestTemplate rt = new RestTemplate();
+        Recall[] recalls = rt.getForObject("http://localhost:8080/manufacturing/api/recalls", Recall[].class);
+        model.addAttribute("recalls", recalls);
         return "recalls";
     }
 

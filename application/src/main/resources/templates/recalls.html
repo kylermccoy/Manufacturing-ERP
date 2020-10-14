@@ -19,12 +19,11 @@
 </ul><br><br>
 
 <h1 style="text-align: center">Recalls</h1><br><br>
-<ol style="text-align: center">
-    <li></li>
+<ol th:each="recall: ${recalls}" style="text-align: center">
+    <li th:text="${recall.getName()}" style="display: inline; font-size: 20px; margin: 10px; padding: 10px"></li>
     <button type="button" style="background-color: grey; color: white; display: inline">View</button>
     <button type="button" style="background-color: darkred; color: white; display: inline">Remove</button>
 </ol>
-
 
 </body>
 </html>
