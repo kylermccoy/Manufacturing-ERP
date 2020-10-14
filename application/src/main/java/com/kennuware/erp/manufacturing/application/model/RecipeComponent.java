@@ -3,8 +3,8 @@ package com.kennuware.erp.manufacturing.application.model;
 import lombok.Data;
 
 @Data
-public class Product {
+public class RecipeComponent {
     Long id;
-    String name;
-    private Recipe recipe;
+    Item item;
+    Long quantity;
 }
