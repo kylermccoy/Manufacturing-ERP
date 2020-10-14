@@ -28,7 +28,7 @@ public class ProductController {
     this.mapper = mapper;
   }
 
-  @GetMapping
+  @GetMapping(path = "/list")
   List<Product> listProducts() {
     return productRepository.findAll();
   }
@@ -66,11 +66,6 @@ public class ProductController {
     response.put("success", success);
     response.put("message", message);
     return response;
-  }
-
-  @GetMapping(path = "/list")
-  List<Product> listEmployees() {
-    return productRepository.findAll();
   }
 
 }

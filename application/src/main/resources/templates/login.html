@@ -3,12 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Manufacturing | Sign In</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
 <form action="/sign_in" method="post" style="text-align: center">
     <h1>Sign In</h1>
-
-    <h2 th:if="${failure}" id="error" style="color: darkred; text-align: center">Username or password invalid. Try again.</h2>
+    <h2 th:if="${failure}" class="alert alert-danger fade in" role="alert" id="error" style="color: darkred; text-align: center"><strong>Invalid</strong> username or password. Try again.</h2>
     <input type="text" id="user" name="user" placeholder="Username"><br><br>
     <input type="password" id="pass" name="pass" placeholder="Password"><br><br>
     <input type="submit" value="Sign in" />
