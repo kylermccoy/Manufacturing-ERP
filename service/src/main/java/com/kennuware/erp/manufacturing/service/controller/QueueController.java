@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.kennuware.erp.manufacturing.service.model.Order;
 import com.kennuware.erp.manufacturing.service.model.Queue;
+import com.kennuware.erp.manufacturing.service.model.repository.OrderRepository;
 import com.kennuware.erp.manufacturing.service.model.repository.QueueRepository;
 import java.util.Collections;
 import java.util.List;
@@ -25,10 +26,12 @@ public class QueueController {
   //TODO: Create a json response object for entity not existing
 
   private final QueueRepository queueRepository;
+  private final OrderRepository orderRepository;
   private final ObjectMapper mapper;
 
-  QueueController(QueueRepository queueRepository, ObjectMapper mapper) {
+  QueueController(QueueRepository queueRepository, OrderRepository orderRepository, ObjectMapper mapper) {
     this.queueRepository = queueRepository;
+    this.orderRepository = orderRepository;
     this.mapper = mapper;
   }
 
@@ -143,6 +146,30 @@ public class QueueController {
     return queueRepository.save(q);
   }
 
-  //@GetMapping("/skip")
+  @GetMapping("/skip")
+  ObjectNode skipCurrentOrder(@RequestParam String queueName) {
+    ObjectNode node = mapper.createObjectNode();
+    boolean success = false;
+    String message = "";
+    Optional<Queue> queue = queueRepository.findByName(queueName);
+    if (queue.isPresent()) {
+      Queue q = queue.get();
+      List<Order> ordersInQueue = q.getOrdersInQueue();
+      if (ordersInQueue.isEmpty()) {
+        message = "No items in queue.";
+      } else {
+        Order skippedOrder = ordersInQueue.remove(0);
+        skippedOrder.setCompleted(true);
+        orderRepository.save(skippedOrder);
+        queueRepository.save(q);
+        success = true;
+      }
+    } else {
+      message = "Queue " + queueName + " does not exist";
+    }
+    node.put("success", success);
+    node.put("message", message);
+    return node;
+  }
 
 }
