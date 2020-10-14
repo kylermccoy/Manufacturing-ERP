@@ -19,7 +19,7 @@
 
 <h1 style="text-align: center">Products</h1><br><br>
 <ol th:each="product: ${products}" style="text-align: center; display: inline; font-size: 20px; margin: 10px; padding: 10px">
-    <a th:href="@{/products/{id}(id=${product.getId()})}"><li th:text="${product.getName()}"></li></a>
+    <li>ProductID#<span th:text="${product.getId()}" style="display: inline; padding-right: 3em"> </span><span th:text="${product.getName()}" style="display: inline; padding-right: 3em"></span><a th:href="@{/products/{id}(id=${product.getId()})}">View Recipe</a></li>
 </ol>
 
 
