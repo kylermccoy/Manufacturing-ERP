@@ -18,10 +18,10 @@
     </ul><br><br>
 
     <h1 style="text-align: center">Orders</h1><br><br>
-    <ol th:each="order: ${orders}" style="text-align: center; font-size: 20px">
-        <li style="display: inline" th:text="${order.getId()}"></li>
-        <a style="display: inline" th:href="@{/orders/{id}(id=${order.getId()})}">View Order</a>
-        <a style="display: inline; color: darkred" th:href="@{/orders/{id}(id=${order.getId()})}">Delete Order</a>
+    <ol th:each="order: ${orders}" style="text-align: center; display: inline; font-size: 20px; margin: 10px; padding: 10px">
+        <li>OrderID#<span th:text="${order.getId()}" style="display: inline; padding-right: 3em"></span>
+            <a style="padding-right: 3em" th:href="@{/orders/{id}(id=${order.getId()})}">View Recipe</a>
+            <a style="color: darkred" th:href="@{/orders/{id}(id=${order.getId()})}">Delete Order</a></li>
     </ol>
 </body>
 </html>
