@@ -26,6 +26,13 @@ public class RecallController {
     String getProduct(@PathVariable Long id, Model model) {
         RestTemplate restTemplate = new RestTemplate();
         Request recall = restTemplate.getForObject("http://localhost:8080/manufacturing/api/requests/" + id, Request.class);
+        String recallStatus;
+        if (recall.isCompleted()){
+            recallStatus = "Complete";
+        }else{
+            recallStatus = "Not Complete";
+        }
+        model.addAttribute("recallStatus", recallStatus);
         model.addAttribute("recall", recall);
         return "recall";
     }

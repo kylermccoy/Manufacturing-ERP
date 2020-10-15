@@ -26,6 +26,13 @@ public class OrdersController {
     public String getOrder(@PathVariable Long id, Model model) {
         RestTemplate restTemplate = new RestTemplate();
         Request order = restTemplate.getForObject("http://localhost:8080/manufacturing/api/requests/" + id, Request.class);
+        String orderStatus;
+        if (order.isCompleted()){
+            orderStatus = "Complete";
+        }else{
+            orderStatus = "Not Complete";
+        }
+        model.addAttribute("orderStatus", orderStatus);
         model.addAttribute("order", order);
         return "order";
     }
