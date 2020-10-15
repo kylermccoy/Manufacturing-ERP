@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" th:src="@{/js/actions.js}"></script>
 </head>
 <body>
 <ul style="list-style-type: none; margin: 10px; padding: 10px; font-size: 25px; text-align: center ">
@@ -18,10 +19,10 @@
 </ul><br><br>
 
 <h1 style="text-align: center">Recalls</h1><br><br>
-<ol th:each="recall: ${recalls}" style="text-align: center; display: inline; font-size: 20px; margin: 10px; padding: 10px">
-    <li>RECALL#<span th:text="${recall.getId()}" style="display: inline; padding-right: 3em"></span>
+<ol id="product-list" style="text-align: center; display: inline; font-size: 20px; margin: 10px; padding: 10px">
+    <li th:each="recall: ${recalls}">RECALL#<span th:text="${recall.getId()}" style="display: inline; padding-right: 3em"></span>
         <a style="padding-right: 3em" th:href="@{/recalls/{id}(id=${recall.getId()})}">View Recall</a>
-        <button style="color: darkred" th:href="@{/recalls/{id}(id=${recall.getId()})}">Delete Recall</button></li>
+        <button th:id="${'recalls-' + recall.getId()}" style="color: darkred" th:href="@{/recalls/{id}(id=${recall.getId()})}">Delete Recall</button></li>
 </ol>
 </body>
 </html>
