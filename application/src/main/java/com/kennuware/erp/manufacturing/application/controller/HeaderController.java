@@ -29,7 +29,7 @@ public class HeaderController {
     @GetMapping(path = "/process")
     public String GetQueue(Model model){
         RestTemplate rt = new RestTemplate();
-        Request[] queue = rt.getForObject("http://localhost:8080/manufacturing/api/queue/?queueName=Main Queue", Request[].class);
+        Request[] queue = rt.getForObject("http://localhost:8080/manufacturing/api/queue/requests?queueName=Main Queue", Request[].class);
         model.addAttribute("queue", queue);
         return "process";
     }

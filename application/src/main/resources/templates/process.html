@@ -17,12 +17,12 @@
     </ul><br><br>
 
     <h1 style="text-align: center">Status: </h1>
-    <h1 style="text-align: center">Request#: <span th:text="${queue[0].getId()}"></span></h1><br>
+    <h1 style="text-align: center">Current Request#: <span th:text="${queue[0].getId()}"></span></h1><br>
 
     <div class="container" style="width: 30%; text-align: center">
-        <h2 style="text-align: center">Queue:</h2>
+        <h2 style="text-align: center">Requests to be Completed:</h2>
         <ol th:each="request: ${queue}" style="text-align: center; display: inline; font-size: 20px">
-            <li>ProductID#<span th:text="${request.getProduct().getId()}" style="display: inline; padding-right: 3em"></span> <span th:text="${request.getProduct().getName()}" style="display: inline; padding-right: 3em"></span> <span th:text="Quantity" style="display: inline"></span> = <span th:text="${request.getQuantity()}" style="display: inline"></span></li>
+            <li><span th:text="${request.getType()}" style="display: inline"></span>#<span th:text="${request.getId()}" style="display: inline; padding-right: 3em"></span><span th:text="${request.getProduct().getName()}" style="display: inline; padding-right: 3em"></span><span th:text="Quantity" style="display: inline"></span> = <span th:text="${request.getQuantity()}" style="display: inline"></span></li>
         </ol><br><br>
     </div>
 
