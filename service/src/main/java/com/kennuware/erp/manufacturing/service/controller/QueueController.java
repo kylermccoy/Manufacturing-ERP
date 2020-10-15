@@ -41,16 +41,6 @@ public class QueueController {
     return queueRepository.findByName(queueName).orElseThrow(EntityNotFoundException::new);
   }
 
-  @GetMapping("/requests")
-  List<Request> getRequestsInQueue(@RequestParam String queueName) {
-    Optional<Queue> queue = queueRepository.findByName(queueName);
-    if (queue.isPresent()) {
-      return queue.get().getRequestsInQueue();
-    } else {
-      return Collections.emptyList();
-    }
-  }
-
   @GetMapping("/start")
   ObjectNode startQueue(@RequestParam String queueName) {
     ObjectNode node = mapper.createObjectNode();
@@ -97,6 +87,16 @@ public class QueueController {
     node.put("success", success);
     node.put("message", message);
     return node;
+  }
+
+  @GetMapping("/requests")
+  List<Request> getRequestsInQueue(@RequestParam String queueName) {
+    Optional<Queue> queue = queueRepository.findByName(queueName);
+    if (queue.isPresent()) {
+      return queue.get().getRequestsInQueue();
+    } else {
+      return Collections.emptyList();
+    }
   }
 
   @PostMapping("/requests")
