@@ -20,7 +20,7 @@ public class HeaderController {
     @GetMapping(path = "/process")
     public String getQueue(Model model){
         RestTemplate rt = new RestTemplate();
-        Queue queue = rt.getForObject("http://localhost:8080/manufacturing/api/queue/?queueName=Main Queue", Queue.class);
+        Queue queue = rt.getForObject("http://localhost:8080/manufacturing/api/queue", Queue.class);
         String queueStatus;
         if (queue.isRunning()){
             queueStatus = "Running";
@@ -28,7 +28,7 @@ public class HeaderController {
             queueStatus = "Stopped";
         }
         model.addAttribute("queueStatus", queueStatus);
-        Request[] requests = rt.getForObject("http://localhost:8080/manufacturing/api/queue/requests?queueName=Main Queue", Request[].class);
+        Request[] requests = rt.getForObject("http://localhost:8080/manufacturing/api/queue/requests", Request[].class);
         model.addAttribute("requests", requests);
         return "process";
     }

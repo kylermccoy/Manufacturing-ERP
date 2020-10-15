@@ -10,7 +10,7 @@ $( function() {
 $( function() {
   $("#controls").find("button").click(function() {
     let command = $(this).attr("id")
-    let url = "http://localhost:8080/manufacturing/api/queue/" + command + "?queueName=Main Queue";
+    let url = "http://localhost:8080/manufacturing/api/queue/" + command;
     sendProcessControlRequest(url);
   })
 } )
