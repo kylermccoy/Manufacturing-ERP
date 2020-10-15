@@ -12,7 +12,7 @@ import org.springframework.web.client.RestTemplate;
 public class ProductsController {
 
     @GetMapping("/products")
-    public String GetProducts(Model model){
+    public String getProducts(Model model){
         RestTemplate rt = new RestTemplate();
         Product[] products = rt.getForObject("http://localhost:8080/manufacturing/api/products", Product[].class);
         model.addAttribute("products", products);

@@ -11,23 +11,23 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.client.RestTemplate;
 
 @Controller
-public class OrdersController {
+public class RecallController {
 
-    @GetMapping(path = "/orders")
-    public String getOrders(Model model){
+    @GetMapping(path = "/recalls")
+    public String getRecalls(Model model){
         RestTemplate rt = new RestTemplate();
-        Request[] ordersArr = rt.getForObject("http://localhost:8080/manufacturing/api/requests", Request[].class);
-        List<Request> orders = RequestSorter.getRequestsOfType(ordersArr, RequestType.ORDER);
-        model.addAttribute("orders", orders);
-        return "orders";
+        Request[] recallsArr = rt.getForObject("http://localhost:8080/manufacturing/api/requests", Request[].class);
+        List<Request> recalls = RequestSorter.getRequestsOfType(recallsArr, RequestType.RECALL);
+        model.addAttribute("recalls", recalls);
+        return "recalls";
     }
 
-    @GetMapping(path = "/orders/{id}")
+    @GetMapping(path = "/recalls/{id}")
     String getProduct(@PathVariable Long id, Model model) {
         RestTemplate restTemplate = new RestTemplate();
-        Request order = restTemplate.getForObject("http://localhost:8080/manufacturing/api/requests/" + id, Request.class);
-        model.addAttribute("order", order);
-        return "order";
+        Request recall = restTemplate.getForObject("http://localhost:8080/manufacturing/api/requests/" + id, Request.class);
+        model.addAttribute("recall", recall);
+        return "recall";
     }
 
 

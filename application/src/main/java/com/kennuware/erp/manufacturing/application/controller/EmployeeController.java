@@ -30,12 +30,12 @@ public class EmployeeController {
     }
 
     @GetMapping(path = "/timesheet")
-    public String GetTimesheet(){
+    public String getTimesheet(){
         return "timesheet";
     }
 
     @RequestMapping(path = "/update_timesheet")
-    public String UpdateTimesheet(@RequestParam String hours, Model model){
+    public String updateTimesheet(@RequestParam String hours, Model model){
         //ADD TIMESHEET FUNCTIONALITY
         if (hours.isBlank()){
             model.addAttribute("success", false);
