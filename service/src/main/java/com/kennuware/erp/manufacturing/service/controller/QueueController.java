@@ -16,12 +16,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(path = "/queue")
 public class QueueController {
+
+  public static final String QUEUE_NAME = "queue";
+
   //TODO: probably refactor a lot of duplicate code
   //TODO: make better use of Optional.orElse
   //TODO: Create a json error response object
@@ -37,16 +39,16 @@ public class QueueController {
   }
 
   @GetMapping
-  Queue getQueue(@RequestParam String queueName) {
-    return queueRepository.findByName(queueName).orElseThrow(EntityNotFoundException::new);
+  Queue getQueue() {
+    return queueRepository.findByName(QUEUE_NAME).orElseThrow(EntityNotFoundException::new);
   }
 
   @GetMapping("/start")
-  ObjectNode startQueue(@RequestParam String queueName) {
+  ObjectNode startQueue() {
     ObjectNode node = mapper.createObjectNode();
     boolean success = false;
     String message = "";
-    Optional<Queue> queue = queueRepository.findByName(queueName);
+    Optional<Queue> queue = queueRepository.findByName(QUEUE_NAME);
     if (queue.isPresent()) {
       Queue q = queue.get();
       if (q.isRunning()) {
@@ -58,7 +60,7 @@ public class QueueController {
       }
       queueRepository.save(q);
     } else {
-      message = "Queue " + queueName + " does not exist";
+      message = "Queue does not exist";
     }
     node.put("success", success);
     node.put("message", message);
@@ -66,11 +68,11 @@ public class QueueController {
   }
 
   @GetMapping("/stop")
-  ObjectNode stopQueue(@RequestParam String queueName) {
+  ObjectNode stopQueue() {
     ObjectNode node = mapper.createObjectNode();
     boolean success = false;
     String message = "";
-    Optional<Queue> queue = queueRepository.findByName(queueName);
+    Optional<Queue> queue = queueRepository.findByName(QUEUE_NAME);
     if (queue.isPresent()) {
       Queue q = queue.get();
       if (!q.isRunning()) {
@@ -82,7 +84,7 @@ public class QueueController {
       }
       queueRepository.save(q);
     } else {
-      message = "Queue " + queueName + " does not exist";
+      message = "Queue does not exist";
     }
     node.put("success", success);
     node.put("message", message);
@@ -90,8 +92,8 @@ public class QueueController {
   }
 
   @GetMapping("/requests")
-  List<Request> getRequestsInQueue(@RequestParam String queueName) {
-    Optional<Queue> queue = queueRepository.findByName(queueName);
+  List<Request> getRequestsInQueue() {
+    Optional<Queue> queue = queueRepository.findByName(QUEUE_NAME);
     if (queue.isPresent()) {
       return queue.get().getRequestsInQueue();
     } else {
@@ -100,18 +102,22 @@ public class QueueController {
   }
 
   @PostMapping("/requests")
-  ObjectNode addRequestToQueue(@RequestParam String queueName, @RequestBody Request request) {
+  ObjectNode addRequestToQueue(@RequestBody Request request) {
     ObjectNode node = mapper.createObjectNode();
     boolean success = false;
     String message = "";
-    Optional<Queue> queue = queueRepository.findByName(queueName);
-    if (queue.isPresent()) {
-      Queue q = queue.get();
-      q.getRequestsInQueue().add(request);
-      queueRepository.save(q);
-      success = true;
+    if (request.isCompleted()) {
+      message = "You can not add a completed request to the queue";
     } else {
-      message = "Queue " + queueName + " does not exist";
+      Optional<Queue> queue = queueRepository.findByName(QUEUE_NAME);
+      if (queue.isPresent()) {
+        Queue q = queue.get();
+        q.getRequestsInQueue().add(request);
+        queueRepository.save(q);
+        success = true;
+      } else {
+        message = "Queue does not exist";
+      }
     }
     node.put("success", success);
     node.put("message", message);
@@ -119,11 +125,11 @@ public class QueueController {
   }
 
   @DeleteMapping("/{id}")
-  ObjectNode removeRequestFromQueue(@PathVariable long id, @RequestParam String queueName) {
+  ObjectNode removeRequestFromQueue(@PathVariable long id) {
     ObjectNode node = mapper.createObjectNode();
     boolean success = false;
     String message = "";
-    Optional<Queue> queue = queueRepository.findByName(queueName);
+    Optional<Queue> queue = queueRepository.findByName(QUEUE_NAME);
     if (queue.isPresent()) {
       Queue q = queue.get();
       List<Request> requestsInQueue = q.getRequestsInQueue();
@@ -132,32 +138,24 @@ public class QueueController {
         requestsInQueue.removeIf(o -> o.getId() == id);
         success = true;
       } else {
-        message = "Request " + id + " was not in queue " + queueName;
+        message = "Request " + id + " was not in queue";
       }
       // save the updated list
       queueRepository.save(q);
     } else {
-      message = "Queue " + queueName + " does not exist";
+      message = "Queue does not exist";
     }
     node.put("success", success);
     node.put("message", message);
     return node;
   }
 
-  @PostMapping("/create")
-  Queue createQueue(@RequestParam String queueName) {
-    Queue q = new Queue();
-    q.setName(queueName);
-    q.setRequestsInQueue(Collections.emptyList());q.setRunning(false);
-    return queueRepository.save(q);
-  }
-
   @GetMapping({"/skip", "/completeRequest"})
-  ObjectNode skipCurrentRequest(@RequestParam String queueName) {
+  ObjectNode skipCurrentRequest() {
     ObjectNode node = mapper.createObjectNode();
     boolean success = false;
     String message = "";
-    Optional<Queue> queue = queueRepository.findByName(queueName);
+    Optional<Queue> queue = queueRepository.findByName(QUEUE_NAME);
     if (queue.isPresent()) {
       Queue q = queue.get();
       List<Request> requestsInQueue = q.getRequestsInQueue();
@@ -171,7 +169,7 @@ public class QueueController {
         success = true;
       }
     } else {
-      message = "Queue " + queueName + " does not exist";
+      message = "Queue does not exist";
     }
     node.put("success", success);
     node.put("message", message);
