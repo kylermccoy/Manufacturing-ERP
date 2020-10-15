@@ -32,4 +32,9 @@ public class HeaderController {
         model.addAttribute("requests", requests);
         return "process";
     }
+
+    @GetMapping(path = "/error")
+    public String getError(Model model){
+        return "error";
+    }
 }
