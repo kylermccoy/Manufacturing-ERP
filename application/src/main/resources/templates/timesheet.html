@@ -17,6 +17,7 @@
     <li style="display: inline; margin: 10px; padding: 10px"><a href="log">Log</a></li>
 </ul><br><br>
 <h1 style="text-align: center">Timesheet</h1><br><br>
+<h2 style="text-align: center">Current hours: <span th:text="${hours}"></span> </h2><br>
 <h2 th:if="${success}" class="alert alert-danger fade in" role="alert" id="error" style="color: green; text-align: center"><strong>Success!</strong> Hours updated.</h2>
 <h2 th:if="${failure}" class="alert alert-danger fade in" role="alert" id="error" style="color: darkred; text-align: center"><strong>Invalid!</strong> Please enter a number.</h2>
     <form action="/update_timesheet" style="text-align: center" method="post">
