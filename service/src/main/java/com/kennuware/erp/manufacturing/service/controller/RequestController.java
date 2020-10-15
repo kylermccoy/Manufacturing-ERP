@@ -2,8 +2,8 @@ package com.kennuware.erp.manufacturing.service.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.kennuware.erp.manufacturing.service.model.Recall;
-import com.kennuware.erp.manufacturing.service.model.repository.RecallRepository;
+import com.kennuware.erp.manufacturing.service.model.Request;
+import com.kennuware.erp.manufacturing.service.model.repository.RequestRepository;
 import java.util.List;
 import javax.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -17,56 +17,55 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
-@RequestMapping(path = "/recalls")
-public class RecallController {
+@RequestMapping(path = "/requests")
+public class RequestController {
 
-  private final RecallRepository recallRepository;
+  private final RequestRepository requestRepository;
   private final ObjectMapper mapper;
-
-  RecallController(RecallRepository recallRepository, ObjectMapper mapper) {
-    this.recallRepository = recallRepository;
+  
+  RequestController(RequestRepository requestRepository, ObjectMapper mapper) {
+    this.requestRepository = requestRepository;
     this.mapper = mapper;
   }
-
+  
   @GetMapping
-  List<Recall> listRecalls() {
-    return recallRepository.findAll();
+  List<Request> listRequests() {
+    return requestRepository.findAll();
   }
-
+  
   @GetMapping(path = "/{id}")
-  Recall getRecall(@PathVariable long id) {
-    return recallRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+  Request getRequest(@PathVariable long id) {
+    return requestRepository.findById(id).orElseThrow(EntityNotFoundException::new);
   }
 
   @PostMapping
-  Recall addRecall(@RequestBody Recall recall) {
-    return recallRepository.save(recall);
+  Request addRequest(@RequestBody Request request) {
+    return requestRepository.save(request);
   }
 
   @DeleteMapping(path = "/{id}")
-  ObjectNode deleteRecall(@PathVariable long id) {
+  ObjectNode deleteRequest(@PathVariable long id) {
     final ObjectNode response = mapper.createObjectNode();
     final String message;
     final boolean success;
-    // does the recall exist in the first place
-    if (recallRepository.existsById(id)) {
-      recallRepository.deleteById(id);
-      success = !recallRepository.existsById(id);
+    // does the request exist in the first place
+    if (requestRepository.existsById(id)) {
+      requestRepository.deleteById(id);
+      success = !requestRepository.existsById(id);
       // did it actually get deleted
       if (!success) {
-        message = "Recall was not deleted!";
-        log.error("Recall " + id + " was not successfully deleted");
+        message = "Request was not deleted!";
+        log.error("Request " + id + " was not successfully deleted");
       } else {
-        message = "Recall was successfully deleted";
+        message = "Request was successfully deleted";
       }
     } else {
       success = false;
-      message = "Recall does not exist";
+      message = "Request does not exist";
     }
     response.put("success", success);
     response.put("message", message);
     return response;
   }
-
+  
 }
-
