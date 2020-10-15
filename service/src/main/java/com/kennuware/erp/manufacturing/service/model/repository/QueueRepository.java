@@ -8,4 +8,6 @@ public interface QueueRepository extends JpaRepository<Queue, String> {
 
   Optional<Queue> findByName(String name);
 
+  boolean existsByName(String name);
+
 }

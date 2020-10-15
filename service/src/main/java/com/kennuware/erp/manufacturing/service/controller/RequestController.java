@@ -2,9 +2,12 @@ package com.kennuware.erp.manufacturing.service.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.kennuware.erp.manufacturing.service.model.Queue;
 import com.kennuware.erp.manufacturing.service.model.Request;
+import com.kennuware.erp.manufacturing.service.model.repository.QueueRepository;
 import com.kennuware.erp.manufacturing.service.model.repository.RequestRepository;
 import java.util.List;
+import java.util.Optional;
 import javax.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,10 +24,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class RequestController {
 
   private final RequestRepository requestRepository;
+  private final QueueRepository queueRepository;
   private final ObjectMapper mapper;
   
-  RequestController(RequestRepository requestRepository, ObjectMapper mapper) {
+  RequestController(RequestRepository requestRepository, QueueRepository queueRepository, ObjectMapper mapper) {
     this.requestRepository = requestRepository;
+    this.queueRepository = queueRepository;
     this.mapper = mapper;
   }
   
@@ -50,6 +55,13 @@ public class RequestController {
     final boolean success;
     // does the request exist in the first place
     if (requestRepository.existsById(id)) {
+      Optional<Queue> queue = queueRepository.findByName(QueueController.QUEUE_NAME);
+      if (queue.isPresent()) {
+        Queue q = queue.get();
+        List<Request> reqInQueue = q.getRequestsInQueue();
+        boolean contains = reqInQueue.removeIf(r -> r.getId() == id);
+        queueRepository.save(q);
+      }
       requestRepository.deleteById(id);
       success = !requestRepository.existsById(id);
       // did it actually get deleted
