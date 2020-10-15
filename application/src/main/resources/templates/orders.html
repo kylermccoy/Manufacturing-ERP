@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" th:src="@{/js/actions.js}"></script>
 </head>
 <body>
     <ul style="list-style-type: none; margin: 10px; padding: 10px; font-size: 25px; text-align: center ">
@@ -18,10 +19,10 @@
     </ul><br><br>
 
     <h1 style="text-align: center">Orders</h1><br><br>
-    <ol th:each="order: ${orders}" style="text-align: center; display: inline; font-size: 20px; margin: 10px; padding: 10px">
-        <li>ORDER#<span th:text="${order.getId()}" style="display: inline; padding-right: 3em"></span>
-            <a style="padding-right: 3em" th:href="@{/orders/{id}(id=${order.getId()})}">View Order</a>
-            <button style="color: darkred" th:onclick="@{/orders/{id}/delete(id=${order.getId()})}">Delete Order</button></li>
+    <ol id="product-list" style="text-align: center; display: inline; font-size: 20px; margin: 10px; padding: 10px">
+        <li th:each="order: ${orders}">ORDER#<span th:text="${order.getId()}" style="display: inline; padding-right: 3em"></span>
+        <a style="padding-right: 3em" th:href="@{/orders/{id}(id=${order.getId()})}">View Order</a>
+        <button th:id="${'order-' + order.getId()}" style="color: darkred">Delete Order</button></li>
     </ol>
 </body>
 </html>
