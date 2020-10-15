@@ -44,6 +44,14 @@ mysql> grant all on manufacturing.* to 'springuser'@'%'; -- Gives all privileges
 ```
 If necessary, change the connection url in `application.propeties`
 
+4. Launch the ServiceApplication.
+
+5. Launch the Application.
+
+6. Connect to localhost:8081/
+
+7. Sign in using "admin" for the username and password.
+
 ##Information
 To view generated OpenAPI 3.0 documentation, visit `localhost:8080/manufacturing/api/swagger/ui` 
 
