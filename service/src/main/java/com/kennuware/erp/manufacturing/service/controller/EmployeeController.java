@@ -51,7 +51,7 @@ public class EmployeeController {
     return employeeRepository.save(employee);
   }
 
-  @GetMapping("/authenticate")
+  @PostMapping("/authenticate")
   boolean authenticateEmployee(@RequestBody JsonNode json, HttpSession session) {
     String user = json.get("user").textValue();
     String pass = json.get("pass").textValue();
