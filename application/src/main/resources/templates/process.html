@@ -21,9 +21,9 @@
 
     <div class="container" style="width: 30%; text-align: center">
         <h2 style="text-align: center">Requests to be Completed:</h2>
-        <ul th:each="request: ${requests}" style="text-align: center; display: inline; font-size: 20px; list-style-type: none">
-            <li><span th:text="${request.getType()}" style="display: inline"></span>#<span th:text="${request.getId()}" style="display: inline; padding-right: 3em"></span><span th:text="${request.getProduct().getName()}" style="display: inline; padding-right: 3em"></span><span th:text="Quantity" style="display: inline"></span> = <span th:text="${request.getQuantity()}" style="display: inline"></span></li>
-        </ul><br><br>
+        <ol id="product-list" style="text-align: center; display: inline; font-size: 20px; margin: 10px; padding: 10px">
+            <li th:each="request: ${requests}"><span th:text="${request.getType()}" style="display: inline"></span>#<span th:text="${request.getId()}" style="display: inline; padding-right: 3em"></span><span th:text="${request.getProduct().getName()}" style="display: inline; padding-right: 3em"></span><span th:text="Quantity" style="display: inline"></span> = <span th:text="${request.getQuantity()}" style="display: inline"></span></li>
+        </ol><br><br>
     </div>
 
     <div style="text-align: center">

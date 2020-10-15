@@ -29,14 +29,4 @@ public class OrdersController {
         model.addAttribute("order", order);
         return "order";
     }
-
-    @GetMapping(path = "/orders/{id}/delete")
-    public String deleteProduct(@PathVariable Long id, Model model){
-        RestTemplate restTemplate = new RestTemplate();
-        restTemplate.delete("http://localhost:8080/manufacturing/api/requests/" + id);
-        return "orders";
-    }
-
-
-
 }
