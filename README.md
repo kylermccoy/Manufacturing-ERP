@@ -44,9 +44,11 @@ mysql> grant all on manufacturing.* to 'springuser'@'%'; -- Gives all privileges
 ```
 If necessary, change the connection url in `application.propeties`
 
-4. Launch the ServiceApplication.
+1. Download the latest relase
 
-5. Launch the Application.
+4. `chmod +x start`
+
+5. `./start`
 
 6. Connect to localhost:8081/
 
