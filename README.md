@@ -47,6 +47,7 @@ If necessary, change the connection url in `application.propeties`
 1. Download the latest relase
 
 4. `chmod +x start`
+if you get an error about invalid shell, try `dos2unix start`
 
 5. `./start`
 
