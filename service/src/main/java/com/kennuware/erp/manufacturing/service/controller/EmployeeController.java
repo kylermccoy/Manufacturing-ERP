@@ -83,17 +83,20 @@ public class EmployeeController {
 
   @GetMapping("/getHours")
   Object updateHours(@RequestParam String user, HttpSession session) {
+    boolean success = false;
+    String message = "You are not authenticated to get this user's hours";
     ObjectNode node = mapper.createObjectNode();
     if (session != null) {
       if (user.equals((session.getAttribute(AuthManager.USER)))) {
         Employee employee = employeeRepository.findByUsername(user);
         node.put("name", user);
         node.put("hours", employee.getHoursWorked());
-        return node;
+        success = true;
+        message = "";
       }
     }
-    node.put("success", false);
-    node.put("message", "You are not authenticated to get this user's hours");
+    node.put("success", success);
+    node.put("message", message);
     return node;
   }
 }
