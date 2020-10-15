@@ -21,7 +21,7 @@
     <ol th:each="order: ${orders}" style="text-align: center; display: inline; font-size: 20px; margin: 10px; padding: 10px">
         <li>ORDER#<span th:text="${order.getId()}" style="display: inline; padding-right: 3em"></span>
             <a style="padding-right: 3em" th:href="@{/orders/{id}(id=${order.getId()})}">View Order</a>
-            <a style="color: darkred" th:href="@{/orders/{id}(id=${order.getId()})}">Delete Order</a></li>
+            <button style="color: darkred" th:onclick="@{/orders/{id}/delete(id=${order.getId()})}">Delete Order</button></li>
     </ol>
 </body>
 </html>

@@ -23,11 +23,18 @@ public class OrdersController {
     }
 
     @GetMapping(path = "/orders/{id}")
-    String getProduct(@PathVariable Long id, Model model) {
+    public String getOrder(@PathVariable Long id, Model model) {
         RestTemplate restTemplate = new RestTemplate();
         Request order = restTemplate.getForObject("http://localhost:8080/manufacturing/api/requests/" + id, Request.class);
         model.addAttribute("order", order);
         return "order";
+    }
+
+    @GetMapping(path = "/orders/{id}/delete")
+    public String deleteProduct(@PathVariable Long id, Model model){
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.delete("http://localhost:8080/manufacturing/api/requests/" + id);
+        return "orders";
     }
 
 
