@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" th:src="@{/js/actions.js}"></script>
 </head>
 <body>
     <ul style="list-style-type: none; margin: 10px; padding: 10px; font-size: 25px; text-align: center ">
@@ -22,16 +23,14 @@
     <div class="container" style="width: 30%; text-align: center">
         <h2 style="text-align: center">Requests to be Completed:</h2>
         <ol id="product-list" style="text-align: center; display: inline; font-size: 20px; margin: 10px; padding: 10px">
-            <li th:each="request: ${requests}"><span th:text="${request.getType()}" style="display: inline"></span>#<span th:text="${request.getId()}" style="display: inline; padding-right: 3em"></span><span th:text="${request.getProduct().getName()}" style="display: inline; padding-right: 3em"></span><span th:text="Quantity" style="display: inline"></span> = <span th:text="${request.getQuantity()}" style="display: inline"></span></li>
+            <li th:if="request" th:each="request: ${requests}"><span th:text="${request.getType()}" style="display: inline"></span>#<span th:text="${request.getId()}" style="display: inline; padding-right: 3em"></span><span th:text="${request.getProduct().getName()}" style="display: inline; padding-right: 3em"></span><span th:text="Quantity" style="display: inline"></span> = <span th:text="${request.getQuantity()}" style="display: inline"></span></li>
         </ol><br><br>
     </div>
 
-    <div style="text-align: center">
-
-
-        <button type="button" style="background-color: green; color: white">Start Process</button>
-        <button type="button" style="background-color: darkred; color: white">Stop Process</button>
-        <button type="button" style="background-color: grey; color: white">Skip Process</button>
+    <div id="controls" style="text-align: center; color: white">
+        <button type="button" id="start" style="background-color: green; color: white">Start Process</button>
+        <button type="button" id="stop" style="background-color: darkred; color: white">Stop Process</button>
+        <button type="button" id="skip" style="background-color: grey; color: white">Skip Process</button>-->
     </div>
 
 </body>

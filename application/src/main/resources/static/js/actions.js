@@ -7,11 +7,28 @@ $( function() {
   })
 } )
 
+$( function() {
+  $("#controls").find("button").click(function() {
+    let command = $(this).attr("id")
+    let url = "http://localhost:8080/manufacturing/api/queue/" + command + "?queueName=Main Queue";
+    sendProcessControlRequest(url);
+  })
+} )
+
 function sendDeleteRequest(url) {
   $.ajax({
     url: url,
     type: 'DELETE'
   })
-  .done(function() {location.reload()})
-  .fail(function() {console.log("fail")});
+      .done(function() {location.reload()})
+      .fail(function() {console.log("fail")});
+}
+
+function sendProcessControlRequest(url) {
+  $.ajax({
+    url: url,
+    type: 'GET'
+  })
+      .done(function() {location.reload()})
+      .fail(function() {console.log("fail")});
 }
