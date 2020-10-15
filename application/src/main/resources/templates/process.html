@@ -21,8 +21,8 @@
 
     <div class="container" style="width: 30%; text-align: center">
         <h2 style="text-align: center">Queue:</h2>
-        <ol th:each="order: ${queue}" style="text-align: center; display: inline; font-size: 20px">
-            <li>ProductID#<span th:text="${order.getProduct().getId()}" style="display: inline; padding-right: 3em"></span> <span th:text="${order.getProduct().getName()}" style="display: inline; padding-right: 3em"></span> <span th:text="Quantity" style="display: inline"></span> = <span th:text="${order.getQuantity()}" style="display: inline"></span></li>
+        <ol th:each="request: ${queue}" style="text-align: center; display: inline; font-size: 20px">
+            <li>ProductID#<span th:text="${request.getProduct().getId()}" style="display: inline; padding-right: 3em"></span> <span th:text="${request.getProduct().getName()}" style="display: inline; padding-right: 3em"></span> <span th:text="Quantity" style="display: inline"></span> = <span th:text="${request.getQuantity()}" style="display: inline"></span></li>
         </ol><br><br>
     </div>
 

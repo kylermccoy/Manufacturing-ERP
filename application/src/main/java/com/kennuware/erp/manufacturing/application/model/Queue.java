@@ -8,7 +8,7 @@ import java.util.List;
 public class Queue {
     private String name;
 
-    private List<Order> ordersInQueue;
+    private Request[] requestsInQueue;
 
     private boolean running;
 

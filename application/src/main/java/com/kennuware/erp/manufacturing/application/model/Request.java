@@ -3,7 +3,9 @@ package com.kennuware.erp.manufacturing.application.model;
 import lombok.Data;
 
 @Data
-public class Recall {
+public class Request {
+
+    private RequestType type;
 
     private Long id;
 
