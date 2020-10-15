@@ -17,12 +17,12 @@
     <li style="display: inline; margin: 10px; padding: 10px"><a href="../log">Log</a></li>
 </ul><br><br>
 
-<h1 style="text-align: center">OrderID#<span th:text="${order.getId()}"></span></h1><br><br>
+<h1 style="text-align: center">ORDER#<span th:text="${order.getId()}"></span></h1><br><br>
 
 <div class="container" style="width: 30%; text-align: center">
     <h2 style="text-align: center">Product List:</h2>
     <ul th:each="product: ${order.getProduct()}" style="text-align: center; display: inline; font-size: 20px; list-style-type: none">
-        <li> ProductID#<span th:text="${order.getProduct().getId()}" style="display: inline; padding-right: 3em"></span> <span th:text="${order.getProduct().getName()}" style="display: inline; padding-right: 3em"></span> <span th:text="Quantity" style="display: inline"></span> = <span th:text="${order.getQuantity()}" style="display: inline"></span></li>
+        <li> PRODUCT#<span th:text="${order.getProduct().getId()}" style="display: inline; padding-right: 3em"></span> <span th:text="${order.getProduct().getName()}" style="display: inline; padding-right: 3em"></span> <span th:text="Quantity" style="display: inline"></span> = <span th:text="${order.getQuantity()}" style="display: inline"></span></li>
     </ul><br><br>
 </div>
 
