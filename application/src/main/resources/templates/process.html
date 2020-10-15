@@ -16,12 +16,12 @@
         <li style="display: inline; margin: 10px; padding: 10px"><a href="log">Log</a></li>
     </ul><br><br>
 
-    <h1 style="text-align: center">Status: </h1>
-    <h1 style="text-align: center">Current Request#: <span th:text="${queue[0].getId()}"></span></h1><br>
+    <h1 style="text-align: center">Status: <span th:text="${queueStatus}"></span></h1>
+    <h1 style="text-align: center">Current Request#: <span th:text="${requests[0].getId()}"></span></h1><br>
 
     <div class="container" style="width: 30%; text-align: center">
         <h2 style="text-align: center">Requests to be Completed:</h2>
-        <ol th:each="request: ${queue}" style="text-align: center; display: inline; font-size: 20px">
+        <ol th:each="request: ${requests}" style="text-align: center; display: inline; font-size: 20px">
             <li><span th:text="${request.getType()}" style="display: inline"></span>#<span th:text="${request.getId()}" style="display: inline; padding-right: 3em"></span><span th:text="${request.getProduct().getName()}" style="display: inline; padding-right: 3em"></span><span th:text="Quantity" style="display: inline"></span> = <span th:text="${request.getQuantity()}" style="display: inline"></span></li>
         </ol><br><br>
     </div>

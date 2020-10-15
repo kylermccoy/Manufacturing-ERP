@@ -24,8 +24,16 @@ public class EmployeeController {
         }
         this.user = user;
         RestTemplate rt = new RestTemplate();
-        Request[] queue = rt.getForObject("http://localhost:8080/manufacturing/api/queue/requests?queueName=Main Queue", Request[].class);
-        model.addAttribute("queue", queue);
+        Queue queue = rt.getForObject("http://localhost:8080/manufacturing/api/queue/?queueName=Main Queue", Queue.class);
+        String queueStatus;
+        if (queue.isRunning()){
+            queueStatus = "Running";
+        }else {
+            queueStatus = "Stopped";
+        }
+        model.addAttribute("queueStatus", queueStatus);
+        Request[] requests = rt.getForObject("http://localhost:8080/manufacturing/api/queue/requests?queueName=Main Queue", Request[].class);
+        model.addAttribute("requests", requests);
         return new RedirectView("/process");
     }
 
