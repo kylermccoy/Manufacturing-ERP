@@ -20,29 +20,58 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path = "/products")
 public class ProductController {
 
-  ProductRepository productRepository;
-  ObjectMapper mapper;
+  ProductRepository productRepository; // Repository of products
+  ObjectMapper mapper; // Provides functionality for reading and writing JSON
 
+
+  /**
+   * Creates a new instance of ProductController
+   * @param productRepository repository of products
+   * @param mapper // Provides functionality for reading and writing JSON
+   */
   ProductController(ProductRepository productRepository, ObjectMapper mapper) {
     this.productRepository = productRepository;
     this.mapper = mapper;
   }
 
+
+  /**
+   * Lists all products in repository
+   * @return list of all products
+   */
   @GetMapping
   List<Product> listProducts() {
     return productRepository.findAll();
   }
 
+
+  /**
+   * Gathers data of a specific product from repository
+   * @param id Unique Product ID
+   * @return Specified product
+   */
   @GetMapping(path = "/{id}")
   Product getProduct(@PathVariable long id) {
     return productRepository.findById(id).orElseThrow(EntityNotFoundException::new);
   }
 
+
+  /**
+   * Adds a product to the repository
+   * @param product Product to be added
+   * @return Saves product to repository
+   */
   @PostMapping
   Product addProduct(@RequestBody Product product) {
     return productRepository.save(product);
   }
 
+
+  /**
+   * Deletes a product from the repository
+   * @param id Unique Product ID
+   * @return Success or failure message for deletion of product
+   */
   @DeleteMapping(path = "/{id}")
   ObjectNode deleteProduct(@PathVariable long id) {
     final ObjectNode response = mapper.createObjectNode();

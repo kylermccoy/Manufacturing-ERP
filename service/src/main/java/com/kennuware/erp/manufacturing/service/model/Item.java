@@ -14,10 +14,15 @@ public class Item {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long id;
+  private Long id; // Unique Item ID
 
-  private String name;
+  private String name; // Item name
 
+
+  /**
+   * Creates a new instance of an Item
+   * @param name Item name
+   */
   public Item(String name) {
     this.name = name;
   }

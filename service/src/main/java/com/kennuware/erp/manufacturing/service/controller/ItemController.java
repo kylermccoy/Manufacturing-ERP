@@ -20,29 +20,51 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/items")
 public class ItemController {
 
-  private final ItemRepository itemRepository;
-  private final ObjectMapper mapper;
+  private final ItemRepository itemRepository; // Repository of items
+  private final ObjectMapper mapper; // Provides functionality for reading and writing JSON
 
   ItemController(ItemRepository itemRepository, ObjectMapper mapper) {
-    this.itemRepository = itemRepository;
-    this.mapper = mapper;
+    this.itemRepository = itemRepository; // Repository of items
+    this.mapper = mapper; // Provides functionality for reading and writing JSON
   }
 
+  /**
+   * Lists all items in repository
+   * @return list of all items
+   */
   @GetMapping
   List<Item> listItems() {
     return itemRepository.findAll();
   }
 
+
+  /**
+   * Gathers data of a specific item
+   * @param id Unique Item ID
+   * @return Specified item
+   */
   @GetMapping(path = "/{id}")
   Item getItem(@PathVariable long id) {
     return itemRepository.findById(id).orElseThrow(EntityNotFoundException::new);
   }
 
+
+  /**
+   * Adds an item to the repository
+   * @param item Item to be added
+   * @return Saves item to repository
+   */
   @PostMapping
   Item addItem(@RequestBody Item item) {
     return itemRepository.save(item);
   }
 
+
+  /**
+   * Deletes an item from the repository
+   * @param id Unique Item ID
+   * @return Success or failure message of item deletion
+   */
   @DeleteMapping(path = "/{id}")
   ObjectNode deleteItem(@PathVariable long id) {
     final ObjectNode response = mapper.createObjectNode();

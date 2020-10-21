@@ -13,14 +13,14 @@ public class Employee {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long id;
+  private Long id; // Unique Employee ID
 
-  private String username;
+  private String username; // Employee username
 
   // users dont need to see this
   @JsonIgnore
-  private String password;
+  private String password; // Employee password
 
-  private long hoursWorked;
+  private long hoursWorked; // Hours worked by employee
 
 }

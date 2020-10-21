@@ -21,16 +21,30 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/employees")
 public class EmployeeController {
 
-  EmployeeRepository employeeRepository;
-  ObjectMapper mapper;
-  PasswordEncoder encoder;
+  EmployeeRepository employeeRepository; // Repository of employees
+  ObjectMapper mapper; // Provides functionality for reading and writing JSON
+  PasswordEncoder encoder; // Encodes the user's password
 
+
+  /**
+   * Creates a new instance of EmployeeController
+   * @param repository Repository of employees
+   * @param encoder Password encoder
+   * @param mapper JSON Mapper
+   */
   EmployeeController(EmployeeRepository repository, PasswordEncoder encoder, ObjectMapper mapper) {
     this.employeeRepository = repository;
     this.encoder = encoder;
     this.mapper = mapper;
   }
 
+
+  /**
+   * Method to create a new employee and save to repository
+   * @param json JSON Node
+   * @param session Current user session
+   * @return new saved Employee
+   */
   @PostMapping
   Employee createEmployee(@RequestBody JsonNode json, HttpSession session) {
     String user = json.get("user").textValue();
@@ -51,6 +65,13 @@ public class EmployeeController {
     return employeeRepository.save(employee);
   }
 
+
+  /**
+   * Authenticates a user's credentials at login
+   * @param json JSON Node
+   * @param session Current user session
+   * @return Boolean value of success or failure of user login authentication
+   */
   @PostMapping("/authenticate")
   boolean authenticateEmployee(@RequestBody JsonNode json, HttpSession session) {
     String user = json.get("user").textValue();
@@ -62,6 +83,14 @@ public class EmployeeController {
     return success;
   }
 
+
+  /**
+   * Updates the hours worked by the signed-in employee
+   * @param user Current user
+   * @param hoursWorked Number of hours worked in pay cycle
+   * @param session Current user session
+   * @return JSON success or failure message based on whether or not user hours were properly updated
+   */
   @PostMapping("/updateHours")
   Object updateHours(@RequestParam String user, @RequestParam long hoursWorked, HttpSession session) {
     boolean success = false;
@@ -81,6 +110,13 @@ public class EmployeeController {
     return node;
   }
 
+
+  /**
+   * Requests the user's work hours
+   * @param user Current user
+   * @param session Current user session
+   * @return JSON success or failure message
+   */
   @GetMapping("/getHours")
   Object updateHours(@RequestParam String user, HttpSession session) {
     boolean success = false;

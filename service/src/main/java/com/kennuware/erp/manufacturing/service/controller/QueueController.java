@@ -22,27 +22,44 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path = "/queue")
 public class QueueController {
 
-  public static final String QUEUE_NAME = "queue";
+  public static final String QUEUE_NAME = "queue"; // Queue name
 
   //TODO: probably refactor a lot of duplicate code
   //TODO: make better use of Optional.orElse
   //TODO: Create a json error response object
 
-  private final QueueRepository queueRepository;
-  private final RequestRepository requestRepository;
-  private final ObjectMapper mapper;
+  private final QueueRepository queueRepository; // Repository of queues
+  private final RequestRepository requestRepository; // Repository of requests
+  private final ObjectMapper mapper; // Provides functionality for reading and writing JSON
 
+
+  /**
+   * Creates a new instance of QueueController
+   * @param queueRepository Repository of queue
+   * @param requestRepository Repository of requests
+   * @param mapper Mapper
+   */
   QueueController(QueueRepository queueRepository, RequestRepository requestRepository, ObjectMapper mapper) {
     this.queueRepository = queueRepository;
     this.requestRepository = requestRepository;
     this.mapper = mapper;
   }
 
+
+  /**
+   * Obtains the Queue from the repository
+   * @return the queue
+   */
   @GetMapping
   Queue getQueue() {
     return queueRepository.findByName(QUEUE_NAME).orElseThrow(EntityNotFoundException::new);
   }
 
+
+  /**
+   * Starts the manufacturing process
+   * @return JSON success or failure message
+   */
   @GetMapping("/start")
   ObjectNode startQueue() {
     ObjectNode node = mapper.createObjectNode();
@@ -67,6 +84,11 @@ public class QueueController {
     return node;
   }
 
+
+  /**
+   * Stops the manufacturing process
+   * @return JSON success or failure message
+   */
   @GetMapping("/stop")
   ObjectNode stopQueue() {
     ObjectNode node = mapper.createObjectNode();
@@ -91,6 +113,11 @@ public class QueueController {
     return node;
   }
 
+
+  /**
+   * Requests a list of all requests in the queue
+   * @return List of requests
+   */
   @GetMapping("/requests")
   List<Request> getRequestsInQueue() {
     Optional<Queue> queue = queueRepository.findByName(QUEUE_NAME);
@@ -101,6 +128,12 @@ public class QueueController {
     }
   }
 
+
+  /**
+   * Adds a request to the queue
+   * @param request Request to be added
+   * @return JSON success or failure message
+   */
   @PostMapping("/requests")
   ObjectNode addRequestToQueue(@RequestBody Request request) {
     ObjectNode node = mapper.createObjectNode();
@@ -124,6 +157,12 @@ public class QueueController {
     return node;
   }
 
+
+  /**
+   * Deletes a request from the queue
+   * @param id Unique ID of Request being removed
+   * @return JSON success or failure message
+   */
   @DeleteMapping("/{id}")
   ObjectNode removeRequestFromQueue(@PathVariable long id) {
     ObjectNode node = mapper.createObjectNode();
@@ -150,6 +189,11 @@ public class QueueController {
     return node;
   }
 
+
+  /**
+   * Skip current request in the manufacturing process
+   * @return JSON success or failure message
+   */
   @GetMapping({"/skip", "/completeRequest"})
   ObjectNode skipCurrentRequest() {
     ObjectNode node = mapper.createObjectNode();
