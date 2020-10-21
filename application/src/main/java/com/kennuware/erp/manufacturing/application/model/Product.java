@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class Product {
-    Long id;
-    String name;
-    private Recipe recipe;
+    Long id;    // Unique ID of product
+    String name;    // Name of product
+    private Recipe recipe;  // Product recipe
 }
