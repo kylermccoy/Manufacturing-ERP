@@ -5,7 +5,7 @@
 
 trigger:
 - master
-- task_*
+- task/*
 
 pool:
   vmImage: 'ubuntu-latest'
