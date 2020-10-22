@@ -19,7 +19,7 @@
 
 <h1 style="text-align: center"><span th:text="${product.getName()}"></span></h1><br><br>
 
-<div class="container" style="width: 30%; text-align: center">
+<div class="container" style="width: 30%; text-align: center; font-size: 22px">
     <h2 style="text-align: center">Recipe:</h2>
     <ul id="product-list" style="text-align: center; display: inline; font-size: 20px; margin: 10px; padding: 10px; list-style-type: none">
         <li th:each="component: ${product.getRecipe().getComponents()}">
@@ -27,10 +27,16 @@
             <span th:text="${component.getItem().getName()}" style="display: inline; padding-right: 3em"></span>
             <span th:text="Quantity" style="display: inline"></span> = <span th:text="${component.getQuantity()}" style="display: inline"></span>
         </li>
-    </ul><br><br>
-    <!-- Manufacturing Instructions + Build Time -->
-    <p style="font-size: 20px"><span th:text="Instructions" style="display: inline"></span>: <span th:text="${product.getRecipe().getBuildInstructions()}" style="display: inline"></span></p>
-    <p style="font-size: 20px">Build time: <span th:text="${product.getRecipe().getBuildTime()}"></span> minutes</p>
+    </ul><br>
+    <!-- Manufacturing Instructions -->
+    <h2>Instructions:</h2>
+    <ol style="font-size: 22px">
+        <li th:each="step: ${product.getRecipe().getBuildInstructions().split('\n')}"><span th:text="${step}"></span></li>
+    </ol>
+    <br>
+    <!-- Build time -->
+    <h2>Build Time:</h2>
+    <p style="font-size: 26px"><span th:text="${product.getRecipe().getBuildTime()}"></span> minutes</p>
 </div>
 
 </body>
