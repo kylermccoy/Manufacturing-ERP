@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.kennuware.erp.manufacturing.application.controller.util.RequestSender;
 import com.kennuware.erp.manufacturing.application.model.Employee;
 import com.kennuware.erp.manufacturing.application.model.Queue;
 import com.kennuware.erp.manufacturing.application.model.Request;
@@ -75,11 +76,7 @@ public class EmployeeController {
     @GetMapping(path = "/timesheet")
     public String getTimesheet(Model model, HttpSession session){
         RestTemplate rt = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Cookie", "SESSION=" + session.getAttribute("session"));
-        HttpEntity entity = new HttpEntity(headers);
-        ResponseEntity<JsonNode> response = rt.exchange(
-            "http://localhost:8080/manufacturing/api/employees/getHours?user=" + this.user, HttpMethod.GET, entity, JsonNode.class);
+        ResponseEntity<JsonNode> response = RequestSender.getForObject("http://localhost:8080/manufacturing/api/employees/getHours?user=" + this.user, JsonNode.class, session);
         JsonNode res = response.getBody();
         long hours = res.get("hours").asLong();
         model.addAttribute("hours", hours);
