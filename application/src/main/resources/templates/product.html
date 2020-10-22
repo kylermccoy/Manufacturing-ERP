@@ -8,23 +8,26 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
-<ul style="list-style-type: none; margin: 10px; padding: 10px; font-size: 25px; text-align: center ">
-    <li style="display: inline; margin: 10px; padding: 10px"><a href="../process">Process</a></li>
-    <li style="display: inline; margin: 10px; padding: 10px"><a href="../orders">Orders</a></li>
-    <li style="display: inline; margin: 10px; padding: 10px"><a href="../recalls">Recalls</a></li>
-    <li style="display: inline; margin: 10px; padding: 10px"><a href="../products">Products</a></li>
-    <li style="display: inline; margin: 10px; padding: 10px"><a href="../timesheet">Timesheet</a></li>
-<!--    <li style="display: inline; margin: 10px; padding: 10px"><a href="../log">Log</a></li>-->
-</ul><br><br>
 
-<h1 style="text-align: center"><span th:text="${product.getName()}"></span></h1><br><br>
-
-<div class="container" style="width: 30%; text-align: center">
-    <h2 style="text-align: center">Recipe:</h2>
-    <ul id="product-list" style="text-align: center; display: inline; font-size: 20px; margin: 10px; padding: 10px; list-style-type: none">
-        <li th:each="component: ${product.getRecipe().getComponents()}">ITEM#<span th:text="${component.getItem().getId()}" style="display: inline; padding-right: 3em"></span> <span th:text="${component.getItem().getName()}" style="display: inline; padding-right: 3em"></span> <span th:text="Quantity" style="display: inline"></span> = <span th:text="${component.getQuantity()}" style="display: inline"></span></li>
+    <!-- Nav bar -->
+    <ul style="list-style-type: none; margin: 10px; padding: 10px; font-size: 25px; text-align: center ">
+        <li style="display: inline; margin: 10px; padding: 10px"><a href="../process">Process</a></li>
+        <li style="display: inline; margin: 10px; padding: 10px"><a href="../orders">Orders</a></li>
+        <li style="display: inline; margin: 10px; padding: 10px"><a href="../recalls">Recalls</a></li>
+        <li style="display: inline; margin: 10px; padding: 10px"><a href="../products">Products</a></li>
+        <li style="display: inline; margin: 10px; padding: 10px"><a href="../timesheet">Timesheet</a></li>
     </ul><br><br>
-</div>
+
+    <!-- Product Name -->
+    <h1 style="text-align: center"><span th:text="${product.getName()}"></span></h1><br><br>
+
+    <!-- List of components -->
+    <div class="container" style="width: 30%; text-align: center">
+        <h2 style="text-align: center">Recipe:</h2>
+        <ul id="product-list" style="text-align: center; display: inline; font-size: 20px; margin: 10px; padding: 10px; list-style-type: none">
+            <li th:each="component: ${product.getRecipe().getComponents()}">ITEM#<span th:text="${component.getItem().getId()}" style="display: inline; padding-right: 3em"></span> <span th:text="${component.getItem().getName()}" style="display: inline; padding-right: 3em"></span> <span th:text="Quantity" style="display: inline"></span> = <span th:text="${component.getQuantity()}" style="display: inline"></span></li>
+        </ul><br><br>
+    </div>
 
 </body>
 </html>
