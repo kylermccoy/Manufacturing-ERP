@@ -27,12 +27,21 @@ public class ItemController {
   private final ItemRepository itemRepository; // Repository of items
   private final ObjectMapper mapper; // Provides functionality for reading and writing JSON
 
+  /**
+   * Creates a new instance of ItemController
+   * @param itemRepository Repository of items
+   * @param mapper Mapper
+   */
   ItemController(ItemRepository itemRepository, ObjectMapper mapper) {
     this.itemRepository = itemRepository; // Repository of items
     this.mapper = mapper; // Provides functionality for reading and writing JSON
   }
 
 
+  /**
+   * Lists all items in repository
+   * @return list of all items
+   */
   @GetMapping
   @Operation(summary = "Lists all items in repository")
   List<Item> listItems() {
@@ -40,6 +49,11 @@ public class ItemController {
   }
 
 
+  /**
+   * Gathers data of a specific item
+   * @param id Unique Item ID
+   * @return item
+   */
   @GetMapping(path = "/{id}")
   @Operation(summary = "Gathers data of a specific item")
   Item getItem(@Parameter(description = "Unique Item ID") @PathVariable long id) {
@@ -47,6 +61,11 @@ public class ItemController {
   }
 
 
+  /**
+   * Adds an item to the repository
+   * @param item Item to be added
+   * @return Saves item to repository
+   */
   @PostMapping
   @Operation(summary = "Adds an item to the repository")
   Item addItem(@Parameter(description = "Item to be added") @RequestBody Item item) {
@@ -54,6 +73,11 @@ public class ItemController {
   }
 
 
+  /**
+   * Deletes an item from the repository
+   * @param id Unique Item ID
+   * @return JSON success or failure message
+   */
   @DeleteMapping(path = "/{id}")
   @Operation(summary = "Deletes an item from the repository")
   ObjectNode deleteItem(@Parameter(description = "Unique Item ID") @PathVariable long id) {

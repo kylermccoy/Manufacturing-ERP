@@ -39,6 +39,10 @@ public class ProductController {
   }
 
 
+  /**
+   * Lists all products in repository
+   * @return list of all products
+   */
   @GetMapping
   @Operation(summary = "Lists all products in repository")
   List<Product> listProducts() {
@@ -58,6 +62,11 @@ public class ProductController {
   }
 
 
+  /**
+   * Adds a product to the repository
+   * @param product Product to be added
+   * @return
+   */
   @PostMapping
   @Operation(summary = "Adds a product to the repository")
   Product addProduct(@Parameter(description = "Product to be added") @RequestBody Product product) {

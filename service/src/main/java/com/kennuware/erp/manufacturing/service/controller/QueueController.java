@@ -12,6 +12,8 @@ import java.util.Optional;
 import javax.persistence.EntityNotFoundException;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -50,7 +52,7 @@ public class QueueController {
 
   /**
    * Obtains the Queue from the repository
-   * @return the queue
+   * @return Queue
    */
   @GetMapping
   @Operation(summary = "Obtains the Queue from the repository")
@@ -64,6 +66,7 @@ public class QueueController {
    * @return JSON success or failure message
    */
   @GetMapping("/start")
+  @Operation(summary = "Starts the manufacturing process")
   ObjectNode startQueue() {
     ObjectNode node = mapper.createObjectNode();
     boolean success = false;
@@ -93,6 +96,7 @@ public class QueueController {
    * @return JSON success or failure message
    */
   @GetMapping("/stop")
+  @Operation(summary = "Stops the manufacturing process")
   ObjectNode stopQueue() {
     ObjectNode node = mapper.createObjectNode();
     boolean success = false;
@@ -122,6 +126,7 @@ public class QueueController {
    * @return List of requests
    */
   @GetMapping("/requests")
+  @Operation(summary = "Requests a list of all requests in the queue")
   List<Request> getRequestsInQueue() {
     Optional<Queue> queue = queueRepository.findByName(QUEUE_NAME);
     if (queue.isPresent()) {
@@ -138,7 +143,8 @@ public class QueueController {
    * @return JSON success or failure message
    */
   @PostMapping("/requests")
-  ObjectNode addRequestToQueue(@RequestBody Request request) {
+  @Operation(summary = "Adds a request to the queue")
+  ObjectNode addRequestToQueue(@Parameter(description = "Request to be added") @RequestBody Request request) {
     ObjectNode node = mapper.createObjectNode();
     boolean success = false;
     String message = "";
@@ -167,7 +173,8 @@ public class QueueController {
    * @return JSON success or failure message
    */
   @DeleteMapping("/{id}")
-  ObjectNode removeRequestFromQueue(@PathVariable long id) {
+  @Operation(summary = "Deletes a request from the queue")
+  ObjectNode removeRequestFromQueue(@Parameter(description = "Unique ID of Request being removed") @PathVariable long id) {
     ObjectNode node = mapper.createObjectNode();
     boolean success = false;
     String message = "";
@@ -198,6 +205,7 @@ public class QueueController {
    * @return JSON success or failure message
    */
   @GetMapping({"/skip", "/completeRequest"})
+  @Operation(summary = "Skip current request in the manufacturing process")
   ObjectNode skipCurrentRequest() {
     ObjectNode node = mapper.createObjectNode();
     boolean success = false;

@@ -9,6 +9,9 @@ import com.kennuware.erp.manufacturing.service.model.repository.RequestRepositor
 import java.util.List;
 import java.util.Optional;
 import javax.persistence.EntityNotFoundException;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -68,12 +71,20 @@ public class RequestController {
    * @return JSON success or failure message
    */
   @PostMapping
-  Request addRequest(@RequestBody Request request) {
+  @Operation(summary = "Adds a request to the repository")
+  Request addRequest(@Parameter(description = "Request to be added") @RequestBody Request request) {
     return requestRepository.save(request);
   }
 
+
+  /**
+   * Deletes a request from queue
+   * @param id Request ID
+   * @return JSON success or failure
+   */
   @DeleteMapping(path = "/{id}")
-  ObjectNode deleteRequest(@PathVariable long id) {
+  @Operation(summary = "Deletes a request from queue")
+  ObjectNode deleteRequest(@Parameter(description = "Request ID") @PathVariable long id) {
     final ObjectNode response = mapper.createObjectNode();
     final String message;
     final boolean success;

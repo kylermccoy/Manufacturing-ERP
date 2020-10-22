@@ -43,6 +43,12 @@ public class EmployeeController {
   }
 
 
+  /**
+   * Method to create a new employee and save it to repository
+   * @param json JSON Node
+   * @param session Current user session
+   * @return
+   */
   @PostMapping
   @Operation(summary = "Method to create a new employee and save it to repository")
   Employee createEmployee(@Parameter(description = "JSON Node") @RequestBody JsonNode json, @Parameter(description = "Current user session") HttpSession session) {
@@ -65,6 +71,12 @@ public class EmployeeController {
   }
 
 
+  /**
+   * Authenticates a user's credentials at login
+   * @param json JSON Node
+   * @param session Current user session
+   * @return Boolean success or failure message
+   */
   @PostMapping("/authenticate")
   @Operation(summary = "Authenticates a user's credentials at login")
   boolean authenticateEmployee(@Parameter(description = "JSON Node") @RequestBody JsonNode json,
@@ -109,6 +121,12 @@ public class EmployeeController {
   }
 
 
+  /**
+   * Requests the user's work hours
+   * @param user Current user
+   * @param session Current user session
+   * @return JSON success or failure message
+   */
   @GetMapping("/getHours")
   @Operation(summary = "Requests the user's work hours")
   Object updateHours(@Parameter(description = "Current user") @RequestParam String user,
