@@ -7,6 +7,6 @@ public class Recipe {
     Long id;
     String name;
     RecipeComponent[] components;
-    String buildInstructions;
-    int buildTime;
+    String buildInstructions; // Instructions of how to build product
+    int buildTime;  // Number of minutes to manufacture product
 }

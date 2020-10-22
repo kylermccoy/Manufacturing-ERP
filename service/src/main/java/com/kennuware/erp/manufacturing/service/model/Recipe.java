@@ -22,7 +22,8 @@ public class Recipe {
   @OneToMany(cascade = CascadeType.ALL)
   private List<RecipeComponent> components;
 
-  private String buildInstructions;
-  private int buildTime;
+  private String buildInstructions; // Instructions of how to manufacture product
+
+  private int buildTime;  // How many minutes manufacturing of product will take
 
 }

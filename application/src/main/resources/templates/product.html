@@ -28,7 +28,9 @@
             <span th:text="Quantity" style="display: inline"></span> = <span th:text="${component.getQuantity()}" style="display: inline"></span>
         </li>
     </ul><br><br>
+    <!-- Manufacturing Instructions + Build Time -->
     <p style="font-size: 20px"><span th:text="Instructions" style="display: inline"></span>: <span th:text="${product.getRecipe().getBuildInstructions()}" style="display: inline"></span></p>
+    <p style="font-size: 20px">Build time: <span th:text="${product.getRecipe().getBuildTime()}"></span> minutes</p>
 </div>
 
 </body>
