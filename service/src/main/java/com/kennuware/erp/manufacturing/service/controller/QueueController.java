@@ -10,6 +10,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import javax.persistence.EntityNotFoundException;
+
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -51,6 +53,7 @@ public class QueueController {
    * @return the queue
    */
   @GetMapping
+  @Operation(summary = "Obtains the Queue from the repository")
   Queue getQueue() {
     return queueRepository.findByName(QUEUE_NAME).orElseThrow(EntityNotFoundException::new);
   }

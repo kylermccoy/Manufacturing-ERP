@@ -6,7 +6,11 @@ import com.kennuware.erp.manufacturing.service.model.Product;
 import com.kennuware.erp.manufacturing.service.model.repository.ProductRepository;
 import java.util.List;
 import javax.persistence.EntityNotFoundException;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,11 +39,8 @@ public class ProductController {
   }
 
 
-  /**
-   * Lists all products in repository
-   * @return list of all products
-   */
   @GetMapping
+  @Operation(summary = "Lists all products in repository")
   List<Product> listProducts() {
     return productRepository.findAll();
   }
@@ -51,18 +52,15 @@ public class ProductController {
    * @return Specified product
    */
   @GetMapping(path = "/{id}")
-  Product getProduct(@PathVariable long id) {
+  @Operation(summary = "Gathers data of a specific product from repository")
+  Product getProduct(@Parameter(description = "Unique Product ID") @PathVariable long id) {
     return productRepository.findById(id).orElseThrow(EntityNotFoundException::new);
   }
 
 
-  /**
-   * Adds a product to the repository
-   * @param product Product to be added
-   * @return Saves product to repository
-   */
   @PostMapping
-  Product addProduct(@RequestBody Product product) {
+  @Operation(summary = "Adds a product to the repository")
+  Product addProduct(@Parameter(description = "Product to be added") @RequestBody Product product) {
     return productRepository.save(product);
   }
 
@@ -73,7 +71,8 @@ public class ProductController {
    * @return Success or failure message for deletion of product
    */
   @DeleteMapping(path = "/{id}")
-  ObjectNode deleteProduct(@PathVariable long id) {
+  @Operation(summary = "Deletes a product from the repository")
+  ObjectNode deleteProduct(@Parameter(description = "Unique Product ID") @PathVariable long id) {
     final ObjectNode response = mapper.createObjectNode();
     final String message;
     final boolean success;

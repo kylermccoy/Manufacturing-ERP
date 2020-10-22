@@ -6,7 +6,11 @@ import com.kennuware.erp.manufacturing.service.model.Item;
 import com.kennuware.erp.manufacturing.service.model.repository.ItemRepository;
 import java.util.List;
 import javax.persistence.EntityNotFoundException;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,45 +32,31 @@ public class ItemController {
     this.mapper = mapper; // Provides functionality for reading and writing JSON
   }
 
-  /**
-   * Lists all items in repository
-   * @return list of all items
-   */
+
   @GetMapping
+  @Operation(summary = "Lists all items in repository")
   List<Item> listItems() {
     return itemRepository.findAll();
   }
 
 
-  /**
-   * Gathers data of a specific item
-   * @param id Unique Item ID
-   * @return Specified item
-   */
   @GetMapping(path = "/{id}")
-  Item getItem(@PathVariable long id) {
+  @Operation(summary = "Gathers data of a specific item")
+  Item getItem(@Parameter(description = "Unique Item ID") @PathVariable long id) {
     return itemRepository.findById(id).orElseThrow(EntityNotFoundException::new);
   }
 
 
-  /**
-   * Adds an item to the repository
-   * @param item Item to be added
-   * @return Saves item to repository
-   */
   @PostMapping
-  Item addItem(@RequestBody Item item) {
+  @Operation(summary = "Adds an item to the repository")
+  Item addItem(@Parameter(description = "Item to be added") @RequestBody Item item) {
     return itemRepository.save(item);
   }
 
 
-  /**
-   * Deletes an item from the repository
-   * @param id Unique Item ID
-   * @return Success or failure message of item deletion
-   */
   @DeleteMapping(path = "/{id}")
-  ObjectNode deleteItem(@PathVariable long id) {
+  @Operation(summary = "Deletes an item from the repository")
+  ObjectNode deleteItem(@Parameter(description = "Unique Item ID") @PathVariable long id) {
     final ObjectNode response = mapper.createObjectNode();
     final String message;
     final boolean success;

@@ -7,6 +7,10 @@ import com.kennuware.erp.manufacturing.service.auth.AuthManager;
 import com.kennuware.erp.manufacturing.service.model.Employee;
 import com.kennuware.erp.manufacturing.service.model.repository.EmployeeRepository;
 import javax.servlet.http.HttpSession;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import org.springframework.data.repository.query.Param;
 import org.springframework.lang.UsesSunMisc;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -39,14 +43,9 @@ public class EmployeeController {
   }
 
 
-  /**
-   * Method to create a new employee and save to repository
-   * @param json JSON Node
-   * @param session Current user session
-   * @return new saved Employee
-   */
   @PostMapping
-  Employee createEmployee(@RequestBody JsonNode json, HttpSession session) {
+  @Operation(summary = "Method to create a new employee and save it to repository")
+  Employee createEmployee(@Parameter(description = "JSON Node") @RequestBody JsonNode json, @Parameter(description = "Current user session") HttpSession session) {
     String user = json.get("user").textValue();
     String pass = json.get("pass").textValue();
     if (!user.isBlank() || !pass.isBlank()) {
@@ -66,14 +65,10 @@ public class EmployeeController {
   }
 
 
-  /**
-   * Authenticates a user's credentials at login
-   * @param json JSON Node
-   * @param session Current user session
-   * @return Boolean value of success or failure of user login authentication
-   */
   @PostMapping("/authenticate")
-  boolean authenticateEmployee(@RequestBody JsonNode json, HttpSession session) {
+  @Operation(summary = "Authenticates a user's credentials at login")
+  boolean authenticateEmployee(@Parameter(description = "JSON Node") @RequestBody JsonNode json,
+                               @Parameter(description = "Current user session") HttpSession session) {
     String user = json.get("user").textValue();
     String pass = json.get("pass").textValue();
     Employee employee = employeeRepository.findByUsername(user);
@@ -92,7 +87,10 @@ public class EmployeeController {
    * @return JSON success or failure message based on whether or not user hours were properly updated
    */
   @PostMapping("/updateHours")
-  Object updateHours(@RequestParam String user, @RequestParam long hoursWorked, HttpSession session) {
+  @Operation(summary = "Updates the hours worked by the signed-in employee")
+  Object updateHours(@Parameter(description = "Current user") @RequestParam String user,
+                     @Parameter(description = "Number of hours worked in pay cycle") @RequestParam long hoursWorked,
+                     @Parameter(description = "Current user session") HttpSession session) {
     boolean success = false;
     String message = "You are not authenticated to update this user's hours";
     if (session != null) {
@@ -111,14 +109,10 @@ public class EmployeeController {
   }
 
 
-  /**
-   * Requests the user's work hours
-   * @param user Current user
-   * @param session Current user session
-   * @return JSON success or failure message
-   */
   @GetMapping("/getHours")
-  Object updateHours(@RequestParam String user, HttpSession session) {
+  @Operation(summary = "Requests the user's work hours")
+  Object updateHours(@Parameter(description = "Current user") @RequestParam String user,
+                     @Parameter(description = "Current user session") HttpSession session) {
     boolean success = false;
     String message = "You are not authenticated to get this user's hours";
     ObjectNode node = mapper.createObjectNode();
