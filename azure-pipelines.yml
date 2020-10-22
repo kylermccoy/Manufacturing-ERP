@@ -14,17 +14,19 @@ steps:
 - task: Maven@3
   inputs:
     mavenPomFile: 'application/pom.xml'
+    options: '-Dmaven.test.skip=true'
     mavenOptions: '-Xmx3072m'
     javaHomeOption: 'JDKVersion'
     jdkVersionOption: '1.11'
     jdkArchitectureOption: 'x64'
-    publishJUnitResults: true
+    publishJUnitResults: false
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
     goals: 'package'
 - task: Maven@1
   inputs:
     mavenPomFile: 'service/pom.xml'
-    publishJUnitResults: true
+    options: '-Dmaven.test.skip=true'
+    publishJUnitResults: false
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
     javaHomeOption: 'JDKVersion'
     mavenVersionOption: 'Default'
