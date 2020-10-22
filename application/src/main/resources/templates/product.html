@@ -31,7 +31,7 @@
     <!-- Manufacturing Instructions -->
     <h2>Instructions:</h2>
     <ol style="font-size: 22px">
-        <li th:each="step: ${product.getRecipe().getBuildInstructions().split('\n')}"><span th:text="${step}"></span></li>
+        <li th:each="step: ${product.getRecipe().getBuildInstructions()}"><span th:text="${step}"></span></li>
     </ol>
     <br>
     <!-- Build time -->

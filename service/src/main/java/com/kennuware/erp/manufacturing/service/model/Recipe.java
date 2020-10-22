@@ -1,12 +1,8 @@
 package com.kennuware.erp.manufacturing.service.model;
 
 import java.util.List;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
+
 import lombok.Data;
 
 @Data
@@ -22,7 +18,8 @@ public class Recipe {
   @OneToMany(cascade = CascadeType.ALL)
   private List<RecipeComponent> components;
 
-  private String buildInstructions; // Instructions of how to manufacture product
+  @ElementCollection
+  private List<String> buildInstructions; // Instructions of how to manufacture product
 
   private int buildTime;  // How many minutes manufacturing of product will take
 
