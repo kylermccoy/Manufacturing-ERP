@@ -22,8 +22,13 @@
 <div class="container" style="width: 30%; text-align: center">
     <h2 style="text-align: center">Recipe:</h2>
     <ul id="product-list" style="text-align: center; display: inline; font-size: 20px; margin: 10px; padding: 10px; list-style-type: none">
-        <li th:each="component: ${product.getRecipe().getComponents()}">ITEM#<span th:text="${component.getItem().getId()}" style="display: inline; padding-right: 3em"></span> <span th:text="${component.getItem().getName()}" style="display: inline; padding-right: 3em"></span> <span th:text="Quantity" style="display: inline"></span> = <span th:text="${component.getQuantity()}" style="display: inline"></span></li>
+        <li th:each="component: ${product.getRecipe().getComponents()}">
+            ITEM#<span th:text="${component.getItem().getId()}" style="display: inline; padding-right: 3em"></span>
+            <span th:text="${component.getItem().getName()}" style="display: inline; padding-right: 3em"></span>
+            <span th:text="Quantity" style="display: inline"></span> = <span th:text="${component.getQuantity()}" style="display: inline"></span>
+        </li>
     </ul><br><br>
+    <p style="font-size: 20px"><span th:text="Instructions" style="display: inline"></span>: <span th:text="${product.getRecipe().getBuildInstructions()}" style="display: inline"></span></p>
 </div>
 
 </body>

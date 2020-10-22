@@ -22,4 +22,7 @@ public class Recipe {
   @OneToMany(cascade = CascadeType.ALL)
   private List<RecipeComponent> components;
 
+  private String buildInstructions;
+  private int buildTime;
+
 }

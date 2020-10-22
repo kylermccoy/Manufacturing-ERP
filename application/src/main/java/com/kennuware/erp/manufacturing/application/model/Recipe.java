@@ -7,4 +7,6 @@ public class Recipe {
     Long id;
     String name;
     RecipeComponent[] components;
+    String buildInstructions;
+    int buildTime;
 }
