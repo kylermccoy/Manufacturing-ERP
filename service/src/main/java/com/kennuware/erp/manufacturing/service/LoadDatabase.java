@@ -4,17 +4,17 @@ import com.kennuware.erp.manufacturing.service.controller.QueueController;
 import com.kennuware.erp.manufacturing.service.model.*;
 import com.kennuware.erp.manufacturing.service.model.repository.*;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
@@ -37,8 +37,6 @@ public class LoadDatabase {
       if (!repository.existsByName(QueueController.QUEUE_NAME)) {
         log.info("Preloading " + repository.save(q));
       }
-
-      /**
 
       Item usbInputItem = new Item("USB Input");
       Item glassScreenItem = new Item("Glass Screen");
@@ -68,14 +66,25 @@ public class LoadDatabase {
       Item motorItem = new Item("Motor");
       Item heelysItem = new Item("Heelys");
 
-      List<Item> items = Arrays.asList(usbInputItem, glassFramesItem, wristbandItem, motherboardItem, bioSensorItem, polyesterFabricItem,
-              VelcroItem, heatingPadItem, watchScreenItem, jacketItem, cottonFabricItem, buttonItem, zipperItem, ledLightsItem,
-              lacesItem, bluetoothConnectorItem, smallBatteryItem, largeBatteryItem, syntheticLeatherItem, shoeSoleItem,
-              laceTightenerItem, glassFramesItem, miniProjectorItem, microchipItem, aluminumBandItem, motorItem, heelysItem);
-      itemRepository.saveAll(items);
-
+      List<Item> items = Stream
+          .of(usbInputItem, glassFramesItem, wristbandItem, motherboardItem, bioSensorItem,
+              polyesterFabricItem,
+              VelcroItem, heatingPadItem, watchScreenItem, jacketItem, cottonFabricItem, buttonItem,
+              zipperItem, ledLightsItem,
+              lacesItem, bluetoothConnectorItem, smallBatteryItem, largeBatteryItem,
+              syntheticLeatherItem, shoeSoleItem,
+              laceTightenerItem, glassFramesItem, miniProjectorItem, microchipItem,
+              aluminumBandItem, motorItem, heelysItem)
+          .filter(i -> !itemRepository.existsByName(i.getName()))
+          .collect(Collectors.toList());
+      log.info("Preloading Items: " +
+          itemRepository.saveAll(items)
+              .stream()
+              .map(Item::getName)
+              .collect(Collectors.toList()));
 
       Recipe smartWatchRecipe = new Recipe();
+      smartWatchRecipe.setName("Smart Watch Recipe");
       smartWatchRecipe.setBuildTime(30);
       List<String> smartWatchInstructions = new ArrayList<>();
       smartWatchInstructions.add("Add Watch Screen to assembly line");
@@ -85,9 +94,9 @@ public class LoadDatabase {
       List<RecipeComponent> smartWatchRecipeComps = Arrays.asList(sw_comp1, sw_comp2);
       smartWatchRecipe.setComponents(smartWatchRecipeComps);
       smartWatchRecipe.setBuildInstructions(smartWatchInstructions);
-      recipeRepository.save(smartWatchRecipe);
 
       Recipe smartHeadbandRecipe = new Recipe();
+      smartHeadbandRecipe.setName("Smart Headband Recipe");
       smartHeadbandRecipe.setBuildTime(110);
       List<String> smartHeadbandInstructions = new ArrayList<>();
       smartHeadbandInstructions.add("Cut Polyester Fabric to Headband size");
@@ -103,9 +112,9 @@ public class LoadDatabase {
       List<RecipeComponent> smartHeadbandRecipeComps = Arrays.asList(shb_comp1, shb_comp2, shb_comp3, shb_comp4, shb_comp5);
       smartHeadbandRecipe.setComponents(smartHeadbandRecipeComps);
       smartHeadbandRecipe.setBuildInstructions(smartHeadbandInstructions);
-      recipeRepository.save(smartHeadbandRecipe);
 
       Recipe lightUpBootsRecipe = new Recipe();
+      lightUpBootsRecipe.setName("Light Up Boots Recipe");
       lightUpBootsRecipe.setBuildTime(90);
       List<String> lightUpBootsInstructions = new ArrayList<>();
       lightUpBootsInstructions.add("Place Shoe Soles to be worked on");
@@ -123,9 +132,9 @@ public class LoadDatabase {
       List<RecipeComponent> lubComps = Arrays.asList(lub_comp1, lub_comp2, lub_comp3, lub_comp4, lub_comp5, lub_comp6);
       lightUpBootsRecipe.setComponents(lubComps);
       lightUpBootsRecipe.setBuildInstructions(lightUpBootsInstructions);
-      recipeRepository.save(lightUpBootsRecipe);
 
       Recipe autoHeatingJacketRecipe = new Recipe();
+      autoHeatingJacketRecipe.setName("Auto-heating Jacket Recipe");
       autoHeatingJacketRecipe.setBuildTime(80);
       List<String> autoHeatingJacketInstructions = new ArrayList<>();
       autoHeatingJacketInstructions.add("Lay out jacket and create insert slots for heating pads");
@@ -139,9 +148,9 @@ public class LoadDatabase {
       List<RecipeComponent> ahjComps = Arrays.asList(ahj_comp1, ahj_comp2, ahj_comp3, ahj_comp4);
       autoHeatingJacketRecipe.setComponents(ahjComps);
       autoHeatingJacketRecipe.setBuildInstructions(autoHeatingJacketInstructions);
-      recipeRepository.save(autoHeatingJacketRecipe);
 
       Recipe tieThemselvesSneakersRecipe = new Recipe();
+      tieThemselvesSneakersRecipe.setName("Tie-Themselves Sneakers Recipe");
       tieThemselvesSneakersRecipe.setBuildTime(130);
       List<String> tieThemselvesSneakersInstructions = new ArrayList<>();
       tieThemselvesSneakersInstructions.add("Place Shoe soles to be worked on");
@@ -159,9 +168,9 @@ public class LoadDatabase {
       List<RecipeComponent> tssComps = Arrays.asList(tss_comp1, tss_comp2, tss_comp3, tss_comp4, tss_comp5, tss_comp6);
       tieThemselvesSneakersRecipe.setComponents(tssComps);
       tieThemselvesSneakersRecipe.setBuildInstructions(tieThemselvesSneakersInstructions);
-      recipeRepository.save(tieThemselvesSneakersRecipe);
 
       Recipe smartGlassesRecipe = new Recipe();
+      smartGlassesRecipe.setName("Smart Glasses Recipe");
       smartGlassesRecipe.setBuildTime(150);
       List<String> smartGlassesInstructions = new ArrayList<>();
       smartGlassesInstructions.add("Place glass frames on assembly line and create insert slots");
@@ -177,9 +186,9 @@ public class LoadDatabase {
       List<RecipeComponent> sgComps = Arrays.asList(sg_comp1, sg_comp2, sg_comp3, sg_comp4, sg_comp5);
       smartGlassesRecipe.setComponents(sgComps);
       smartGlassesRecipe.setBuildInstructions(smartGlassesInstructions);
-      recipeRepository.save(smartGlassesRecipe);
 
       Recipe smartRingRecipe = new Recipe();
+      smartRingRecipe.setName("Smart Ring Recipe");
       smartRingRecipe.setBuildTime(115);
       List<String> smartRingInstructions = new ArrayList<>();
       smartRingInstructions.add("Shape Aluminum band to ring size and create inserts");
@@ -193,9 +202,9 @@ public class LoadDatabase {
       List<RecipeComponent> srComps = Arrays.asList(sr_comp1, sr_comp2, sr_comp3, sr_comp4);
       smartRingRecipe.setComponents(srComps);
       smartRingRecipe.setBuildInstructions(smartRingInstructions);
-      recipeRepository.save(smartRingRecipe);
 
       Recipe smartHeelysRecipe = new Recipe();
+      smartHeelysRecipe.setName("Smart Heelys Recipe");
       smartHeelysRecipe.setBuildTime(80);
       List<String> smartHeelysInstructions = new ArrayList<>();
       smartHeelysInstructions.add("Dissassemble Heelys and create inserts for motor and battery");
@@ -213,9 +222,9 @@ public class LoadDatabase {
       List<RecipeComponent> shComps = Arrays.asList(sh_comp1, sh_comp2, sh_comp3, sh_comp4, sh_comp5, sh_comp6);
       smartHeelysRecipe.setComponents(shComps);
       smartHeelysRecipe.setBuildInstructions(smartHeelysInstructions);
-      recipeRepository.save(smartHeelysRecipe);
 
       Recipe watchScreenRecipe = new Recipe();
+      watchScreenRecipe.setName("Watch Screen Recipe");
       watchScreenRecipe.setBuildTime(50);
       List<String> watchScreenInstructions = new ArrayList<>();
       watchScreenInstructions.add("Layout watch motherboard and create wiring nodes");
@@ -229,9 +238,9 @@ public class LoadDatabase {
       List<RecipeComponent> wsComps = Arrays.asList(ws_comp1, ws_comp2, ws_comp3, ws_comp4);
       watchScreenRecipe.setComponents(wsComps);
       watchScreenRecipe.setBuildInstructions(watchScreenInstructions);
-      recipeRepository.save(watchScreenRecipe);
 
       Recipe jacketRecipe = new Recipe();
+      jacketRecipe.setName("Jacket Recipe");
       jacketRecipe.setBuildTime(20);
       List<String> jacketInstructions = new ArrayList<>();
       jacketInstructions.add("Create Jacket cut out of the cotton fabric and cut button and zipper");
@@ -243,60 +252,71 @@ public class LoadDatabase {
       List<RecipeComponent> jComps = Arrays.asList(j_comp1, j_comp2, j_comp3);
       jacketRecipe.setComponents(jComps);
       jacketRecipe.setBuildInstructions(jacketInstructions);
-      recipeRepository.save(jacketRecipe);
+      List<Recipe> recipeList = Stream
+          .of(jacketRecipe, autoHeatingJacketRecipe, lightUpBootsRecipe, smartGlassesRecipe,
+              smartHeadbandRecipe, smartHeelysRecipe, smartRingRecipe, smartWatchRecipe,
+              tieThemselvesSneakersRecipe, watchScreenRecipe)
+          .filter(r -> !recipeRepository.existsByName(r.getName()))
+          .collect(Collectors.toList());
+      log.info("Preloading Recipes: " +
+          recipeRepository.saveAll(recipeList)
+              .stream()
+              .map(Recipe::getName)
+              .collect(Collectors.toList()));
 
 
       Product smartWatch = new Product();
       smartWatch.setName("Smart Watch");
       smartWatch.setRecipe(smartWatchRecipe);
-      productRepository.save(smartWatch);
 
       Product smartHeadband = new Product();
       smartHeadband.setName("Smart Headband");
       smartHeadband.setRecipe(smartHeadbandRecipe);
-      productRepository.save(smartHeadband);
 
       Product lightUpBoots = new Product();
       lightUpBoots.setName("Light-Up Boots");
       lightUpBoots.setRecipe(lightUpBootsRecipe);
-      productRepository.save(lightUpBoots);
 
       Product autoHeatingJacket = new Product();
       autoHeatingJacket.setName("Auto-Heating Jacket");
       autoHeatingJacket.setRecipe(autoHeatingJacketRecipe);
-      productRepository.save(autoHeatingJacket);
 
       Product tieThemselvesSneakers = new Product();
       tieThemselvesSneakers.setName("Tie-themselves Sneakers");
       tieThemselvesSneakers.setRecipe(tieThemselvesSneakersRecipe);
-      productRepository.save(tieThemselvesSneakers);
 
       Product smartGlasses = new Product();
       smartGlasses.setName("Smart Glasses");
       smartGlasses.setRecipe(smartGlassesRecipe);
-      productRepository.save(smartGlasses);
 
       Product smartRing = new Product();
       smartRing.setName("Smart Ring");
       smartRing.setRecipe(smartRingRecipe);
-      productRepository.save(smartRing);
 
       Product smartHeelys = new Product();
       smartHeelys.setName("Smart Heelys");
       smartHeelys.setRecipe(smartHeelysRecipe);
-      productRepository.save(smartHeelys);
 
       Product watchScreen = new Product();
       watchScreen.setName("Watch Screen");
       watchScreen.setRecipe(watchScreenRecipe);
-      productRepository.save(watchScreen);
 
       Product jacket = new Product();
       jacket.setName("Jacket");
       jacket.setRecipe(jacketRecipe);
-      productRepository.save(jacket);
-**/
 
+      List<Product> productList = Stream
+          .of(smartWatch, smartHeadband,
+              lightUpBoots, autoHeatingJacket, tieThemselvesSneakers, smartGlasses, smartRing,
+              smartHeelys, watchScreen, jacket)
+          .filter(p -> !productRepository.existsByName(p.getName()))
+          .collect(Collectors.toList());
+
+      log.info("Preloading Products: " +
+          productRepository.saveAll(productList)
+              .stream()
+              .map(Product::getName)
+              .collect(Collectors.toList()));
     };
   }
 
