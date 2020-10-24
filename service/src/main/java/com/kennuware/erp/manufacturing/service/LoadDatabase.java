@@ -32,6 +32,8 @@ public class LoadDatabase {
       if (!repository.existsByName(QueueController.QUEUE_NAME)) {
         log.info("Preloading " + repository.save(q));
       }
+
+      System.out.println("some change here");
     };
   }
 
