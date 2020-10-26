@@ -13,6 +13,10 @@ import org.springframework.web.servlet.view.RedirectView;
 @Controller
 public class HomepageController {
 
+    /**
+     * Sets the homepage to the login screen
+     * @return Redirection to the login screen
+     */
     @GetMapping
     String getHome() {
         return "login";

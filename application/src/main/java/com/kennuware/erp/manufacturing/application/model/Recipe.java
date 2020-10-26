@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class Recipe {
-    Long id;
-    String name;
-    RecipeComponent[] components;
+    Long id;    // Unique ID of Recipe
+    String name;    // Name of Recipe
+    RecipeComponent[] components;   // Contents of Recipe
 }

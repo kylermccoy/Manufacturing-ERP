@@ -12,11 +12,21 @@ import org.springframework.web.servlet.view.RedirectView;
 @Controller
 public class HeaderController {
 
+    /**
+     * Redirects to the Log page
+     * @return Redirection to the log page
+     */
     @GetMapping(path = "/log")
     public String getLog(){
         return "log";
     }
 
+
+    /**
+     * Redirects to the Process page
+     * @param model Model
+     * @return Redirection to the process page
+     */
     @GetMapping(path = "/process")
     public String getQueue(Model model){
         RestTemplate rt = new RestTemplate();
@@ -33,6 +43,12 @@ public class HeaderController {
         return "process";
     }
 
+
+    /**
+     * Alerts user of an error
+     * @param model Model
+     * @return Error
+     */
     @GetMapping(path = "/error")
     public String getError(Model model){
         return "error";

@@ -12,6 +12,11 @@ import org.springframework.web.client.RestTemplate;
 @Controller
 public class ProductsController {
 
+    /**
+     * Requests a list of all products from backend
+     * @param model Model
+     * @return Redirection to products page
+     */
     @GetMapping("/products")
     public String getProducts(Model model) {
         RestTemplate rt = new RestTemplate();
@@ -20,6 +25,13 @@ public class ProductsController {
         return "products";
     }
 
+
+    /**
+     * Requests specific product data from backend
+     * @param id Unique Product ID
+     * @param model Model
+     * @return Redirection to specific product page
+     */
     @GetMapping(path = "/products/{id}")
     String getProduct(@PathVariable Long id, Model model) {
         RestTemplate restTemplate = new RestTemplate();

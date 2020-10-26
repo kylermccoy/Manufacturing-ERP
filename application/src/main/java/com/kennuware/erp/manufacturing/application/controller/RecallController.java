@@ -13,6 +13,11 @@ import org.springframework.web.client.RestTemplate;
 @Controller
 public class RecallController {
 
+    /**
+     * Requests a list of recall orders from the backend
+     * @param model Model
+     * @return Redirection to the recalls page
+     */
     @GetMapping(path = "/recalls")
     public String getRecalls(Model model){
         RestTemplate rt = new RestTemplate();
@@ -22,6 +27,13 @@ public class RecallController {
         return "recalls";
     }
 
+
+    /**
+     * Requests specific recall order data from backend
+     * @param id Unique Recall Order ID
+     * @param model Model
+     * @return Redirection to specific recall page
+     */
     @GetMapping(path = "/recalls/{id}")
     String getProduct(@PathVariable Long id, Model model) {
         RestTemplate restTemplate = new RestTemplate();
