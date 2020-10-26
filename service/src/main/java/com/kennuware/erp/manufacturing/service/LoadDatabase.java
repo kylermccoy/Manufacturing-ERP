@@ -21,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Slf4j
 public class LoadDatabase {
 
+  // matt cant run commandlinerunner
   @Bean
   CommandLineRunner initDatabase(QueueRepository repository, EmployeeRepository employeeRepository, PasswordEncoder encoder, ProductRepository productRepository, RecipeRepository recipeRepository, ItemRepository itemRepository) {
     return args -> {
