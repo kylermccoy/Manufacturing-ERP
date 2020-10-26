@@ -33,7 +33,7 @@ public class ExceptionController {
   public JsonNode handleRouteNotFound(Exception e) {
     ObjectNode node = mapper.createObjectNode();
     node.put("success", false);
-    node.put("message", "Route " + e.getLocalizedMessage() + " not found");
+    node.put("message", e.getLocalizedMessage());
     return node;
   }
 
