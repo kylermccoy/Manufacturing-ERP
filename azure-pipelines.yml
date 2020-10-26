@@ -13,7 +13,7 @@ pool:
 steps:
 - task: Maven@3
   inputs:
-    mavenPomFile: 'application/pom.xml'
+    mavenPomFile: 'pom.xml'
     options: '-Dmaven.test.skip=true'
     mavenOptions: '-Xmx3072m'
     javaHomeOption: 'JDKVersion'
@@ -22,13 +22,3 @@ steps:
     publishJUnitResults: false
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
     goals: 'package'
-- task: Maven@1
-  inputs:
-    mavenPomFile: 'service/pom.xml'
-    options: '-Dmaven.test.skip=true'
-    publishJUnitResults: false
-    testResultsFiles: '**/surefire-reports/TEST-*.xml'
-    javaHomeOption: 'JDKVersion'
-    mavenVersionOption: 'Default'
-    mavenAuthenticateFeed: false
-    sonarQubeRunAnalysis: false
