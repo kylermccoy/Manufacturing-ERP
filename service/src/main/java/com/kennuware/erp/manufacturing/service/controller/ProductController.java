@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.kennuware.erp.manufacturing.service.model.Product;
 import com.kennuware.erp.manufacturing.service.model.repository.ProductRepository;
 import java.util.List;
-import javax.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,7 +34,7 @@ public class ProductController {
 
   @GetMapping(path = "/{id}")
   Product getProduct(@PathVariable long id) {
-    return productRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+    return productRepository.findById(id).orElseThrow(() -> new GenericJSONException("Product [" + id + "] was not found"));
   }
 
   @PostMapping
