@@ -8,7 +8,6 @@ import com.kennuware.erp.manufacturing.service.model.repository.QueueRepository;
 import com.kennuware.erp.manufacturing.service.model.repository.RequestRepository;
 import java.util.List;
 import java.util.Optional;
-import javax.persistence.EntityNotFoundException;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -61,7 +60,7 @@ public class RequestController {
    */
   @GetMapping(path = "/{id}")
   Request getRequest(@PathVariable long id) {
-    return requestRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+    return requestRepository.findById(id).orElseThrow(() -> new GenericJSONException("Request [" + id + "] was not found"));
   }
 
 

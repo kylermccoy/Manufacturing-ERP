@@ -5,12 +5,11 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.kennuware.erp.manufacturing.service.model.Item;
 import com.kennuware.erp.manufacturing.service.model.repository.ItemRepository;
 import java.util.List;
-import javax.persistence.EntityNotFoundException;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.repository.query.Param;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -57,7 +56,7 @@ public class ItemController {
   @GetMapping(path = "/{id}")
   @Operation(summary = "Gathers data of a specific item")
   Item getItem(@Parameter(description = "Unique Item ID") @PathVariable long id) {
-    return itemRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+    return itemRepository.findById(id).orElseThrow(() -> new GenericJSONException("Item [" + id + "] not found"));
   }
 
 

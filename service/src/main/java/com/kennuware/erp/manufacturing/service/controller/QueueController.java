@@ -9,11 +9,10 @@ import com.kennuware.erp.manufacturing.service.model.repository.RequestRepositor
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import javax.persistence.EntityNotFoundException;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import org.springframework.data.repository.query.Param;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -57,7 +56,7 @@ public class QueueController {
   @GetMapping
   @Operation(summary = "Obtains the Queue from the repository")
   Queue getQueue() {
-    return queueRepository.findByName(QUEUE_NAME).orElseThrow(EntityNotFoundException::new);
+    return queueRepository.findByName(QUEUE_NAME).orElseThrow(() -> new GenericJSONException("The queue does not exist"));
   }
 
 
