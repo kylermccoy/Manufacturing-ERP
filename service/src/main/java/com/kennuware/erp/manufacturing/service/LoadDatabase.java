@@ -67,7 +67,7 @@ public class LoadDatabase {
       Item heelysItem = new Item("Heelys");
 
       List<Item> items = Stream
-          .of(usbInputItem, glassFramesItem, wristbandItem, motherboardItem, bioSensorItem,
+          .of(usbInputItem, glassScreenItem, wristbandItem, motherboardItem, bioSensorItem,
               polyesterFabricItem,
               VelcroItem, heatingPadItem, watchScreenItem, jacketItem, cottonFabricItem, buttonItem,
               zipperItem, ledLightsItem,
