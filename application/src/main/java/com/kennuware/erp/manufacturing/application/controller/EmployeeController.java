@@ -112,4 +112,10 @@ public class EmployeeController {
             return "timesheet";
         }
     }
+
+    @PostMapping(path = "/send_timesheet")
+    public String sendTimesheet() {
+        return "timesheet";
+    }
+
 }
