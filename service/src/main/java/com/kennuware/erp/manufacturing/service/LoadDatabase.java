@@ -1,8 +1,6 @@
 package com.kennuware.erp.manufacturing.service;
 
 import com.kennuware.erp.manufacturing.service.controller.QueueController;
-import com.kennuware.erp.manufacturing.service.model.*;
-import com.kennuware.erp.manufacturing.service.model.repository.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,6 +9,9 @@ import java.util.List;
 
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import com.kennuware.erp.manufacturing.service.model.*;
+import com.kennuware.erp.manufacturing.service.model.repository.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -22,11 +23,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class LoadDatabase {
 
   @Bean
-  CommandLineRunner initDatabase(QueueRepository repository, EmployeeRepository employeeRepository, PasswordEncoder encoder, ProductRepository productRepository, RecipeRepository recipeRepository, ItemRepository itemRepository) {
+  CommandLineRunner initDatabase(QueueRepository repository, EmployeeRepository employeeRepository, PasswordEncoder passwordEncoder, ProductRepository productRepository, RecipeRepository recipeRepository, ItemRepository itemRepository) {
     return args -> {
       Employee e = new Employee();
       e.setUsername("admin");
-      e.setPassword(encoder.encode("admin"));
+      e.setPassword(passwordEncoder.encode("admin"));
       if (!employeeRepository.existsByUsername("admin")) {
         log.info("Preloading " + employeeRepository.save(e));
       }
