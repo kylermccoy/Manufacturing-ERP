@@ -111,7 +111,7 @@ public class EmployeeController {
             HttpEntity entity = new HttpEntity(headers);
 
             /*
-             * Send updated timecard to HR
+             * Request timecard from HR
              */
 
             ResponseEntity<JsonNode> response = rt.exchange(
