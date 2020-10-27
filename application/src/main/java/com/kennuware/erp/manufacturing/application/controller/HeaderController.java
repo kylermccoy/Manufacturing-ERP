@@ -46,7 +46,6 @@ public class HeaderController {
         String timeLeft = queue.getTimeLeft();
         model.addAttribute("timeLeft", timeLeft);
 
-        Request[] requests = rt.getForObject("http://localhost:8080/manufacturing/api/queue/requests", Request[].class);
         ResponseEntity<Request[]> response2 = RequestSender.getForObject("http://localhost:8080/manufacturing/api/queue/requests", Request[].class, session);
         Request[] requests = response2.getBody();
         model.addAttribute("requests", requests);

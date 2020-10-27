@@ -35,9 +35,6 @@ public class QueueController {
   private final QueueRepository queueRepository; // Repository of queues
   private final RequestRepository requestRepository; // Repository of requests
   private final ObjectMapper mapper; // Provides functionality for reading and writing JSON
-  private final QueueRepository queueRepository;
-  private final RequestRepository requestRepository;
-  private final ObjectMapper mapper;
   private final Timer timer;
 
 
