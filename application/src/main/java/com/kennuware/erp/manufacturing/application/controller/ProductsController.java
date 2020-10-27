@@ -6,10 +6,7 @@ import com.kennuware.erp.manufacturing.application.model.Request;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpSession;
@@ -43,6 +40,22 @@ public class ProductsController {
         Product product = response1.getBody();
         model.addAttribute("product", product);
         return "product";
+    }
+
+    /*
+     * Deliver products to inventory
+     */
+    @PostMapping(path = "/products/deliver")
+    String deliverProducts(Product product, int quantity) {
+        return null;
+    }
+
+    /*
+     * Request products from inventory
+     */
+    @PostMapping(path = "products/request")
+    String requestProducts(Long productID, int quantity) {
+        return null;
     }
 
 }
