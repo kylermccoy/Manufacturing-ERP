@@ -4,6 +4,7 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+
 import lombok.Data;
 
 @Entity
@@ -17,5 +18,7 @@ public class Queue {
   private List<Request> requestsInQueue;
 
   private boolean running;
+
+  private String timeLeft;
 
 }

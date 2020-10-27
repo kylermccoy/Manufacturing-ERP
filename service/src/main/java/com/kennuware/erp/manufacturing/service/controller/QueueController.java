@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.kennuware.erp.manufacturing.service.model.Request;
 import com.kennuware.erp.manufacturing.service.model.Queue;
+import com.kennuware.erp.manufacturing.service.model.Timer;
 import com.kennuware.erp.manufacturing.service.model.repository.QueueRepository;
 import com.kennuware.erp.manufacturing.service.model.repository.RequestRepository;
 import java.util.Collections;
@@ -31,11 +32,13 @@ public class QueueController {
   private final QueueRepository queueRepository;
   private final RequestRepository requestRepository;
   private final ObjectMapper mapper;
+  private final Timer timer;
 
   QueueController(QueueRepository queueRepository, RequestRepository requestRepository, ObjectMapper mapper) {
     this.queueRepository = queueRepository;
     this.requestRepository = requestRepository;
     this.mapper = mapper;
+    this.timer = new Timer();
   }
 
   @GetMapping
@@ -59,6 +62,15 @@ public class QueueController {
         success = true;
       }
       queueRepository.save(q);
+
+      List<Request> requestsInQueue = q.getRequestsInQueue();
+      if (!requestsInQueue.isEmpty()){
+        int duration = requestsInQueue.get(0).getProduct().getRecipe().getBuildTime();
+        timer.setDuration(duration);
+        timer.start();
+        q.setTimeLeft(timer.getRemainingTime());
+
+      }
     } else {
       message = "Queue does not exist";
     }
@@ -83,6 +95,10 @@ public class QueueController {
         success = true;
       }
       queueRepository.save(q);
+
+      timer.pause();
+      q.setTimeLeft(timer.getRemainingTime());
+
     } else {
       message = "Queue does not exist";
     }
@@ -167,6 +183,11 @@ public class QueueController {
         requestRepository.save(skippedRequest);
         queueRepository.save(q);
         success = true;
+
+        int duration = requestsInQueue.get(0).getProduct().getRecipe().getBuildTime();
+        timer.setDuration(duration);
+        timer.start();
+        q.setTimeLeft(timer.getRemainingTime());
       }
     } else {
       message = "Queue does not exist";

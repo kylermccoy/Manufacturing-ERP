@@ -6,7 +6,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.servlet.view.RedirectView;
 
 
 @Controller
@@ -28,8 +27,13 @@ public class HeaderController {
             queueStatus = "Stopped";
         }
         model.addAttribute("queueStatus", queueStatus);
+
+        String timeLeft = queue.getTimeLeft();
+        model.addAttribute("timeLeft", timeLeft);
+
         Request[] requests = rt.getForObject("http://localhost:8080/manufacturing/api/queue/requests", Request[].class);
         model.addAttribute("requests", requests);
+
         return "process";
     }
 

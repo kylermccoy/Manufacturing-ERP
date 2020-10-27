@@ -12,4 +12,6 @@ public class Queue {
 
     private boolean running;
 
+    private String timeLeft;
+
 }

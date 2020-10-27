@@ -18,12 +18,25 @@
     </ul><br><br>
 
     <h1 style="text-align: center">Status: <span th:text="${queueStatus}"></span></h1>
-    <h1 style="text-align: center">Current Request#: <span th:unless="${#lists.isEmpty(requests)}"><span th:text="${requests[0].getId()}"></span></span></h1><br>
+    <h1 style="text-align: center">
+        Current Request#:
+        <span th:unless="${#lists.isEmpty(requests)}">
+            <span th:text="${requests[0].getId()}"></span>
+        </span>
+    </h1><br>
 
     <div class="container" style="width: 30%; text-align: center">
         <h2 style="text-align: center">Requests to be Completed:</h2>
         <ol id="product-list" style="text-align: center; display: inline; font-size: 20px; margin: 10px; padding: 10px">
-            <li th:if="request" th:each="request: ${requests}"><span th:text="${request.getType()}" style="display: inline"></span>#<span th:text="${request.getId()}" style="display: inline; padding-right: 3em"></span><span th:text="${request.getProduct().getName()}" style="display: inline; padding-right: 3em"></span><span th:text="Quantity" style="display: inline"></span> = <span th:text="${request.getQuantity()}" style="display: inline"></span></li>
+            <li th:if="request" th:each="request: ${requests}">
+                <span th:text="${request.getType()}" style="display: inline"></span>
+                #
+                <span th:text="${request.getId()}" style="display: inline; padding-right: 3em"></span>
+                <span th:text="${request.getProduct().getName()}" style="display: inline; padding-right: 3em"></span>
+                <span th:text="Quantity" style="display: inline"></span>
+                =
+                <span th:text="${request.getQuantity()}" style="display: inline"></span>
+            </li>
         </ol><br><br>
     </div>
 
@@ -31,6 +44,11 @@
         <button type="button" id="start" style="background-color: green; color: white">Start Process</button>
         <button type="button" id="stop" style="background-color: darkred; color: white">Stop Process</button>
         <button type="button" id="skip" style="background-color: grey; color: white">Skip Process</button>-->
+    </div>
+    <div>
+        <h2 style="text-align: center">
+            Time Left till Completion: <span th:text="${timeLeft}" style="display: inline"></span>
+        </h2>
     </div>
 
 </body>
