@@ -171,6 +171,11 @@ public class QueueController {
     } else {
       message = "Queue does not exist";
     }
+
+    /*
+     * Complete a product, deliver to inventory
+     */
+
     node.put("success", success);
     node.put("message", message);
     return node;
