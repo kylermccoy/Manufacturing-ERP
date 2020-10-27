@@ -117,7 +117,7 @@ public class EmployeeController {
         }
         try {
             int temp = Integer.parseInt(hours);
-            ResponseEntity<JsonNode> response = RequestSender.getForObject("http://localhost:8080/manufacturing/api/employees/updateHours?user=" + this.user + "&hoursWorked=" + temp, JsonNode.class, session);
+            ResponseEntity<JsonNode> response = RequestSender.postForObject("http://localhost:8080/manufacturing/api/employees/updateHours?user=" + this.user + "&hoursWorked=" + temp, null, JsonNode.class, session);
             JsonNode res = response.getBody();
             model.addAttribute("success", res.get("success"));
             model.addAttribute("failure", false);
