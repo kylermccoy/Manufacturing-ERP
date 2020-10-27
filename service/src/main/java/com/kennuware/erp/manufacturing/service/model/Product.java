@@ -13,7 +13,6 @@ import lombok.Data;
 public class Product {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id; // Unique Product ID
 
   private String name; // Product name

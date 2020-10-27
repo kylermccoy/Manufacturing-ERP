@@ -265,46 +265,55 @@ public class LoadDatabase {
               .map(Recipe::getName)
               .collect(Collectors.toList()));
 
-
       Product smartWatch = new Product();
       smartWatch.setName("Smart Watch");
       smartWatch.setRecipe(smartWatchRecipe);
+      smartWatch.setId((long)0);
 
       Product smartHeadband = new Product();
       smartHeadband.setName("Smart Headband");
       smartHeadband.setRecipe(smartHeadbandRecipe);
+      smartHeadband.setId((long)1);
 
       Product lightUpBoots = new Product();
       lightUpBoots.setName("Light-Up Boots");
       lightUpBoots.setRecipe(lightUpBootsRecipe);
+      lightUpBoots.setId((long)2);
 
       Product autoHeatingJacket = new Product();
       autoHeatingJacket.setName("Auto-Heating Jacket");
       autoHeatingJacket.setRecipe(autoHeatingJacketRecipe);
+      autoHeatingJacket.setId((long)3);
 
       Product tieThemselvesSneakers = new Product();
       tieThemselvesSneakers.setName("Tie-Themselves Sneakers");
       tieThemselvesSneakers.setRecipe(tieThemselvesSneakersRecipe);
+      tieThemselvesSneakers.setId((long)4);
 
       Product smartGlasses = new Product();
       smartGlasses.setName("Smart Glasses");
       smartGlasses.setRecipe(smartGlassesRecipe);
+      smartGlasses.setId((long)5);
 
       Product smartRing = new Product();
       smartRing.setName("Smart Ring");
       smartRing.setRecipe(smartRingRecipe);
+      smartRing.setId((long)6);
 
       Product smartHeelys = new Product();
       smartHeelys.setName("Smart Heelys");
       smartHeelys.setRecipe(smartHeelysRecipe);
+      smartHeelys.setId((long)7);
 
       Product watchScreen = new Product();
       watchScreen.setName("Watch Screen");
       watchScreen.setRecipe(watchScreenRecipe);
+      watchScreen.setId((long)8);
 
       Product jacket = new Product();
       jacket.setName("Jacket");
       jacket.setRecipe(jacketRecipe);
+      jacket.setId((long)9);
 
       List<Product> productList = Stream
           .of(smartWatch, smartHeadband,
