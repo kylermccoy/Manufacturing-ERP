@@ -10,7 +10,10 @@ import com.kennuware.erp.manufacturing.service.model.repository.RequestRepositor
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import javax.persistence.EntityNotFoundException;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,17 +26,27 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path = "/queue")
 public class QueueController {
 
-  public static final String QUEUE_NAME = "queue";
+  public static final String QUEUE_NAME = "queue"; // Queue name
 
   //TODO: probably refactor a lot of duplicate code
   //TODO: make better use of Optional.orElse
   //TODO: Create a json error response object
 
+  private final QueueRepository queueRepository; // Repository of queues
+  private final RequestRepository requestRepository; // Repository of requests
+  private final ObjectMapper mapper; // Provides functionality for reading and writing JSON
   private final QueueRepository queueRepository;
   private final RequestRepository requestRepository;
   private final ObjectMapper mapper;
   private final Timer timer;
 
+
+  /**
+   * Creates a new instance of QueueController
+   * @param queueRepository Repository of queue
+   * @param requestRepository Repository of requests
+   * @param mapper Mapper
+   */
   QueueController(QueueRepository queueRepository, RequestRepository requestRepository, ObjectMapper mapper) {
     this.queueRepository = queueRepository;
     this.requestRepository = requestRepository;
@@ -41,12 +54,24 @@ public class QueueController {
     this.timer = new Timer();
   }
 
+
+  /**
+   * Obtains the Queue from the repository
+   * @return Queue
+   */
   @GetMapping
+  @Operation(summary = "Obtains the Queue from the repository")
   Queue getQueue() {
-    return queueRepository.findByName(QUEUE_NAME).orElseThrow(EntityNotFoundException::new);
+    return queueRepository.findByName(QUEUE_NAME).orElseThrow(() -> new GenericJSONException("The queue does not exist"));
   }
 
+
+  /**
+   * Starts the manufacturing process
+   * @return JSON success or failure message
+   */
   @GetMapping("/start")
+  @Operation(summary = "Starts the manufacturing process")
   ObjectNode startQueue() {
     ObjectNode node = mapper.createObjectNode();
     boolean success = false;
@@ -80,7 +105,13 @@ public class QueueController {
     return node;
   }
 
+
+  /**
+   * Stops the manufacturing process
+   * @return JSON success or failure message
+   */
   @GetMapping("/stop")
+  @Operation(summary = "Stops the manufacturing process")
   ObjectNode stopQueue() {
     ObjectNode node = mapper.createObjectNode();
     boolean success = false;
@@ -108,7 +139,13 @@ public class QueueController {
     return node;
   }
 
+
+  /**
+   * Requests a list of all requests in the queue
+   * @return List of requests
+   */
   @GetMapping("/requests")
+  @Operation(summary = "Requests a list of all requests in the queue")
   List<Request> getRequestsInQueue() {
     Optional<Queue> queue = queueRepository.findByName(QUEUE_NAME);
     if (queue.isPresent()) {
@@ -118,8 +155,15 @@ public class QueueController {
     }
   }
 
+
+  /**
+   * Adds a request to the queue
+   * @param request Request to be added
+   * @return JSON success or failure message
+   */
   @PostMapping("/requests")
-  ObjectNode addRequestToQueue(@RequestBody Request request) {
+  @Operation(summary = "Adds a request to the queue")
+  ObjectNode addRequestToQueue(@Parameter(description = "Request to be added") @RequestBody Request request) {
     ObjectNode node = mapper.createObjectNode();
     boolean success = false;
     String message = "";
@@ -141,8 +185,15 @@ public class QueueController {
     return node;
   }
 
+
+  /**
+   * Deletes a request from the queue
+   * @param id Unique ID of Request being removed
+   * @return JSON success or failure message
+   */
   @DeleteMapping("/{id}")
-  ObjectNode removeRequestFromQueue(@PathVariable long id) {
+  @Operation(summary = "Deletes a request from the queue")
+  ObjectNode removeRequestFromQueue(@Parameter(description = "Unique ID of Request being removed") @PathVariable long id) {
     ObjectNode node = mapper.createObjectNode();
     boolean success = false;
     String message = "";
@@ -167,7 +218,13 @@ public class QueueController {
     return node;
   }
 
+
+  /**
+   * Skip current request in the manufacturing process
+   * @return JSON success or failure message
+   */
   @GetMapping({"/skip", "/completeRequest"})
+  @Operation(summary = "Skip current request in the manufacturing process")
   ObjectNode skipCurrentRequest() {
     ObjectNode node = mapper.createObjectNode();
     boolean success = false;
@@ -193,6 +250,11 @@ public class QueueController {
     } else {
       message = "Queue does not exist";
     }
+
+    /*
+     * Complete a product, deliver to inventory
+     */
+
     node.put("success", success);
     node.put("message", message);
     return node;

@@ -15,17 +15,17 @@ import org.springframework.lang.NonNull;
 public class Request {
 
   @NonNull
-  private RequestType type;
+  private RequestType type; // Request type
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long id;
+  private Long id;  // Unique Request ID
 
   @ManyToOne
-  private Product product;
+  private Product product; // Product
 
-  private long quantity;
+  private long quantity;  // Product quantity
 
-  private boolean completed;
+  private boolean completed;  // Specifies whether or not the request has been complete
 
 }

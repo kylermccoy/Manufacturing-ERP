@@ -10,4 +10,10 @@ class ApplicationTests {
 	void contextLoads() {
 	}
 
+	@Test
+	void viewOrder() {
+
+	}
+
+
 }

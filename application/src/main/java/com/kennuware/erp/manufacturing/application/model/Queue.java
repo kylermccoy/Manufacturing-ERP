@@ -6,11 +6,11 @@ import java.util.List;
 
 @Data
 public class Queue {
-    private String name;
+    private String name;    // Name of Queue
 
-    private Request[] requestsInQueue;
+    private Request[] requestsInQueue;  // Contents of the queue
 
-    private boolean running;
+    private boolean running;    // Signifies if queue is running
 
     private String timeLeft;
 

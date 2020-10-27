@@ -13,11 +13,11 @@ import lombok.Data;
 public class Product {
 
   @Id
-  private Long id;
+  private Long id; // Unique Product ID
 
-  private String name;
+  private String name; // Product name
 
-  @ManyToOne
-  private Recipe recipe;
+  @ManyToOne(cascade = CascadeType.ALL)
+  private Recipe recipe; // Product recipe
 
 }

@@ -12,12 +12,12 @@ import lombok.Data;
 public class Queue {
 
   @Id
-  private String name;
+  private String name; // Queue name
 
   @OneToMany
-  private List<Request> requestsInQueue;
+  private List<Request> requestsInQueue; // List of requests in queue
 
-  private boolean running;
+  private boolean running;  // Specifies whether or not the queue is running
 
   private String timeLeft;
 
