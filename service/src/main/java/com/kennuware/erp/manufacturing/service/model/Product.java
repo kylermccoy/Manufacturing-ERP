@@ -14,11 +14,11 @@ public class Product {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long id;
+  private Long id; // Unique Product ID
 
-  private String name;
+  private String name; // Product name
 
   @ManyToOne(cascade = CascadeType.ALL)
-  private Recipe recipe;
+  private Recipe recipe; // Product recipe
 
 }

@@ -15,13 +15,19 @@ public class RecipeComponent {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long id;
+  private Long id; // Unique Recipe component ID
 
   @ManyToOne
-  private Item item;
+  private Item item; // Recipe Component Item
 
-  private long quantity;
+  private long quantity; // Item quantity
 
+
+  /**
+   * Creates a new instance of RecipeComponent
+   * @param item Item
+   * @param quantity Item quantity
+   */
   public RecipeComponent(Item item, long quantity) {
     this.item = item;
     this.quantity = quantity;

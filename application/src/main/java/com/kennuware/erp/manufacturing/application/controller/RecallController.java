@@ -19,6 +19,11 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class RecallController {
 
+    /**
+     * Requests a list of recall orders from the backend
+     * @param model Model
+     * @return Redirection to the recalls page
+     */
     @GetMapping(path = "/recalls")
     public String getRecalls(Model model, HttpSession session){
         ResponseEntity<Request[]> response1 = RequestSender.getForObject("http://localhost:8080/manufacturing/api/requests", Request[].class, session);
@@ -28,6 +33,13 @@ public class RecallController {
         return "recalls";
     }
 
+
+    /**
+     * Requests specific recall order data from backend
+     * @param id Unique Recall Order ID
+     * @param model Model
+     * @return Redirection to specific recall page
+     */
     @GetMapping(path = "/recalls/{id}")
     String getProduct(@PathVariable Long id, Model model, HttpSession session) {
         ResponseEntity<Request> response1 = RequestSender.getForObject("http://localhost:8080/manufacturing/api/requests/" + id, Request.class, session);

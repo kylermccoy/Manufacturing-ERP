@@ -19,6 +19,11 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class OrdersController {
 
+    /**
+     * Requests list of all orders from backend
+     * @param model Model
+     * @return Redirection to orders page
+     */
     @GetMapping(path = "/orders")
     public String getOrders(Model model, HttpSession session){
         ResponseEntity<Request[]> response1 = RequestSender.getForObject("http://localhost:8080/manufacturing/api/requests", Request[].class, session);
@@ -28,6 +33,13 @@ public class OrdersController {
         return "orders";
     }
 
+
+    /**
+     * Requests specific order data from backend
+     * @param id Unique Order ID number
+     * @param model Model
+     * @return Redirection to specific order page
+     */
     @GetMapping(path = "/orders/{id}")
     public String getOrder(@PathVariable Long id, Model model, HttpSession session) {
         ResponseEntity<Request> response1 = RequestSender.getForObject("http://localhost:8080/manufacturing/api/requests/" + id, Request.class, session);
