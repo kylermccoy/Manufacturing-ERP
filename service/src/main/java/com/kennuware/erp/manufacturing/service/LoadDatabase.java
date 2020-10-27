@@ -283,7 +283,7 @@ public class LoadDatabase {
       autoHeatingJacket.setRecipe(autoHeatingJacketRecipe);
 
       Product tieThemselvesSneakers = new Product();
-      tieThemselvesSneakers.setName("Tie-themselves Sneakers");
+      tieThemselvesSneakers.setName("Tie-Themselves Sneakers");
       tieThemselvesSneakers.setRecipe(tieThemselvesSneakersRecipe);
 
       Product smartGlasses = new Product();
