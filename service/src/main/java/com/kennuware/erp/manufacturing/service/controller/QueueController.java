@@ -66,7 +66,8 @@ public class QueueController {
       List<Request> requestsInQueue = q.getRequestsInQueue();
       if (!requestsInQueue.isEmpty()){
         int duration = requestsInQueue.get(0).getProduct().getRecipe().getBuildTime();
-        timer.setDuration(duration);
+        int quantity = (int)requestsInQueue.get(0).getQuantity();
+        timer.setDuration(duration*quantity);
         timer.start();
         q.setTimeLeft(timer.getRemainingTime());
 

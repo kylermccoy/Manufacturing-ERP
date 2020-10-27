@@ -10,7 +10,6 @@ import lombok.Data;
 public class Recipe {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
 
   private String name;
