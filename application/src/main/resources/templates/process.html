@@ -34,8 +34,8 @@
             <li th:if="request" th:each="request: ${requests}">
                 <span th:text="${request.getType()}" style="display: inline"></span>
                 #
-                <span th:text="${request.getId()}" style="display: inline; padding-right: 3em"></span>
-                <span th:text="${request.getProduct().getName()}" style="display: inline; padding-right: 3em"></span>
+                <span th:text="${request.getId()}" style="display: inline; padding-right: 25px"></span>
+                <span th:text="${request.getProduct().getName()}" style="display: inline; padding-right: 25px"></span>
                 <span th:text="Quantity" style="display: inline"></span>
                 =
                 <span th:text="${request.getQuantity()}" style="display: inline"></span>
