@@ -95,6 +95,7 @@ public class LoadDatabase {
       List<RecipeComponent> smartWatchRecipeComps = Arrays.asList(sw_comp1, sw_comp2);
       smartWatchRecipe.setComponents(smartWatchRecipeComps);
       smartWatchRecipe.setBuildInstructions(smartWatchInstructions);
+      smartWatchRecipe.setId((long)0);
 
       Recipe smartHeadbandRecipe = new Recipe();
       smartHeadbandRecipe.setName("Smart Headband Recipe");
@@ -113,6 +114,7 @@ public class LoadDatabase {
       List<RecipeComponent> smartHeadbandRecipeComps = Arrays.asList(shb_comp1, shb_comp2, shb_comp3, shb_comp4, shb_comp5);
       smartHeadbandRecipe.setComponents(smartHeadbandRecipeComps);
       smartHeadbandRecipe.setBuildInstructions(smartHeadbandInstructions);
+      smartHeadbandRecipe.setId((long)1);
 
       Recipe lightUpBootsRecipe = new Recipe();
       lightUpBootsRecipe.setName("Light Up Boots Recipe");
@@ -133,6 +135,7 @@ public class LoadDatabase {
       List<RecipeComponent> lubComps = Arrays.asList(lub_comp1, lub_comp2, lub_comp3, lub_comp4, lub_comp5, lub_comp6);
       lightUpBootsRecipe.setComponents(lubComps);
       lightUpBootsRecipe.setBuildInstructions(lightUpBootsInstructions);
+      lightUpBootsRecipe.setId((long)2);
 
       Recipe autoHeatingJacketRecipe = new Recipe();
       autoHeatingJacketRecipe.setName("Auto-heating Jacket Recipe");
@@ -149,6 +152,7 @@ public class LoadDatabase {
       List<RecipeComponent> ahjComps = Arrays.asList(ahj_comp1, ahj_comp2, ahj_comp3, ahj_comp4);
       autoHeatingJacketRecipe.setComponents(ahjComps);
       autoHeatingJacketRecipe.setBuildInstructions(autoHeatingJacketInstructions);
+      autoHeatingJacketRecipe.setId((long)3);
 
       Recipe tieThemselvesSneakersRecipe = new Recipe();
       tieThemselvesSneakersRecipe.setName("Tie-Themselves Sneakers Recipe");
@@ -169,6 +173,7 @@ public class LoadDatabase {
       List<RecipeComponent> tssComps = Arrays.asList(tss_comp1, tss_comp2, tss_comp3, tss_comp4, tss_comp5, tss_comp6);
       tieThemselvesSneakersRecipe.setComponents(tssComps);
       tieThemselvesSneakersRecipe.setBuildInstructions(tieThemselvesSneakersInstructions);
+      tieThemselvesSneakersRecipe.setId((long)4);
 
       Recipe smartGlassesRecipe = new Recipe();
       smartGlassesRecipe.setName("Smart Glasses Recipe");
@@ -187,6 +192,7 @@ public class LoadDatabase {
       List<RecipeComponent> sgComps = Arrays.asList(sg_comp1, sg_comp2, sg_comp3, sg_comp4, sg_comp5);
       smartGlassesRecipe.setComponents(sgComps);
       smartGlassesRecipe.setBuildInstructions(smartGlassesInstructions);
+      smartGlassesRecipe.setId((long)5);
 
       Recipe smartRingRecipe = new Recipe();
       smartRingRecipe.setName("Smart Ring Recipe");
@@ -203,6 +209,7 @@ public class LoadDatabase {
       List<RecipeComponent> srComps = Arrays.asList(sr_comp1, sr_comp2, sr_comp3, sr_comp4);
       smartRingRecipe.setComponents(srComps);
       smartRingRecipe.setBuildInstructions(smartRingInstructions);
+      smartRingRecipe.setId((long)6);
 
       Recipe smartHeelysRecipe = new Recipe();
       smartHeelysRecipe.setName("Smart Heelys Recipe");
@@ -223,6 +230,7 @@ public class LoadDatabase {
       List<RecipeComponent> shComps = Arrays.asList(sh_comp1, sh_comp2, sh_comp3, sh_comp4, sh_comp5, sh_comp6);
       smartHeelysRecipe.setComponents(shComps);
       smartHeelysRecipe.setBuildInstructions(smartHeelysInstructions);
+      smartHeelysRecipe.setId((long)7);
 
       Recipe watchScreenRecipe = new Recipe();
       watchScreenRecipe.setName("Watch Screen Recipe");
@@ -239,6 +247,7 @@ public class LoadDatabase {
       List<RecipeComponent> wsComps = Arrays.asList(ws_comp1, ws_comp2, ws_comp3, ws_comp4);
       watchScreenRecipe.setComponents(wsComps);
       watchScreenRecipe.setBuildInstructions(watchScreenInstructions);
+      watchScreenRecipe.setId((long)8);
 
       Recipe jacketRecipe = new Recipe();
       jacketRecipe.setName("Jacket Recipe");
@@ -253,6 +262,8 @@ public class LoadDatabase {
       List<RecipeComponent> jComps = Arrays.asList(j_comp1, j_comp2, j_comp3);
       jacketRecipe.setComponents(jComps);
       jacketRecipe.setBuildInstructions(jacketInstructions);
+      jacketRecipe.setId((long)9);
+
       List<Recipe> recipeList = Stream
           .of(jacketRecipe, autoHeatingJacketRecipe, lightUpBootsRecipe, smartGlassesRecipe,
               smartHeadbandRecipe, smartHeelysRecipe, smartRingRecipe, smartWatchRecipe,
@@ -265,46 +276,55 @@ public class LoadDatabase {
               .map(Recipe::getName)
               .collect(Collectors.toList()));
 
-
       Product smartWatch = new Product();
       smartWatch.setName("Smart Watch");
       smartWatch.setRecipe(smartWatchRecipe);
+      smartWatch.setId((long)0);
 
       Product smartHeadband = new Product();
       smartHeadband.setName("Smart Headband");
       smartHeadband.setRecipe(smartHeadbandRecipe);
+      smartHeadband.setId((long)1);
 
       Product lightUpBoots = new Product();
       lightUpBoots.setName("Light-Up Boots");
       lightUpBoots.setRecipe(lightUpBootsRecipe);
+      lightUpBoots.setId((long)2);
 
       Product autoHeatingJacket = new Product();
       autoHeatingJacket.setName("Auto-Heating Jacket");
       autoHeatingJacket.setRecipe(autoHeatingJacketRecipe);
+      autoHeatingJacket.setId((long)3);
 
       Product tieThemselvesSneakers = new Product();
-      tieThemselvesSneakers.setName("Tie-themselves Sneakers");
+      tieThemselvesSneakers.setName("Tie-Themselves Sneakers");
       tieThemselvesSneakers.setRecipe(tieThemselvesSneakersRecipe);
+      tieThemselvesSneakers.setId((long)4);
 
       Product smartGlasses = new Product();
       smartGlasses.setName("Smart Glasses");
       smartGlasses.setRecipe(smartGlassesRecipe);
+      smartGlasses.setId((long)5);
 
       Product smartRing = new Product();
       smartRing.setName("Smart Ring");
       smartRing.setRecipe(smartRingRecipe);
+      smartRing.setId((long)6);
 
       Product smartHeelys = new Product();
       smartHeelys.setName("Smart Heelys");
       smartHeelys.setRecipe(smartHeelysRecipe);
+      smartHeelys.setId((long)7);
 
       Product watchScreen = new Product();
       watchScreen.setName("Watch Screen");
       watchScreen.setRecipe(watchScreenRecipe);
+      watchScreen.setId((long)8);
 
       Product jacket = new Product();
       jacket.setName("Jacket");
       jacket.setRecipe(jacketRecipe);
+      jacket.setId((long)9);
 
       List<Product> productList = Stream
           .of(smartWatch, smartHeadband,

@@ -13,12 +13,11 @@ import lombok.Data;
 public class Product {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long id;
+  private Long id; // Unique Product ID
 
-  private String name;
+  private String name; // Product name
 
-  @ManyToOne
-  private Recipe recipe;
+  @ManyToOne(cascade = CascadeType.ALL)
+  private Recipe recipe; // Product recipe
 
 }

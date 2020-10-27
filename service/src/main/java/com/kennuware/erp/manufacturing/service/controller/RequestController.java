@@ -8,7 +8,9 @@ import com.kennuware.erp.manufacturing.service.model.repository.QueueRepository;
 import com.kennuware.erp.manufacturing.service.model.repository.RequestRepository;
 import java.util.List;
 import java.util.Optional;
-import javax.persistence.EntityNotFoundException;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,33 +25,69 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path = "/requests")
 public class RequestController {
 
-  private final RequestRepository requestRepository;
-  private final QueueRepository queueRepository;
-  private final ObjectMapper mapper;
-  
+  private final RequestRepository requestRepository; // Repository of requests
+  private final QueueRepository queueRepository; // Queue repository
+  private final ObjectMapper mapper; // Provides functionality for reading and writing JSON
+
+
+  /**
+   * Creates a new instance of RequestController
+   * @param requestRepository Repository of requests
+   * @param queueRepository Queue repository
+   * @param mapper Mapper
+   */
   RequestController(RequestRepository requestRepository, QueueRepository queueRepository, ObjectMapper mapper) {
     this.requestRepository = requestRepository;
     this.queueRepository = queueRepository;
     this.mapper = mapper;
   }
-  
+
+
+  /**
+   * Lists the requests in the queue
+   * @return List of requests
+   */
   @GetMapping
   List<Request> listRequests() {
     return requestRepository.findAll();
   }
-  
+
+
+  /**
+   * Gathers data on specific request
+   * @param id Unique request ID
+   * @return Specific request
+   */
   @GetMapping(path = "/{id}")
   Request getRequest(@PathVariable long id) {
-    return requestRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+    return requestRepository.findById(id).orElseThrow(() -> new GenericJSONException("Request [" + id + "] was not found"));
   }
 
+
+  /**
+   * Adds a request to the repository
+   * @param request Request to be added
+   * @return JSON success or failure message
+   */
   @PostMapping
-  Request addRequest(@RequestBody Request request) {
-    return requestRepository.save(request);
+  @Operation(summary = "Adds a request to the repository")
+  Request addRequest(@Parameter(description = "Request to be added") @RequestBody Request request) {
+    Request newRequest = requestRepository.save(request);
+    Queue q = queueRepository.findByName(QueueController.QUEUE_NAME).orElseThrow(() -> new GenericJSONException("Queue does not exist"));
+    q.getRequestsInQueue().add(newRequest);
+    queueRepository.save(q);
+    return newRequest;
   }
 
+
+  /**
+   * Deletes a request from queue
+   * @param id Request ID
+   * @return JSON success or failure
+   */
   @DeleteMapping(path = "/{id}")
-  ObjectNode deleteRequest(@PathVariable long id) {
+  @Operation(summary = "Deletes a request from queue")
+  ObjectNode deleteRequest(@Parameter(description = "Request ID") @PathVariable long id) {
     final ObjectNode response = mapper.createObjectNode();
     final String message;
     final boolean success;
