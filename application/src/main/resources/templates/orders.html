@@ -9,16 +9,20 @@
     <script type="text/javascript" th:src="@{/js/actions.js}"></script>
 </head>
 <body>
+
+    <!-- Nav bar -->
     <ul style="list-style-type: none; margin: 10px; padding: 10px; font-size: 25px; text-align: center ">
         <li style="display: inline; margin: 10px; padding: 10px"><a href="process">Process</a></li>
         <li style="display: inline; margin: 10px; padding: 10px"><a href="orders">Orders</a></li>
         <li style="display: inline; margin: 10px; padding: 10px"><a href="recalls">Recalls</a></li>
         <li style="display: inline; margin: 10px; padding: 10px"><a href="products">Products</a></li>
         <li style="display: inline; margin: 10px; padding: 10px"><a href="timesheet">Timesheet</a></li>
-<!--        <li style="display: inline; margin: 10px; padding: 10px"><a href="log">Log</a></li>-->
     </ul><br><br>
 
+    <!-- Orders section -->
     <h1 style="text-align: center">Orders</h1><br><br>
+
+    <!-- Lists the orders in the queue -->
     <ol id="product-list" style="text-align: center; display: inline; font-size: 20px; margin: 10px; padding: 10px">
         <li th:each="order: ${orders}">ORDER#<span th:text="${order.getId()}" style="display: inline; padding-right: 3em"></span>
         <a style="padding-right: 3em" th:href="@{/orders/{id}(id=${order.getId()})}">View Order</a>

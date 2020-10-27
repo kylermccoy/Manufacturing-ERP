@@ -8,17 +8,20 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
+
+<!-- Nav bar -->
 <ul style="list-style-type: none; margin: 10px; padding: 10px; font-size: 25px; text-align: center ">
     <li style="display: inline; margin: 10px; padding: 10px"><a href="../process">Process</a></li>
     <li style="display: inline; margin: 10px; padding: 10px"><a href="../orders">Orders</a></li>
     <li style="display: inline; margin: 10px; padding: 10px"><a href="../recalls">Recalls</a></li>
     <li style="display: inline; margin: 10px; padding: 10px"><a href="../products">Products</a></li>
     <li style="display: inline; margin: 10px; padding: 10px"><a href="../timesheet">Timesheet</a></li>
-<!--    <li style="display: inline; margin: 10px; padding: 10px"><a href="../log">Log</a></li>-->
 </ul><br><br>
 
+<!-- Current request -->
 <h1 style="text-align: center">ORDER#<span th:text="${order.getId()}"></span></h1><br><br>
 
+<!-- Order status & Product List -->
 <div class="container" style="width: 30%; text-align: center">
     <h2 style="text-align: center">Status: <stan th:text="${orderStatus}"></stan></h2>
     <h2 style="text-align: center">Product List:</h2>

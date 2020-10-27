@@ -11,12 +11,12 @@ public class Recipe {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long id;
+  private Long id; // Unique recipe ID
 
-  private String name;
+  private String name; // Recipe name
 
   @OneToMany(cascade = CascadeType.ALL)
-  private List<RecipeComponent> components;
+  private List<RecipeComponent> components; // List of recipe components
 
   @ElementCollection
   private List<String> buildInstructions; // Instructions of how to manufacture product

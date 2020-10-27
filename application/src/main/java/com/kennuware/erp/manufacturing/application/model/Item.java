@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class Item {
-    Long id;
-    String name;
+    Long id;    // Unique ID of item
+    String name;    // Name of item
 }

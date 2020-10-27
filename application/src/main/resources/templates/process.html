@@ -8,18 +8,21 @@
     <script type="text/javascript" th:src="@{/js/actions.js}"></script>
 </head>
 <body>
+
+    <!-- Nav bar -->
     <ul style="list-style-type: none; margin: 10px; padding: 10px; font-size: 25px; text-align: center ">
         <li style="display: inline; margin: 10px; padding: 10px"><a href="process">Process</a></li>
         <li style="display: inline; margin: 10px; padding: 10px"><a href="orders">Orders</a></li>
         <li style="display: inline; margin: 10px; padding: 10px"><a href="recalls">Recalls</a></li>
         <li style="display: inline; margin: 10px; padding: 10px"><a href="products">Products</a></li>
         <li style="display: inline; margin: 10px; padding: 10px"><a href="timesheet">Timesheet</a></li>
-<!--        <li style="display: inline; margin: 10px; padding: 10px"><a href="log">Log</a></li>-->
     </ul><br><br>
 
+    <!-- Status and current request in queue -->
     <h1 style="text-align: center">Status: <span th:text="${queueStatus}"></span></h1>
     <h1 style="text-align: center">Current Request#: <span th:unless="${#lists.isEmpty(requests)}"><span th:text="${requests[0].getId()}"></span></span></h1><br>
 
+    <!-- List of requests in queue -->
     <div class="container" style="width: 30%; text-align: center">
         <h2 style="text-align: center">Requests to be Completed:</h2>
         <ol id="product-list" style="text-align: center; display: inline; font-size: 20px; margin: 10px; padding: 10px">
@@ -27,6 +30,7 @@
         </ol><br><br>
     </div>
 
+    <!-- Queue controls -->
     <div id="controls" style="text-align: center; color: white">
         <button type="button" id="start" style="background-color: green; color: white">Start Process</button>
         <button type="button" id="stop" style="background-color: darkred; color: white">Stop Process</button>

@@ -24,14 +24,27 @@ import org.springframework.web.servlet.view.RedirectView;
 @Controller
 public class EmployeeController {
 
-    public String user;
-    ObjectMapper mapper;
+    public String user; // Employee user
+    ObjectMapper mapper;    // Provides functionality for reading & writing JSON
 
+
+    /**
+     * Creates a new EmployeeController
+     * @param mapper mapper
+     */
     EmployeeController(ObjectMapper mapper) {
         this.mapper = mapper;
     }
 
 
+    /**
+     * User login process with database authentication
+     * @param user Username
+     * @param pass Password
+     * @param model Model
+     * @param session Current Session
+     * @return Redirect page
+     */
     @RequestMapping(path = "/sign_in")
     public Object redirectToProcess(@RequestParam String user, @RequestParam String pass, Model model, HttpSession session){
         // INSERT SIGN IN CHECKING HERE!!!
@@ -72,6 +85,13 @@ public class EmployeeController {
         return new RedirectView("/process");
     }
 
+
+    /**
+     * Gathers data from the user's Timesheet page
+     * @param model Model
+     * @param session Current Session
+     * @return Where to redirect the user
+     */
     @GetMapping(path = "/timesheet")
     public String getTimesheet(Model model, HttpSession session){
         RestTemplate rt = new RestTemplate();
@@ -86,6 +106,14 @@ public class EmployeeController {
         return "timesheet";
     }
 
+
+    /**
+     * Updates the employee's timesheet based on the data inputted
+     * @param hours Hours worked
+     * @param model Model
+     * @param session Current session
+     * @return Where to redirect the user
+     */
     @RequestMapping(path = "/update_timesheet")
     public String updateTimesheet(@RequestParam String hours, Model model, HttpSession session){
         if (hours.isBlank()){

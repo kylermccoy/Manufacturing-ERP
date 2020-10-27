@@ -13,6 +13,11 @@ import org.springframework.web.client.RestTemplate;
 @Controller
 public class OrdersController {
 
+    /**
+     * Requests list of all orders from backend
+     * @param model Model
+     * @return Redirection to orders page
+     */
     @GetMapping(path = "/orders")
     public String getOrders(Model model){
         RestTemplate rt = new RestTemplate();
@@ -22,6 +27,13 @@ public class OrdersController {
         return "orders";
     }
 
+
+    /**
+     * Requests specific order data from backend
+     * @param id Unique Order ID number
+     * @param model Model
+     * @return Redirection to specific order page
+     */
     @GetMapping(path = "/orders/{id}")
     public String getOrder(@PathVariable Long id, Model model) {
         RestTemplate restTemplate = new RestTemplate();
