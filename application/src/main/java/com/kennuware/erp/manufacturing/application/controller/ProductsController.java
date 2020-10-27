@@ -25,9 +25,11 @@ public class ProductsController {
         return "product";
     }
 
-    @PostMapping(path = "")
+    /*
+     * Deliver products to inventory
+     */
     String deliverProducts() {
-        return "products";
+        return null;
     }
 
 }

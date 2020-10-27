@@ -109,8 +109,18 @@ public class EmployeeController {
             HttpHeaders headers = new HttpHeaders();
             headers.add("Cookie", "SESSION=" + session.getAttribute("session"));
             HttpEntity entity = new HttpEntity(headers);
+
+            /*
+             * Send updated timecard to HR
+             */
+
             ResponseEntity<JsonNode> response = rt.exchange(
                 "http://localhost:8080/manufacturing/api/employees/updateHours?user=" + this.user + "&hoursWorked=" + temp, HttpMethod.POST, entity, JsonNode.class);
+            /*
+             * ResponseEntity<JsonNode> response = rt.exchange(
+                "/humanresources/api/employees/updateHours?user=" + this.user + "&hoursWorked=" + temp, HttpMethod.POST, entity, JsonNode.class);
+             */
+
             JsonNode res = response.getBody();
             model.addAttribute("success", res.get("success"));
             model.addAttribute("failure", false);
