@@ -43,13 +43,16 @@ public class EmployeeController {
         ObjectNode json = mapper.createObjectNode();
         json.put("user", user);
         json.put("pass", pass);
-        /**
+
+        /*
          * Request sign-in authentication from HR here
-         *
          */
 
         ResponseEntity<Boolean> response = authenticateTemplate.postForEntity("http://localhost:8080/manufacturing/api/employees/authenticate", json, boolean.class);
 
+        /*
+         * ResponseEntity<Boolean> response = authenticateTemplate.postForEntity("/humanresources/api/employees/authenticate", json, boolean.class);
+         */
 
         HttpHeaders headers = response.getHeaders();
         List<String> cookieList = headers.getOrDefault("Set-Cookie", Collections.emptyList());
