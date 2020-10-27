@@ -72,7 +72,11 @@ public class RequestController {
   @PostMapping
   @Operation(summary = "Adds a request to the repository")
   Request addRequest(@Parameter(description = "Request to be added") @RequestBody Request request) {
-    return requestRepository.save(request);
+    Request newRequest = requestRepository.save(request);
+    Queue q = queueRepository.findByName(QueueController.QUEUE_NAME).orElseThrow(() -> new GenericJSONException("Queue does not exist"));
+    q.getRequestsInQueue().add(newRequest);
+    queueRepository.save(q);
+    return newRequest;
   }
 
 
