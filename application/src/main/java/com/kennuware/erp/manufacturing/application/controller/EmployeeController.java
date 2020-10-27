@@ -47,6 +47,7 @@ public class EmployeeController {
         /*
          * Request sign-in authentication from HR here
          */
+        authenticateSignIn(user, pass);
 
         ResponseEntity<Boolean> response = authenticateTemplate.postForEntity("http://localhost:8080/manufacturing/api/employees/authenticate", json, boolean.class);
 
@@ -121,6 +122,11 @@ public class EmployeeController {
                 "/humanresources/api/employees/updateHours?user=" + this.user + "&hoursWorked=" + temp, HttpMethod.POST, entity, JsonNode.class);
              */
 
+            /*
+             * SEND TIMESHEET TO HR
+             */
+            sendTimesheet();
+
             JsonNode res = response.getBody();
             model.addAttribute("success", res.get("success"));
             model.addAttribute("failure", false);
@@ -133,11 +139,21 @@ public class EmployeeController {
         }
     }
 
-    @PostMapping(path = "/send_timesheet")
+    /*
+     * Post timesheet to HR
+     */
+    @PostMapping
     public String sendTimesheet() {
-        return "timesheet";
+        return null;
     }
 
+    /*
+     * Request sign in authentication from HR
+     */
+    @RequestMapping
+    public String authenticateSignIn(String user, String pass) {
+        return null;
+    }
 
 
 }

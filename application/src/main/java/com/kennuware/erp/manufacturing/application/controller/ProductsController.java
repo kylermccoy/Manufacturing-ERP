@@ -28,7 +28,16 @@ public class ProductsController {
     /*
      * Deliver products to inventory
      */
-    String deliverProducts() {
+    @PostMapping
+    String deliverProducts(Product product, int quantity) {
+        return null;
+    }
+
+    /*
+     * Request products from inventory
+     */
+    @PostMapping
+    String requestProducts(Long productID, int quantity) {
         return null;
     }
 
