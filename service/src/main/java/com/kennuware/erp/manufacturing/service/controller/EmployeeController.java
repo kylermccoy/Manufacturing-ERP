@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.repository.query.Param;
 import org.springframework.lang.UsesSunMisc;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,6 +29,9 @@ public class EmployeeController {
   EmployeeRepository employeeRepository; // Repository of employees
   ObjectMapper mapper; // Provides functionality for reading and writing JSON
   PasswordEncoder encoder; // Encodes the user's password
+
+  @Value("${servers.accounting}")
+  private String hrURL;
 
 
   /**

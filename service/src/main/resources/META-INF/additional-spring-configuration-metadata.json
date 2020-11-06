@@ -1,0 +1,18 @@
+{
+  "properties": [
+    {
+      "name": "servers.accounting",
+      "type": "java.lang.String",
+      "description": "Accounting server URL."
+    },
+    {
+      "name": "servers.sales",
+      "type": "java.lang.String",
+      "description": "Sales server URL."
+    },
+    {
+      "name": "servers.inventory",
+      "type": "java.lang.String",
+      "description": "Inventory server URL."
+    }
+  ] }
