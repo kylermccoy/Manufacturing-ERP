@@ -1,57 +1,94 @@
 package com.kennuware.erp.manufacturing.service;
 
-import com.kennuware.erp.manufacturing.service.model.Employee;
-import com.kennuware.erp.manufacturing.service.model.Product;
-import com.kennuware.erp.manufacturing.service.model.Request;
-import com.kennuware.erp.manufacturing.service.model.RequestType;
-import com.kennuware.erp.manufacturing.service.model.repository.EmployeeRepository;
-import com.kennuware.erp.manufacturing.service.model.repository.ProductRepository;
-import com.kennuware.erp.manufacturing.service.model.repository.RequestRepository;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
+import com.kennuware.erp.manufacturing.service.model.*;
+import com.kennuware.erp.manufacturing.service.model.repository.*;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootTest
 class ServiceApplicationTests {
 
 	@Autowired
-	ProductRepository productRepository;
+	ItemRepository itemRepo;
 
 	@Autowired
-	RequestRepository requestRepository;
+	ProductRepository productRepo;
 
-	@BeforeEach
-	void init() {
-		productRepository.deleteAll();
-		requestRepository.deleteAll();
+	@Autowired
+	RequestRepository requestRepo;
+
+	@Autowired
+	QueueRepository queueRepo;
+
+	@Autowired
+	EmployeeRepository employeeRepo;
+
+
+	/**
+	 * Tests the add/delete functionality of an Item in the Item Repository
+	 */
+	@Test
+	void addAndDeleteItemTest() {
+		long originalCount = itemRepo.count();
+		Item item = new Item("Brass");
+		itemRepo.save(item);
+		Assertions.assertTrue(originalCount < itemRepo.count());
+		Assertions.assertTrue(itemRepo.existsByName("Brass"));
+		itemRepo.deleteById(item.getId());
+		Assertions.assertTrue(originalCount == itemRepo.count());
+		Assertions.assertFalse(itemRepo.existsByName("Brass"));
 	}
 
+
+	/**
+	 * Tests the add/delete functionality of a Product in the Product Repository
+	 */
 	@Test
-	void contextLoads() {
+	void addAndDeleteProductTest() {
+		long originalCount = productRepo.count();
+		Product product = new Product();
+		product.setName("Hoverboard");
+		product.setId(Integer.toUnsignedLong(100));
+		productRepo.save(product);
+		Assertions.assertTrue(originalCount < productRepo.count());
+		Assertions.assertTrue(productRepo.existsByName("Hoverboard"));
+		productRepo.delete(product);
+		Assertions.assertTrue(originalCount == productRepo.count());
+		Assertions.assertFalse(productRepo.existsByName("Hoverboard"));
 	}
 
-	@Test
-	void addProductToRepository() {
-		Assertions.assertEquals(productRepository.count(),  0);
-		productRepository.save(new Product());
-		Assertions.assertEquals(productRepository.count(), 1);
-	}
 
+	/**
+	 * Tests the add/delete functionality of a Request in the Request Repository
+	 */
 	@Test
-	void addOrderToRepository() {
-		Assertions.assertEquals(requestRepository.count(), 0);
+	void addAndDeleteRequestTest() {
+		long originalCount = requestRepo.count();
 		Request request = new Request();
-		request.setId(Integer.toUnsignedLong(1));
-		request.setType(RequestType.ORDER);
-		requestRepository.save(request);
-		Assertions.assertEquals(requestRepository.count(), 1);
+		requestRepo.save(request);
+		Assertions.assertTrue(originalCount < requestRepo.count());
+		Assertions.assertTrue(requestRepo.existsById(request.getId()));
+		requestRepo.delete(request);
+		Assertions.assertTrue(originalCount == requestRepo.count());
+		Assertions.assertFalse(requestRepo.existsById(request.getId()));
 	}
 
 
+	/**
+	 * Tests the add/delete functionality of an Employee in the Employee Repository
+	 */
+	@Test
+	void addAndDeleteEmployeeTest() {
+		long originalCount = employeeRepo.count();
+		Employee employee = new Employee();
+		employeeRepo.save(employee);
+		Assertions.assertTrue(originalCount < employeeRepo.count());
+		Assertions.assertTrue(employeeRepo.existsById(employee.getId()));
+		employeeRepo.delete(employee);
+		Assertions.assertTrue(originalCount == employeeRepo.count());
+		Assertions.assertFalse(employeeRepo.existsById(employee.getId()));
+	}
 
 
 
