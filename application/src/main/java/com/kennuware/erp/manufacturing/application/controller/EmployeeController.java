@@ -3,7 +3,7 @@ package com.kennuware.erp.manufacturing.application.controller;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.kennuware.erp.manufacturing.application.controller.util.RequestSender;
+import com.kennuware.erp.manufacturing.application.util.RequestSender;
 import com.kennuware.erp.manufacturing.application.model.Queue;
 import com.kennuware.erp.manufacturing.application.model.Request;
 import org.springframework.http.HttpHeaders;

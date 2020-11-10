@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 @RestController
 @RequestMapping(path = "/queue")
@@ -30,7 +31,6 @@ public class QueueController {
 
   //TODO: probably refactor a lot of duplicate code
   //TODO: make better use of Optional.orElse
-  //TODO: Create a json error response object
 
   private final QueueRepository queueRepository; // Repository of queues
   private final RequestRepository requestRepository; // Repository of requests
@@ -152,6 +152,21 @@ public class QueueController {
     }
   }
 
+  /**
+   * Requests the first (next up) request in the queue
+   * @return List of requests
+   */
+  @GetMapping("/requests/next")
+  @Operation(summary = "Gets the next up item in the queue")
+  Request getNextRequest() {
+    Optional<Queue> queue = queueRepository.findByName(QUEUE_NAME);
+    if (queue.isPresent()) {
+      List<Request> reqs = queue.get().getRequestsInQueue();
+      return reqs.size() > 0 ? queue.get().getRequestsInQueue().remove(0) : null;
+    }
+    return null;
+  }
+  
 
   /**
    * Adds a request to the queue
@@ -255,6 +270,13 @@ public class QueueController {
     node.put("success", success);
     node.put("message", message);
     return node;
+  }
+
+  @GetMapping("/timeRemaining")
+  public ObjectNode getTimeRemaining() {
+    // this is super backwards and fucked to call the front end and then just return that
+    RestTemplate rt = new RestTemplate();
+    return rt.getForObject("http://localhost:8081/process/getRemainingTime", ObjectNode.class);
   }
 
 }

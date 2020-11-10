@@ -1,13 +1,11 @@
 package com.kennuware.erp.manufacturing.application.controller;
 
-import com.kennuware.erp.manufacturing.application.controller.util.RequestSender;
+import com.kennuware.erp.manufacturing.application.util.RequestSender;
 import com.kennuware.erp.manufacturing.application.model.Product;
-import com.kennuware.erp.manufacturing.application.model.Request;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpSession;
 
