@@ -222,7 +222,7 @@ public class ProductsController {
 
         Recipe recipe = new Recipe();
         recipe.setName(name + " Recipe");
-        recipe.setBuildInstructions(Arrays.asList(instructions.split("\\.")));
+        recipe.setBuildInstructions(Arrays.asList(instructions.split("\n")));
         recipe.setBuildTime(buildTime);
         recipe.setComponents(recipeComponents.toArray(new RecipeComponent[recipeComponents.size()]));
         recipe.setId((long) (products.length));
