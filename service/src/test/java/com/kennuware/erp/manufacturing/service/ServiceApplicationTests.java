@@ -12,12 +12,13 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Example;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.Null;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 class ServiceApplicationTests {
@@ -43,21 +44,23 @@ class ServiceApplicationTests {
 	@Autowired
 	EmployeeRepository employeeRepo;
 
-	private static Item item = new Item();
+	Item item = new Item();
 
-	private static Product product = new Product();
+	Product product = new Product();
 
-	private static Request request = new Request();
+	Request request = new Request();
 
-	private static Employee employee = new Employee();
+	Employee employee = new Employee();
 
-	private static Recipe recipe = new Recipe();
+	Recipe recipe = new Recipe();
 
-	private static RecipeComponent recipeComponent = new RecipeComponent();
+	RecipeComponent recipeComponent = new RecipeComponent();
+
+	Queue queue = new Queue();
 
 
-	@BeforeAll
-	public static void init() {
+	@BeforeEach
+	void init() {
 		// Item initialization
 		item.setName("Paper");
 
@@ -67,24 +70,29 @@ class ServiceApplicationTests {
 
 		// Recipe initialization
 		recipe.setName("Book Recipe");
+		recipe.setId(Integer.toUnsignedLong(0));
 		List<RecipeComponent> components = Stream.of(recipeComponent).collect(Collectors.toList());
 		recipe.setComponents(components);
 		recipe.setBuildTime(20);
 		recipe.setBuildInstructions(Stream.of("Print pages", "Stitch pages").collect(Collectors.toList()));
 
 		// Product initialization
+		product.setId(Integer.toUnsignedLong(0));
 		product.setName("Book");
 		product.setRecipe(recipe);
 
 		// Request initialization
 		request.setType(RequestType.ORDER);
-		request.setProduct(product);
+		//request.setProduct(product);
 		request.setQuantity(3);
 
 		// Employee initialization
 		employee.setUsername("admin");
 		employee.setPassword("admin");
 		employee.setHoursWorked(30);
+
+		// Queue initialization
+		queue.setName("QUEUE");
 	}
 
 
@@ -97,29 +105,20 @@ class ServiceApplicationTests {
 	 */
 	@Test
 	void addItemTest() {
-		if (!itemRepo.existsByName(item.getName())) {
-			itemRepo.saveAndFlush(item);
-			Assertions.assertTrue(itemRepo.existsByName(item.getName()));
-		}
+		itemRepo.save(item);
+		assertTrue(itemRepo.existsByName(item.getName()));
 	}
 
 
 	/**
 	 * Tests the ability to get an Item's name from the repository given an ID
 	 */
-   /*@Test
-   void getItemNameTest() {
-      Assertions.assertEquals(itemRepo.getOne(item.getId()).getName(), "Paper");
-   }*/
-
-
-	/**
-	 * Tests deleting an Item from the Item Repository
-	 */
-   /*@Test
-   void deleteItemTest() {
-
-   }*/
+	@Test
+	void getItemNameTest() {
+		itemRepo.save(item);
+		assertTrue(itemRepo.existsByName(item.getName()));
+		Assertions.assertEquals(itemRepo.getOne(item.getId()).getName(), "Paper");
+	}
 
 
 	////////////////////////////////////////////////////////////
@@ -131,12 +130,43 @@ class ServiceApplicationTests {
 	 */
 	@Test
 	void addRecipeComponentTest() {
-		if (recipeComponent.getId() == null || !recipeComponentRepository.existsById(recipeComponent.getId())) {
-			recipeComponentRepository.saveAndFlush(recipeComponent);
-			Assertions.assertTrue(recipeComponentRepository.existsById(recipeComponent.getId()));
-		}
+		itemRepo.save(item);
+		recipeComponentRepository.save(recipeComponent);
+		assertTrue(recipeComponentRepository.existsById(recipeComponent.getId()));
 	}
 
+
+	/**
+	 * Tests getting a RecipeComponent from the RecipeComponent Repository
+	 */
+	@Test
+	void getRecipeComponentTest() {
+		itemRepo.save(item);
+		recipeComponentRepository.save(recipeComponent);
+		assertEquals(recipeComponentRepository.getOne(recipeComponent.getId()), recipeComponent);
+	}
+
+
+	/**
+	 * Tests getting a RecipeComponent quantity from the RecipeComponent Repository
+	 */
+	@Test
+	void getRecipeComponentQuantityTest() {
+		itemRepo.save(item);
+		recipeComponentRepository.save(recipeComponent);
+		assertEquals(recipeComponentRepository.getOne(recipeComponent.getId()).getQuantity(), recipeComponent.getQuantity());
+	}
+
+
+	/**
+	 * Tests getting a RecipeComponent's Item from the RecipeComponent Repository
+	 */
+	@Test
+	void getRecipeComponentItemTest() {
+		itemRepo.save(item);
+		recipeComponentRepository.save(recipeComponent);
+		assertEquals(recipeComponentRepository.getOne(recipeComponent.getId()).getItem(), recipeComponent.getItem());
+	}
 
 	////////////////////////////////////////////////////////////
 	/////////////////////  RECIPE TESTS  ///////////////////////
@@ -147,10 +177,22 @@ class ServiceApplicationTests {
 	 */
 	@Test
 	void addRecipeTest() {
-		if (recipe.getId() == null || !recipeRepository.existsByName(recipe.getName())) {
-			recipeRepository.save(recipe);
-			Assertions.assertTrue(recipeRepository.existsByName(recipe.getName()));
-		}
+		itemRepo.save(item);
+		recipeComponentRepository.save(recipeComponent);
+		recipeRepository.save(recipe);
+		assertTrue(recipeRepository.existsByName(recipe.getName()));
+	}
+
+
+	/**
+	 * Tests the ability to get a Recipe from the repository given an ID
+	 */
+	@Test
+	void getRecipeTest() {
+		itemRepo.save(item);
+		recipeComponentRepository.save(recipeComponent);
+		recipeRepository.save(recipe);
+		assertEquals(recipeRepository.getOne(recipe.getId()), recipe);
 	}
 
 
@@ -159,7 +201,10 @@ class ServiceApplicationTests {
 	 */
 	@Test
 	void getRecipeNameTest() {
-		Assertions.assertEquals(recipeRepository.findById(recipe.getId()).get().getName(), "Book Recipe");
+		itemRepo.save(item);
+		recipeComponentRepository.save(recipeComponent);
+		recipeRepository.save(recipe);
+		assertEquals(recipeRepository.getOne(recipe.getId()).getName(), recipe.getName());
 	}
 
 
@@ -168,7 +213,10 @@ class ServiceApplicationTests {
 	 */
 	@Test
 	void getRecipeBuildTimeTest() {
-		Assertions.assertEquals(recipeRepository.findById(recipe.getId()).get().getBuildTime(), recipe.getBuildTime());
+		itemRepo.save(item);
+		recipeComponentRepository.save(recipeComponent);
+		recipeRepository.save(recipe);
+		assertEquals(recipeRepository.getOne(recipe.getId()).getBuildTime(), recipe.getBuildTime());
 	}
 
 
@@ -177,7 +225,10 @@ class ServiceApplicationTests {
 	 */
 	@Test
 	void getRecipeBuildInstructionsTest() {
-		Assertions.assertEquals(recipeRepository.findById(recipe.getId()).get().getBuildInstructions(), recipe.getBuildInstructions());
+		itemRepo.save(item);
+		recipeComponentRepository.save(recipeComponent);
+		recipeRepository.save(recipe);
+		assertEquals(recipeRepository.getOne(recipe.getId()).getBuildInstructions(), recipe.getBuildInstructions());
 	}
 
 
@@ -186,24 +237,11 @@ class ServiceApplicationTests {
 	 */
 	@Test
 	void getRecipeComponentsTest() {
-		Assertions.assertEquals(recipeRepository.findById(recipe.getId()).get().getComponents(), recipe.getComponents());
+		itemRepo.save(item);
+		recipeComponentRepository.save(recipeComponent);
+		recipeRepository.save(recipe);
+		assertEquals(recipeRepository.getOne(recipe.getId()).getComponents(), recipe.getComponents());
 	}
-
-
-	/**
-	 * Tests deleting a Recipe from the Recipe Repository
-	 */
-// @Test
-// void deleteRecipeTest() {
-// }
-
-
-	/**
-	 * Tests deleting a RecipeComponent from the RecipeComponent Repository
-	 */
-// @Test
-// void deleteRecipeComponentTest() {
-// }
 
 
 	////////////////////////////////////////////////////////////
@@ -215,10 +253,11 @@ class ServiceApplicationTests {
 	 */
 	@Test
 	void addProductTest() {
-		if (product.getId() == null || !productRepo.existsByName(product.getName())) {
-			productRepo.save(product);
-			Assertions.assertTrue(productRepo.existsByName(product.getName()));
-		}
+		itemRepo.save(item);
+		recipeComponentRepository.save(recipeComponent);
+		recipeRepository.save(recipe);
+		productRepo.save(product);
+		assertTrue(productRepo.existsByName(product.getName()));
 	}
 
 
@@ -227,7 +266,11 @@ class ServiceApplicationTests {
 	 */
 	@Test
 	void getProductNameTest() {
-		Assertions.assertEquals(productRepo.findById(product.getId()).get().getName(), "Book");
+		itemRepo.save(item);
+		recipeComponentRepository.save(recipeComponent);
+		recipeRepository.save(recipe);
+		productRepo.save(product);
+		assertEquals(productRepo.getOne(product.getId()).getName(), "Book");
 	}
 
 
@@ -236,22 +279,12 @@ class ServiceApplicationTests {
 	 */
 	@Test
 	void getProductRecipeTest() {
-		Assertions.assertEquals(productRepo.findById(product.getId()).get().getRecipe(), product.getRecipe());
+		itemRepo.save(item);
+		recipeComponentRepository.save(recipeComponent);
+		recipeRepository.save(recipe);
+		productRepo.save(product);
+		assertEquals(productRepo.getOne(product.getId()).getRecipe(), product.getRecipe());
 	}
-
-
-	/**
-	 * Tests deleting a Product from the Product Repository
-	 */
-   /*
-   @Test
-   void deleteProductTest() {
-      productRepo.deleteById(Integer.toUnsignedLong(500));
-      if (productRepo.existsByName(product.getName())) {
-         productRepo.deleteById(product);
-         Assertions.assertFalse(productRepo.existsByName(product.getName()));
-      }
-   }*/
 
 
 	////////////////////////////////////////////////////////////
@@ -263,19 +296,69 @@ class ServiceApplicationTests {
 	 */
 	@Test
 	void addRequestTest() {
-		if (request.getId() == null || !requestRepo.existsById((request.getId()))) {
-			requestRepo.saveAndFlush(request);
-			Assertions.assertTrue(requestRepo.existsById(request.getId()));
-		}
+		itemRepo.save(item);
+		recipeComponentRepository.save(recipeComponent);
+		recipeRepository.save(recipe);
+		productRepo.save(product);
+		requestRepo.save(request);
+		assertEquals(requestRepo.getOne(request.getId()), request);
 	}
 
 
 	/**
-	 * Tests deleting a Request from the Request Repository
+	 * Tests getting the Request's type from the Request Repository
 	 */
-// @Test
-// void deleteRequestTest() {
-// }
+	@Test
+	void getRequestType() {
+		itemRepo.save(item);
+		recipeComponentRepository.save(recipeComponent);
+		recipeRepository.save(recipe);
+		productRepo.save(product);
+		requestRepo.save(request);
+		assertEquals(requestRepo.getOne(request.getId()).getType(), request.getType());
+	}
+
+
+	/**
+	 * Tests getting the Request's product from the Request Repository
+	 */
+	@Test
+	void getRequestProduct() {
+		itemRepo.save(item);
+		recipeComponentRepository.save(recipeComponent);
+		recipeRepository.save(recipe);
+		productRepo.save(product);
+		requestRepo.save(request);
+		assertEquals(requestRepo.getOne(request.getId()).getProduct(), request.getProduct());
+	}
+
+
+	/**
+	 * Tests getting the Request's type from the Request Repository
+	 */
+	@Test
+	void getRequestQuantity() {
+		itemRepo.save(item);
+		recipeComponentRepository.save(recipeComponent);
+		recipeRepository.save(recipe);
+		productRepo.save(product);
+		requestRepo.save(request);
+		assertEquals(requestRepo.getOne(request.getId()).getQuantity(), request.getQuantity());
+	}
+
+
+	////////////////////////////////////////////////////////////
+	/////////////////////  QUEUE TESTS  ////////////////////////
+	////////////////////////////////////////////////////////////
+
+	/**
+	 * Tests adding a Queue to the Queue Repository
+	 */
+	@Test
+	void addQueueTest() {
+		queueRepo.save(queue);
+		assertTrue(queueRepo.existsByName(queue.getName()));
+	}
 
 
 	////////////////////////////////////////////////////////////
@@ -287,10 +370,8 @@ class ServiceApplicationTests {
 	 */
 	@Test
 	void addEmployeeTest() {
-		if (employee.getId() == null || !employeeRepo.existsById(employee.getId())) {
-			employeeRepo.saveAndFlush(employee);
-			Assertions.assertTrue(employeeRepo.existsByUsername(employee.getUsername()));
-		}
+		employeeRepo.save(employee);
+		assertTrue(employeeRepo.existsById(employee.getId()));
 	}
 
 
@@ -299,14 +380,41 @@ class ServiceApplicationTests {
 	 */
 	@Test
 	void getHoursWorkedTest() {
-		Assertions.assertEquals(employeeRepo.getOne(employee.getId()).getHoursWorked(), employee.getHoursWorked());
+		employeeRepo.save(employee);
+		assertEquals(employeeRepo.getOne(employee.getId()).getHoursWorked(), employee.getHoursWorked());
 	}
 
 
 	/**
-	 * Tests deleting an Employee from the Employee Repository
+	 * Tests adding a request to the queue
 	 */
-// @Test
-// void deleteEmployeeTest() {
-// }
+	@Test
+	void addRequestToQueueTest() {
+		itemRepo.save(item);
+		recipeComponentRepository.save(recipeComponent);
+		recipeRepository.save(recipe);
+		productRepo.save(product);
+		requestRepo.save(request);
+		queueRepo.save(queue);
+		queueRepo.findByName(queue.getName()).get().setRequestsInQueue(Stream.of(requestRepo.getOne(request.getId())).collect(Collectors.toList()));
+		assertEquals(queueRepo.findByName(queue.getName()).get().getRequestsInQueue().get(0).getId(), request.getId());
+	}
+
+
+	/**
+	 * Tests removing a request from the queue
+	 */
+	@Test
+	void removeRequestFromQueueTest() {
+		itemRepo.save(item);
+		recipeComponentRepository.save(recipeComponent);
+		recipeRepository.save(recipe);
+		productRepo.save(product);
+		requestRepo.save(request);
+		queueRepo.save(queue);
+		queueRepo.findByName(queue.getName()).get().setRequestsInQueue(Stream.of(requestRepo.getOne(request.getId())).collect(Collectors.toList()));
+		queueRepo.findByName(queue.getName()).get().getRequestsInQueue().remove(request);
+		assertFalse(queueRepo.findByName(queue.getName()).get().getRequestsInQueue().contains(request));
+	}
+
 }
