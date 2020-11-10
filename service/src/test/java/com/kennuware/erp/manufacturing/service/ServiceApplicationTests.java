@@ -352,12 +352,45 @@ class ServiceApplicationTests {
 	////////////////////////////////////////////////////////////
 
 	/**
-	 * Tests adding a Queue to the Queue Repository
+	 * Tests adding a Queue to the Queue Repository through the Queue Repository
 	 */
 	@Test
 	void addQueueTest() {
 		queueRepo.save(queue);
 		assertTrue(queueRepo.existsByName(queue.getName()));
+	}
+
+
+	/**
+	 * Tests adding a Request to the Queue through the Queue Repository
+	 */
+	@Test
+	void addRequestToQueueTest() {
+		itemRepo.save(item);
+		recipeComponentRepository.save(recipeComponent);
+		recipeRepository.save(recipe);
+		productRepo.save(product);
+		requestRepo.save(request);
+		queueRepo.save(queue);
+		queueRepo.findByName(queue.getName()).get().setRequestsInQueue(Stream.of(requestRepo.getOne(request.getId())).collect(Collectors.toList()));
+		assertEquals(queueRepo.findByName(queue.getName()).get().getRequestsInQueue().get(0).getId(), request.getId());
+	}
+
+
+	/**
+	 * Tests removing a Request from the Queue
+	 */
+	@Test
+	void removeRequestFromQueueTest() {
+		itemRepo.save(item);
+		recipeComponentRepository.save(recipeComponent);
+		recipeRepository.save(recipe);
+		productRepo.save(product);
+		requestRepo.save(request);
+		queueRepo.save(queue);
+		queueRepo.findByName(queue.getName()).get().setRequestsInQueue(Stream.of(requestRepo.getOne(request.getId())).collect(Collectors.toList()));
+		queueRepo.findByName(queue.getName()).get().getRequestsInQueue().remove(request);
+		assertFalse(queueRepo.findByName(queue.getName()).get().getRequestsInQueue().contains(request));
 	}
 
 
@@ -382,39 +415,6 @@ class ServiceApplicationTests {
 	void getHoursWorkedTest() {
 		employeeRepo.save(employee);
 		assertEquals(employeeRepo.getOne(employee.getId()).getHoursWorked(), employee.getHoursWorked());
-	}
-
-
-	/**
-	 * Tests adding a request to the queue
-	 */
-	@Test
-	void addRequestToQueueTest() {
-		itemRepo.save(item);
-		recipeComponentRepository.save(recipeComponent);
-		recipeRepository.save(recipe);
-		productRepo.save(product);
-		requestRepo.save(request);
-		queueRepo.save(queue);
-		queueRepo.findByName(queue.getName()).get().setRequestsInQueue(Stream.of(requestRepo.getOne(request.getId())).collect(Collectors.toList()));
-		assertEquals(queueRepo.findByName(queue.getName()).get().getRequestsInQueue().get(0).getId(), request.getId());
-	}
-
-
-	/**
-	 * Tests removing a request from the queue
-	 */
-	@Test
-	void removeRequestFromQueueTest() {
-		itemRepo.save(item);
-		recipeComponentRepository.save(recipeComponent);
-		recipeRepository.save(recipe);
-		productRepo.save(product);
-		requestRepo.save(request);
-		queueRepo.save(queue);
-		queueRepo.findByName(queue.getName()).get().setRequestsInQueue(Stream.of(requestRepo.getOne(request.getId())).collect(Collectors.toList()));
-		queueRepo.findByName(queue.getName()).get().getRequestsInQueue().remove(request);
-		assertFalse(queueRepo.findByName(queue.getName()).get().getRequestsInQueue().contains(request));
 	}
 
 }
