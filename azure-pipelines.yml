@@ -24,6 +24,7 @@ jobs:
         publishJUnitResults: true
         testResultsFiles: '**/surefire-reports/TEST-*.xml'
         goals: 'verify'
+        options: '-DskipTests'
     - task: Maven@1
       inputs:
         mavenPomFile: 'service/pom.xml'
@@ -35,6 +36,7 @@ jobs:
         jdkArchitectureOption: 'x64'
         mavenVersionOption: 'Default'
         goals: 'verify'
+        options: '-DskipTests'
     - task: CopyFiles@2
       displayName: 'Copy Files to artifact staging directory'
       inputs:
