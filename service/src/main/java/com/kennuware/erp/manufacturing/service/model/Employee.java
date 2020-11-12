@@ -23,4 +23,8 @@ public class Employee {
 
   private long hoursWorked; // Hours worked by employee
 
+  public void resetTimecard() {
+    this.hoursWorked = 0;
+  }
+
 }
