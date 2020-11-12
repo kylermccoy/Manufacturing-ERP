@@ -6,8 +6,13 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.kennuware.erp.manufacturing.service.model.*;
 import com.kennuware.erp.manufacturing.service.model.repository.QueueRepository;
 import com.kennuware.erp.manufacturing.service.model.repository.RequestRepository;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import com.kennuware.erp.manufacturing.service.util.RequestSender;
 import io.swagger.v3.oas.annotations.Operation;
@@ -84,9 +89,13 @@ public class RequestController {
 
     if (request.getType() == RequestType.RECALL) {
       try {
+        String[] skus_recall = new String[1];
+        int[] quantities_recall = new int[1];
+        skus_recall[0] = request.getProduct().getId().toString();
+        quantities_recall[0] = (int)request.getQuantity();
         ResponseEntity<JsonNode> response = RequestSender.postForObject("http://demo-1602622154660.azurewebsites.net/api/transfer/products/out?sku="
-                        + request.getProduct().getId() + "&quantity="
-                        + request.getQuantity() + "&location=MANUFACTURING",
+                        + Arrays.toString(skus_recall) + "&quantity="
+                        + Arrays.toString(quantities_recall) + "&location=MANUFACTURING",
                 null, JsonNode.class, session);
       }
       catch (NullPointerException e) {
@@ -96,12 +105,16 @@ public class RequestController {
     else if (request.getType() == RequestType.ORDER) {
       try {
         List<RecipeComponent> recipeComponents = request.getProduct().getRecipe().getComponents();
+        ArrayList<String> skus = new ArrayList<>();
+        ArrayList<Integer> quantities = new ArrayList<>();
         for (RecipeComponent component : recipeComponents) {
-          ResponseEntity<JsonNode> response = RequestSender.postForObject("http://demo-1602622154660.azurewebsites.net/api/transfer/parts/out?sku="
-                          + component.getItem().getId() + "&quantity="
-                          + component.getQuantity() + "&location=MANUFACTURING",
-                  null, JsonNode.class, session);
+          skus.add(Long.toString(component.getItem().getId()));
+          quantities.add((int)component.getQuantity());
         }
+        ResponseEntity<JsonNode> response = RequestSender.postForObject("http://demo-1602622154660.azurewebsites.net/api/transfer/parts/out?sku="
+                        + Arrays.toString(skus.toArray()) + "&quantity="
+                        + Arrays.toString(quantities.toArray()) + "&location=MANUFACTURING",
+                null, JsonNode.class, session);
       }
       catch (NullPointerException e) {
 
