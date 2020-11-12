@@ -237,7 +237,7 @@ public class QueueController {
             JSONObject json_order = new JSONObject();
             json_order.put("sku", skippedRequest.getProduct().getId());
             json_order.put("name", skippedRequest.getProduct().getName());
-            json_order.put("referbished", false);
+            json_order.put("refurbished", false);
             json_order.put("warehouseId", "33633938-3334-6661-2d31-3734652d3131");
             ResponseEntity<JsonNode> response = RequestSender.postForObject("http://demo-1602622154660.azurewebsites.net/api/transfer/products/in?location=MANUFACTURING",
                     json_order, JsonNode.class, session);
