@@ -1,17 +1,19 @@
 package com.kennuware.erp.manufacturing.service.controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.kennuware.erp.manufacturing.service.model.Queue;
-import com.kennuware.erp.manufacturing.service.model.Request;
+import com.kennuware.erp.manufacturing.service.model.*;
 import com.kennuware.erp.manufacturing.service.model.repository.QueueRepository;
 import com.kennuware.erp.manufacturing.service.model.repository.RequestRepository;
 import java.util.List;
 import java.util.Optional;
 
+import com.kennuware.erp.manufacturing.service.util.RequestSender;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +21,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpSession;
+import javax.validation.constraints.Null;
 
 @Slf4j
 @RestController
@@ -71,11 +76,38 @@ public class RequestController {
    */
   @PostMapping
   @Operation(summary = "Adds a request to the repository")
-  Request addRequest(@Parameter(description = "Request to be added") @RequestBody Request request) {
+  Request addRequest(@Parameter(description = "Request to be added") @RequestBody Request request, HttpSession session) {
     Request newRequest = requestRepository.save(request);
     Queue q = queueRepository.findByName(QueueController.QUEUE_NAME).orElseThrow(() -> new GenericJSONException("Queue does not exist"));
     q.getRequestsInQueue().add(newRequest);
     queueRepository.save(q);
+
+    if (request.getType() == RequestType.RECALL) {
+      try {
+        ResponseEntity<JsonNode> response = RequestSender.postForObject("http://demo-1602622154660.azurewebsites.net/api/transfer/products/out?sku="
+                        + request.getProduct().getId() + "&quantity="
+                        + request.getQuantity() + "&location=MANUFACTURING",
+                null, JsonNode.class, session);
+      }
+      catch (NullPointerException e) {
+
+      }
+    }
+    else if (request.getType() == RequestType.ORDER) {
+      try {
+        List<RecipeComponent> recipeComponents = request.getProduct().getRecipe().getComponents();
+        for (RecipeComponent component : recipeComponents) {
+          ResponseEntity<JsonNode> response = RequestSender.postForObject("http://demo-1602622154660.azurewebsites.net/api/transfer/parts/out?sku="
+                          + component.getItem().getId() + "&quantity="
+                          + component.getQuantity() + "&location=MANUFACTURING",
+                  null, JsonNode.class, session);
+        }
+      }
+      catch (NullPointerException e) {
+
+      }
+    }
+
     return newRequest;
   }
 
@@ -117,5 +149,5 @@ public class RequestController {
     response.put("message", message);
     return response;
   }
-  
+
 }

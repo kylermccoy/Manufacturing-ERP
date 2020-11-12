@@ -3,13 +3,16 @@ package com.kennuware.erp.manufacturing.service.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.kennuware.erp.manufacturing.service.model.Item;
+import com.kennuware.erp.manufacturing.service.model.Product;
 import com.kennuware.erp.manufacturing.service.model.repository.ItemRepository;
 import java.util.List;
 
+import com.kennuware.erp.manufacturing.service.util.RequestSender;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

@@ -65,7 +65,7 @@ public class ProductController {
   /**
    * Adds a product to the repository
    * @param product Product to be added
-   * @return
+   * @return product added
    */
   @PostMapping
   @Operation(summary = "Adds a product to the repository")
