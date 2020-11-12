@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 public class Item {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id; // Unique Item ID
 
   private String name; // Item name

@@ -17,16 +17,6 @@ import javax.servlet.http.HttpSession;
 public class HeaderController {
 
     /**
-     * Redirects to the Log page
-     * @return Redirection to the log page
-     */
-    @GetMapping(path = "/log")
-    public String getLog(){
-        return "log";
-    }
-
-
-    /**
      * Redirects to the Process page
      * @param model Model
      * @return Redirection to the process page

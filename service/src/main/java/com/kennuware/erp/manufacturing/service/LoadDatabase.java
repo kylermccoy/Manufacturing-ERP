@@ -40,32 +40,59 @@ public class LoadDatabase {
       }
 
       Item usbInputItem = new Item("USB Input");
+      usbInputItem.setId((long)0);
       Item glassScreenItem = new Item("Glass Screen");
+      glassScreenItem.setId((long)1);
       Item wristbandItem = new Item("Wristband");
+      wristbandItem.setId((long)2);
       Item motherboardItem = new Item("Motherboard");
+      motherboardItem.setId((long)3);
       Item bioSensorItem = new Item("Bio-sensor");
+      bioSensorItem.setId((long)4);
       Item polyesterFabricItem = new Item("Polyester Fabric");
+      polyesterFabricItem.setId((long)5);
       Item VelcroItem = new Item("Velcro");
+      VelcroItem.setId((long)6);
       Item heatingPadItem = new Item("Heating Pad");
+      heatingPadItem.setId((long)7);
       Item watchScreenItem = new Item("Watch Screen");
+      watchScreenItem.setId((long)8);
       Item jacketItem = new Item("Jacket");
+      jacketItem.setId((long)9);
       Item cottonFabricItem = new Item("Cotton Fabric");
+      cottonFabricItem.setId((long)10);
       Item buttonItem = new Item("Button");
+      buttonItem.setId((long)11);
       Item zipperItem = new Item("Zipper");
+      zipperItem.setId((long)12);
       Item ledLightsItem = new Item("LED Lights");
+      ledLightsItem.setId((long)13);
       Item lacesItem = new Item("Laces");
+      lacesItem.setId((long)14);
       Item bluetoothConnectorItem = new Item("Bluetooth Connector");
+      bluetoothConnectorItem.setId((long)15);
       Item smallBatteryItem = new Item("Small Battery");
+      smallBatteryItem.setId((long)16);
       Item largeBatteryItem = new Item("Large Battery");
+      largeBatteryItem.setId((long)17);
       Item syntheticLeatherItem = new Item("Synthetic Leather");
+      syntheticLeatherItem.setId((long)18);
       Item shoeSoleItem = new Item("Shoe Sole");
+      shoeSoleItem.setId((long)19);
       Item laceTightenerItem = new Item("Lace Tightener");
+      laceTightenerItem.setId((long)20);
       Item glassFramesItem = new Item("Glass Frames");
+      glassFramesItem.setId((long)21);
       Item miniProjectorItem = new Item("Mini Projector");
+      miniProjectorItem.setId((long)22);
       Item microchipItem = new Item("Microchip");
+      microchipItem.setId((long)23);
       Item aluminumBandItem = new Item("Aluminum Band");
+      aluminumBandItem.setId((long)24);
       Item motorItem = new Item("Motor");
+      motorItem.setId((long)25);
       Item heelysItem = new Item("Heelys");
+      heelysItem.setId((long)26);
 
       List<Item> items = Stream
           .of(usbInputItem, glassScreenItem, wristbandItem, motherboardItem, bioSensorItem,
