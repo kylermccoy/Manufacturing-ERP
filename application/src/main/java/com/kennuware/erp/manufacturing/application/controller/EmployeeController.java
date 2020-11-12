@@ -1,6 +1,5 @@
 package com.kennuware.erp.manufacturing.application.controller;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.kennuware.erp.manufacturing.application.controller.util.RequestSender;
@@ -86,6 +85,18 @@ public class EmployeeController {
         return new RedirectView("/process");
     }
 
+    @GetMapping(path = "/logout")
+    public String redirectToLogin(HttpSession session){
+        try {
+            RequestSender.postForObject("http://ec2-184-73-13-89.compute-1.amazonaws.com:8080/api/v1/hr/logout?username="
+                    + user, null, boolean.class, session);
+            this.user = "";
+        }
+        catch (NullPointerException e){
+            return "error";
+        }
+        return "login";
+    }
 
     /**
      * Gathers data from the user's Timesheet page
