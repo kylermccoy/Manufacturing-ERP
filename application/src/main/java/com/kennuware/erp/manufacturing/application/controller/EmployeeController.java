@@ -54,14 +54,9 @@ public class EmployeeController {
         ObjectNode json = mapper.createObjectNode();
         json.put("user", user);
         json.put("pass", pass);
-        ResponseEntity<Boolean> response1;
-        try{
-        response1 = RequestSender.postForObject("http://ec2-184-73-13-89.compute-1.amazonaws.com/hr/login?username="
+        ResponseEntity<Boolean> response1 = RequestSender.postForObject("http://ec2-184-73-13-89.compute-1.amazonaws.com:8080/api/v1/hr/login?username="
                 + user + "&password="
-                + pass + "&departmentType=MANUFACTURING", json, boolean.class, session);}
-        catch(NullPointerException e){
-            response1 = RequestSender.postForObject("http://localhost:8080/manufacturing/api/employees/authenticate", json, boolean.class, session );
-        }
+                + pass + "&departmentType=MANUFACTURING", null, boolean.class, session);
         HttpHeaders headers = response1.getHeaders();
         List<String> cookieList = headers.getOrDefault("Set-Cookie", Collections.emptyList());
         if (!cookieList.isEmpty()) {
@@ -95,15 +90,12 @@ public class EmployeeController {
     /**
      * Gathers data from the user's Timesheet page
      * @param model Model
-     * @param session Current Session
      * @return Where to redirect the user
      */
     @GetMapping(path = "/timesheet")
-    public String getTimesheet(Model model, HttpSession session){
-        ResponseEntity<JsonNode> response = RequestSender.getForObject("http://localhost:8080/manufacturing/api/employees/getHours?user=" + this.user, JsonNode.class, session);
-        JsonNode res = response.getBody();
-        long hours = res.get("hours").asLong();
-        model.addAttribute("hours", hours);
+    public String getTimesheet(Model model){
+        model.addAttribute("success", false);
+        model.addAttribute("failure", false);
         return "timesheet";
     }
 
@@ -117,20 +109,20 @@ public class EmployeeController {
      */
     @RequestMapping(path = "/update_timesheet")
     public String updateTimesheet(@RequestParam String hours, Model model, HttpSession session){
-        if (hours.isBlank()){
+        try {
+            int time = Integer.parseInt(hours);
+            ResponseEntity<Boolean> response = RequestSender.postForObject("http://ec2-184-73-13-89.compute-1.amazonaws.com:8080/api/v1/hr/timesheet?username="
+                    + user + "&hours="
+                    + time, null, boolean.class, session);
+            model.addAttribute("success", response.getBody());
+            model.addAttribute("failure", false);
+            return "timesheet";
+        }catch (NumberFormatException ex){
             model.addAttribute("success", false);
             model.addAttribute("failure", true);
             return "timesheet";
         }
-        try {
-            int temp = Integer.parseInt(hours);
-            ResponseEntity<JsonNode> response = RequestSender.postForObject("http://localhost:8080/manufacturing/api/employees/updateHours?user=" + this.user + "&hoursWorked=" + temp, null, JsonNode.class, session);
-            JsonNode res = response.getBody();
-            model.addAttribute("success", res.get("success"));
-            model.addAttribute("failure", false);
-            model.addAttribute("hours", temp);
-            return "timesheet";
-        }catch (NumberFormatException ex){
+        catch (NullPointerException e){
             model.addAttribute("success", false);
             model.addAttribute("failure", true);
             return "timesheet";
