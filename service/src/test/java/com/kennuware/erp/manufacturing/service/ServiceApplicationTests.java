@@ -111,6 +111,16 @@ class ServiceApplicationTests {
 
 
 	/**
+	 * Tests getting an Item from the Item Repository
+	 */
+	@Test
+	void getItemTest() {
+		itemRepo.save(item);
+		assertEquals(itemRepo.getOne(item.getId()), item);
+	}
+
+
+	/**
 	 * Tests the ability to get an Item's name from the repository given an ID
 	 */
 	@Test
@@ -236,7 +246,7 @@ class ServiceApplicationTests {
 	 * Tests the ability to get a Recipe's components from the repository given an ID
 	 */
 	@Test
-	void getRecipeComponentsTest() {
+	void getRecipeComponentsFromRecipeTest() {
 		itemRepo.save(item);
 		recipeComponentRepository.save(recipeComponent);
 		recipeRepository.save(recipe);
@@ -258,6 +268,19 @@ class ServiceApplicationTests {
 		recipeRepository.save(recipe);
 		productRepo.save(product);
 		assertTrue(productRepo.existsByName(product.getName()));
+	}
+
+
+	/**
+	 * Tests the ability to get a Product from the repository given an ID
+	 */
+	@Test
+	void getProductTest() {
+		itemRepo.save(item);
+		recipeComponentRepository.save(recipeComponent);
+		recipeRepository.save(recipe);
+		productRepo.save(product);
+		assertEquals(productRepo.getOne(product.getId()), product);
 	}
 
 
@@ -296,6 +319,20 @@ class ServiceApplicationTests {
 	 */
 	@Test
 	void addRequestTest() {
+		itemRepo.save(item);
+		recipeComponentRepository.save(recipeComponent);
+		recipeRepository.save(recipe);
+		productRepo.save(product);
+		requestRepo.save(request);
+		assertTrue(requestRepo.existsById(request.getId()));
+	}
+
+
+	/**
+	 * Tests getting a Request to the Request Repository
+	 */
+	@Test
+	void getRequestTest() {
 		itemRepo.save(item);
 		recipeComponentRepository.save(recipeComponent);
 		recipeRepository.save(recipe);
@@ -362,6 +399,26 @@ class ServiceApplicationTests {
 
 
 	/**
+	 * Tests getting a Queue from the Queue Repository through the Queue Repository
+	 */
+	@Test
+	void getQueueTest() {
+		queueRepo.save(queue);
+		assertEquals(queueRepo.getOne(queue.getName()), queue);
+	}
+
+
+	/**
+	 * Tests getting a Queue's name from the Queue Repository through the Queue Repository
+	 */
+	@Test
+	void getQueueNameTest() {
+		queueRepo.save(queue);
+		assertEquals(queueRepo.getOne(queue.getName()).getName(), queue.getName());
+	}
+
+
+	/**
 	 * Tests adding a Request to the Queue through the Queue Repository
 	 */
 	@Test
@@ -378,7 +435,7 @@ class ServiceApplicationTests {
 
 
 	/**
-	 * Tests removing a Request from the Queue
+	 * Tests removing a Request from the Queue through the Queue Repository
 	 */
 	@Test
 	void removeRequestFromQueueTest() {
@@ -415,6 +472,26 @@ class ServiceApplicationTests {
 	void getHoursWorkedTest() {
 		employeeRepo.save(employee);
 		assertEquals(employeeRepo.getOne(employee.getId()).getHoursWorked(), employee.getHoursWorked());
+	}
+
+
+	/**
+	 * Tests getting the username of an Employee from the Employee Repository
+	 */
+	@Test
+	void getEmployeeUsernameTest() {
+		employeeRepo.save(employee);
+		assertEquals(employeeRepo.getOne(employee.getId()).getUsername(), employee.getUsername());
+	}
+
+
+	/**
+	 * Tests getting the password of an Employee from the Employee Repository
+	 */
+	@Test
+	void getEmployeePasswordTest() {
+		employeeRepo.save(employee);
+		assertEquals(employeeRepo.getOne(employee.getId()).getPassword(), employee.getPassword());
 	}
 
 }
