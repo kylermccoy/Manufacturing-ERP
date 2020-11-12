@@ -122,7 +122,7 @@ public class EmployeeController {
     public String updateTimesheet(@RequestParam String hours, Model model, HttpSession session){
         try {
             int time = Integer.parseInt(hours);
-            ResponseEntity<Boolean> response = RequestSender.postForObject("http://ec2-184-73-13-89.compute-1.amazonaws.com:8080/api/v1/hr/timesheet?username="
+            ResponseEntity<Boolean> response = RequestSender.postForObject("http://ec2-184-73-13-89.compute-1.amazonaws.com:8080/api/v1/hr/timeSheet?username="
                     + user + "&hours="
                     + time, null, boolean.class, session);
             model.addAttribute("success", response.getBody());
