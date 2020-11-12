@@ -21,12 +21,11 @@
     <h1 style="text-align: center">Timesheet</h1><br><br>
 
     <!-- Current work hours of session user -->
-    <h2 style="text-align: center">Current hours: <span th:text="${hours}"></span> </h2><br>
-    <h2 th:if="${success}" class="alert alert-success fade in" role="alert" id="success" style="color: green; text-align: center"><strong>Success!</strong> Hours updated.</h2>
+    <h2 th:if="${success}" class="alert alert-success fade in" role="alert" id="success" style="color: green; text-align: center"><strong>Success!</strong> Hours submitted.</h2>
     <h2 th:if="${failure}" class="alert alert-danger fade in" role="alert" id="error" style="color: darkred; text-align: center"><strong>Invalid!</strong> Please enter a number.</h2>
         <!-- Form to update hours for user -->
         <form action="/update_timesheet" style="text-align: center" method="post">
-            <h2>Please update your total pay cycle hours:</h2>
+            <h2>Please submit your final end day hours:</h2>
             <input type="text" id="hours" name="hours" style="width: 5%; color: cornflowerblue">
             <input type="submit" value="Submit" style="width: 6%; text-align: center;">
         </form>
