@@ -19,7 +19,7 @@ public class RequestSender {
     return rt.exchange(url, HttpMethod.GET, entity, responseType);
   }
 
-  public static <T> ResponseEntity<T> postForObject(String url, Object data, Class<T> responseType, HttpSession session ) {
+  public static <T> ResponseEntity<T> postForObject(String url, Object data, Class<T> responseType, HttpSession session ) throws NullPointerException{
     RestTemplate rt = new RestTemplate();
     HttpHeaders headers = new HttpHeaders();
     headers.add("Cookie", "SESSION=" + session.getAttribute("session"));
