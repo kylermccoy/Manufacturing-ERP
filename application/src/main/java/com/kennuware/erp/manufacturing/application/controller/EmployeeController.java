@@ -126,12 +126,7 @@ public class EmployeeController {
             model.addAttribute("success", response.getBody());
             model.addAttribute("failure", false);
             return "timesheet";
-        }catch (NumberFormatException ex){
-            model.addAttribute("success", false);
-            model.addAttribute("failure", true);
-            return "timesheet";
-        }
-        catch (NullPointerException e){
+        }catch (NumberFormatException | NullPointerException ex){
             model.addAttribute("success", false);
             model.addAttribute("failure", true);
             return "timesheet";
