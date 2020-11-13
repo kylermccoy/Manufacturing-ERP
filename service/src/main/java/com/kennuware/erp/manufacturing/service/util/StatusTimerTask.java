@@ -1,4 +1,4 @@
-package com.kennuware.erp.manufacturing.application.util;
+package com.kennuware.erp.manufacturing.service.util;
 
 import java.util.TimerTask;
 import lombok.Getter;

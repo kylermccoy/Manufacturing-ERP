@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.kennuware.erp.manufacturing.service.model.Request;
 import com.kennuware.erp.manufacturing.service.model.Queue;
-import com.kennuware.erp.manufacturing.service.model.Timer;
 import com.kennuware.erp.manufacturing.service.model.repository.QueueRepository;
 import com.kennuware.erp.manufacturing.service.model.repository.RequestRepository;
+import com.kennuware.erp.manufacturing.service.util.QueueManager;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -14,6 +14,7 @@ import java.util.Optional;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 
+import javax.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,7 +22,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
 @RestController
 @RequestMapping(path = "/queue")
@@ -35,7 +35,7 @@ public class QueueController {
   private final QueueRepository queueRepository; // Repository of queues
   private final RequestRepository requestRepository; // Repository of requests
   private final ObjectMapper mapper; // Provides functionality for reading and writing JSON
-  private final Timer timer;
+  private final QueueManager queueManager;
 
 
   /**
@@ -44,11 +44,12 @@ public class QueueController {
    * @param requestRepository Repository of requests
    * @param mapper Mapper
    */
-  QueueController(QueueRepository queueRepository, RequestRepository requestRepository, ObjectMapper mapper) {
+  QueueController(QueueRepository queueRepository, RequestRepository requestRepository, ObjectMapper mapper,
+      QueueManager queueManager) {
     this.queueRepository = queueRepository;
     this.requestRepository = requestRepository;
     this.mapper = mapper;
-    this.timer = new Timer();
+    this.queueManager = queueManager;
   }
 
 
@@ -82,18 +83,9 @@ public class QueueController {
       } else {
         q.setRunning(true);
         success = true;
+        queueManager.addNextRequest(queueManager.getNextRequest());
       }
       queueRepository.save(q);
-
-      List<Request> requestsInQueue = q.getRequestsInQueue();
-      if (!requestsInQueue.isEmpty()){
-        int duration = requestsInQueue.get(0).getProduct().getRecipe().getBuildTime();
-        int quantity = (int)requestsInQueue.get(0).getQuantity();
-        timer.setDuration(duration*quantity);
-        timer.start();
-        q.setTimeLeft(timer.getRemainingTime());
-
-      }
     } else {
       message = "Queue does not exist";
     }
@@ -122,11 +114,9 @@ public class QueueController {
       } else {
         q.setRunning(false);
         success = true;
+        queueManager.stopCurrent();
       }
       queueRepository.save(q);
-
-      timer.pause();
-      q.setTimeLeft(timer.getRemainingTime());
 
     } else {
       message = "Queue does not exist";
@@ -151,22 +141,6 @@ public class QueueController {
       return Collections.emptyList();
     }
   }
-
-  /**
-   * Requests the first (next up) request in the queue
-   * @return List of requests
-   */
-  @GetMapping("/requests/next")
-  @Operation(summary = "Gets the next up item in the queue")
-  Request getNextRequest() {
-    Optional<Queue> queue = queueRepository.findByName(QUEUE_NAME);
-    if (queue.isPresent()) {
-      List<Request> reqs = queue.get().getRequestsInQueue();
-      return reqs.size() > 0 ? queue.get().getRequestsInQueue().remove(0) : null;
-    }
-    return null;
-  }
-  
 
   /**
    * Adds a request to the queue
@@ -254,29 +228,20 @@ public class QueueController {
         queueRepository.save(q);
         success = true;
 
-        int duration = requestsInQueue.get(0).getProduct().getRecipe().getBuildTime();
-        timer.setDuration(duration);
-        timer.start();
-        q.setTimeLeft(timer.getRemainingTime());
       }
     } else {
       message = "Queue does not exist";
     }
-
-    /*
-     * Complete a product, deliver to inventory
-     */
 
     node.put("success", success);
     node.put("message", message);
     return node;
   }
 
-  @GetMapping("/timeRemaining")
-  public ObjectNode getTimeRemaining() {
-    // this is super backwards and fucked to call the front end and then just return that
-    RestTemplate rt = new RestTemplate();
-    return rt.getForObject("http://localhost:8081/process/getRemainingTime", ObjectNode.class);
+
+  @GetMapping("/getRemainingTime")
+  public ObjectNode getRemainingTime() {
+    return queueManager.getRemainingTimeMinutes();
   }
 
 }

@@ -2,14 +2,13 @@ package com.kennuware.erp.manufacturing.application.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.kennuware.erp.manufacturing.application.model.CurrentQueueItem;
-import com.kennuware.erp.manufacturing.application.util.QueueManager;
 import com.kennuware.erp.manufacturing.application.util.RequestSender;
 import com.kennuware.erp.manufacturing.application.model.Queue;
 import com.kennuware.erp.manufacturing.application.model.Request;
 import javax.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -24,11 +24,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @RequestMapping(path = "/process")
 public class ProcessController {
 
-  private QueueManager queueManager;
   private ObjectMapper mapper;
 
-  ProcessController(QueueManager queueManager, ObjectMapper mapper) {
-    this.queueManager = queueManager;
+  ProcessController(ObjectMapper mapper) {
     this.mapper = mapper;
   }
 
@@ -61,16 +59,10 @@ public class ProcessController {
 
   @GetMapping(value = "/getRemainingTime", produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseBody
-  public ObjectNode getRemainingTime() {
-    ObjectNode resp = mapper.createObjectNode();
-    resp.put("remaining", queueManager.getRemainingTimeMinutes());
-    return resp;
-  }
-
-  @GetMapping(value = "/getCurrent")
-  @ResponseBody
-  public CurrentQueueItem getCurrentItem() {
-    return queueManager.getCurrent();
+  public ObjectNode getRemainingTime(HttpSession session) {
+    return RequestSender
+        .getForObject("http://localhost:8080/manufacturing/api/queue/getRemainingTime",
+            ObjectNode.class, session).getBody();
   }
 
   @GetMapping("/start")
@@ -79,7 +71,7 @@ public class ProcessController {
     ResponseEntity<ObjectNode> queueResponse = RequestSender.getForObject("http://localhost:8080/manufacturing/api/queue/start", ObjectNode.class, session);
     ObjectNode resp = queueResponse.getBody();
     boolean success = resp != null && resp.get("success").asBoolean();
-    queueManager.addNextRequest(getNextRequest(session), session);
+    //todo api call
   }
 
   @GetMapping("/stop")
@@ -88,16 +80,12 @@ public class ProcessController {
     ResponseEntity<ObjectNode> queueResponse = RequestSender.getForObject("http://localhost:8080/manufacturing/api/queue/stop", ObjectNode.class, session);
     ObjectNode resp = queueResponse.getBody();
     boolean success = resp != null && resp.get("success").asBoolean();
-    queueManager.stopCurrent();
+    //todo api call
   }
 
   @PostMapping("/skip")
-  public void skipTime(@PathVariable long minutesToSkip, HttpSession session) {
+  public void skipTime(@RequestParam long minutes, HttpSession session) {
 
-  }
-
-  public static Request getNextRequest(HttpSession session) {
-    return RequestSender.getForObject("http://localhost:8080/manufacturing/api/queue/requests/next", Request.class, session).getBody();
   }
 
 }

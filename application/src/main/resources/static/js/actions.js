@@ -1,3 +1,5 @@
+//TODO: Split this into separate js files
+
 $( document ).ready( function() {
     $("#product-list").find("button").click(function() {
         let attrId = $(this).attr("id");
@@ -7,40 +9,10 @@ $( document ).ready( function() {
     })
 } )
 
-$( document ).ready( function() {
-
-    $("#controls").find("button").click(function() {
-        let command = $(this).attr("id")
-        let url = "/process/" + command;
-        sendProcessControlRequest(url);
-    })
-} )
-
-$(document).ready( function() {
-    setInterval(function() {
-        $.ajax({
-            url: "/process/getRemainingTime"
-        })
-        .done(function(resp) {
-            console.log(resp);
-//        $("timeRemaining").text(resp)
-        })
-    }, 1000);
-});
-
 function sendDeleteRequest(url) {
     $.ajax({
         url: url,
         type: 'DELETE'
-    })
-        .done(function() {location.reload()})
-        .fail(function() {console.log("fail")});
-}
-
-function sendProcessControlRequest(url) {
-    $.ajax({
-        url: url,
-        type: 'GET'
     })
         .done(function() {location.reload()})
         .fail(function() {console.log("fail")});
