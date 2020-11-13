@@ -17,13 +17,14 @@
         <li style="display: inline; margin: 10px; padding: 10px"><a href="recalls">Recalls</a></li>
         <li style="display: inline; margin: 10px; padding: 10px"><a href="products">Products</a></li>
         <li style="display: inline; margin: 10px; padding: 10px"><a href="timesheet">Timesheet</a></li>
+        <li style="display: inline; margin: 10px; padding: 10px"><a href="logout">Logout</a></li>
     </ul><br><br>
 
     <!-- List of recalls -->
     <h1 style="text-align: center">Recalls</h1><br><br>
-    <ol id="product-list" style="text-align: center; display: inline; font-size: 20px; margin: 10px; padding: 10px">
-        <li th:each="recall: ${recalls}">RECALL#<span th:text="${recall.getId()}" style="display: inline; padding-right: 35px"></span>
-            <a style="padding-right: 35px" th:href="@{/recalls/{id}(id=${recall.getId()})}">View Recall</a>
+    <ol id="request-list" style="text-align: center; display: inline; font-size: 20px; margin: 10px; padding: 10px">
+        <li th:each="recall: ${recalls}">RECALL#<span th:text="${recall.getId()}" style="display: inline; padding-right: 3em"></span>
+            <a style="padding-right: 3em" th:href="@{/recalls/{id}(id=${recall.getId()})}">View Recall</a>
             <button th:id="${'recalls-' + recall.getId()}" style="color: darkred" th:href="@{/recalls/{id}(id=${recall.getId()})}">Delete Recall</button></li>
     </ol>
 </body>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Product</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<!-- Nav bar -->
+<ul style="list-style-type: none; margin: 10px; padding: 10px; font-size: 25px; text-align: center ">
+    <li style="display: inline; margin: 10px; padding: 10px"><a href="../process">Process</a></li>
+    <li style="display: inline; margin: 10px; padding: 10px"><a href="../orders">Orders</a></li>
+    <li style="display: inline; margin: 10px; padding: 10px"><a href="../recalls">Recalls</a></li>
+    <li style="display: inline; margin: 10px; padding: 10px"><a href="../products">Products</a></li>
+    <li style="display: inline; margin: 10px; padding: 10px"><a href="../timesheet">Timesheet</a></li>
+    <li style="display: inline; margin: 10px; padding: 10px"><a href="../logout">Logout</a></li>
+</ul><br><br>
+
+<!-- List of products -->
+<h1 style="text-align: center">Create Product</h1>
+<h2 th:if="${failure}" class="alert alert-danger fade in" role="alert" id="error" style="color: darkred; text-align: center"><strong>Error</strong> Product not created.</h2>
+
+<div style="text-align: center; font-size: 20px; margin: 10px; padding: 10px">
+
+    <form action="/products/creating" method="post" style="text-align: center">
+
+        <br>
+        <span style="display: inline; margin-right: 1em">Product Name:</span><input type="text" id="name" name="name" placeholder="Product Name"><br><br>
+
+        <span style="display: inline; margin-right: 1em">Build Time:</span><input type="number" id="buildTime" name="buildTime" placeholder="Minutes" min="0" style="width: 6em"><br><br>
+
+        <span style="display: inline; margin-right: 1em">Instructions (steps should be separated by a newline):</span><br>
+        <textarea id="instructions" name="instructions" placeholder="Instructions" style="height: 15em; width: 25em; text-align: left; white-space: normal; overflow-wrap: break-word"></textarea><br><br>
+
+        <span style="text-align: center; display: inline; font-size: 20px; margin: 10px"></span>USB Input:<input type="number" id="item0" name="item0" placeholder="Quantity" min="0" value="0" style="margin-left: 1em; width: 6em"><br>
+        <span style="text-align: center; display: inline; font-size: 20px; margin: 10px"></span>Glass Screen:<input type="number" id="item1" name="item1" placeholder="Quantity" min="0" value="0" style="margin-left: 1em; width: 6em"><br>
+        <span style="text-align: center; display: inline; font-size: 20px; margin: 10px"></span>Wristband:<input type="number" id="item2" name="item2" placeholder="Quantity" min="0" value="0" style="margin-left: 1em; width: 6em"><br>
+        <span style="text-align: center; display: inline; font-size: 20px; margin: 10px"></span>Motherboard:<input type="number" id="item3" name="item3" placeholder="Quantity" min="0" value="0" style="margin-left: 1em; width: 6em"><br>
+        <span style="text-align: center; display: inline; font-size: 20px; margin: 10px"></span>Bio-sensor:<input type="number" id="item4" name="item4" placeholder="Quantity" min="0" value="0" style="margin-left: 1em; width: 6em"><br>
+        <span style="text-align: center; display: inline; font-size: 20px; margin: 10px"></span>Polyester Fabric:<input type="number" id="item5" name="item5" placeholder="Quantity" min="0" value="0" style="margin-left: 1em; width: 6em"><br>
+        <span style="text-align: center; display: inline; font-size: 20px; margin: 10px"></span>Velcro:<input type="number" id="item6" name="item6" placeholder="Quantity" min="0" value="0" style="margin-left: 1em; width: 6em"><br>
+        <span style="text-align: center; display: inline; font-size: 20px; margin: 10px"></span>Heating Pad:<input type="number" id="item7" name="item7" placeholder="Quantity" min="0" value="0" style="margin-left: 1em; width: 6em"><br>
+        <span style="text-align: center; display: inline; font-size: 20px; margin: 10px"></span>Watch Screen:<input type="number" id="item8" name="item8" placeholder="Quantity" min="0" value="0" style="margin-left: 1em; width: 6em"><br>
+        <span style="text-align: center; display: inline; font-size: 20px; margin: 10px"></span>Jacket:<input type="number" id="item9" name="item9" placeholder="Quantity" min="0" value="0" style="margin-left: 1em; width: 6em"><br>
+        <span style="text-align: center; display: inline; font-size: 20px; margin: 10px"></span>Cotton Fabric:<input type="number" id="item10" name="item10" placeholder="Quantity" min="0" value="0" style="margin-left: 1em; width: 6em"><br>
+        <span style="text-align: center; display: inline; font-size: 20px; margin: 10px"></span>Button:<input type="number" id="item11" name="item11" placeholder="Quantity" min="0" value="0" style="margin-left: 1em; width: 6em"><br>
+        <span style="text-align: center; display: inline; font-size: 20px; margin: 10px"></span>Zipper:<input type="number" id="item12" name="item12" placeholder="Quantity" min="0" value="0" style="margin-left: 1em; width: 6em"><br>
+        <span style="text-align: center; display: inline; font-size: 20px; margin: 10px"></span>LED Lights:<input type="number" id="item13" name="item13" placeholder="Quantity" min="0" value="0" style="margin-left: 1em; width: 6em"><br>
+        <span style="text-align: center; display: inline; font-size: 20px; margin: 10px"></span>Laces:<input type="number" id="item14" name="item14" placeholder="Quantity" min="0" value="0" style="margin-left: 1em; width: 6em"><br>
+        <span style="text-align: center; display: inline; font-size: 20px; margin: 10px"></span>Bluetooth Connector:<input type="number" id="item15" name="item15" placeholder="Quantity" min="0" value="0" style="margin-left: 1em; width: 6em"><br>
+        <span style="text-align: center; display: inline; font-size: 20px; margin: 10px"></span>Small Battery:<input type="number" id="item16" name="item16" placeholder="Quantity" min="0" value="0" style="margin-left: 1em; width: 6em"><br>
+        <span style="text-align: center; display: inline; font-size: 20px; margin: 10px"></span>Large Battery:<input type="number" id="item17" name="item17" placeholder="Quantity" min="0" value="0" style="margin-left: 1em; width: 6em"><br>
+        <span style="text-align: center; display: inline; font-size: 20px; margin: 10px"></span>Synthetic Leather:<input type="number" id="item18" name="item18" placeholder="Quantity" min="0" value="0" style="margin-left: 1em; width: 6em"><br>
+        <span style="text-align: center; display: inline; font-size: 20px; margin: 10px"></span>Shoe Sole:<input type="number" id="item19" name="item19" placeholder="Quantity" min="0" value="0" style="margin-left: 1em; width: 6em"><br>
+        <span style="text-align: center; display: inline; font-size: 20px; margin: 10px"></span>Lace Tightener:<input type="number" id="item20" name="item20" placeholder="Quantity" min="0" value="0" style="margin-left: 1em; width: 6em"><br>
+        <span style="text-align: center; display: inline; font-size: 20px; margin: 10px"></span>Glass Frames:<input type="number" id="item21" name="item21" placeholder="Quantity" min="0" value="0" style="margin-left: 1em; width: 6em"><br>
+        <span style="text-align: center; display: inline; font-size: 20px; margin: 10px"></span>Mini Projector:<input type="number" id="item22" name="item22" placeholder="Quantity" min="0" value="0" style="margin-left: 1em; width: 6em"><br>
+        <span style="text-align: center; display: inline; font-size: 20px; margin: 10px"></span>Microchip:<input type="number" id="item23" name="item23" placeholder="Quantity" min="0" value="0" style="margin-left: 1em; width: 6em"><br>
+        <span style="text-align: center; display: inline; font-size: 20px; margin: 10px"></span>Aluminum Band:<input type="number" id="item24" name="item24" placeholder="Quantity" min="0" value="0" style="margin-left: 1em; width: 6em"><br>
+        <span style="text-align: center; display: inline; font-size: 20px; margin: 10px"></span>Motor:<input type="number" id="item25" name="item25" placeholder="Quantity" min="0" value="0" style="margin-left: 1em; width: 6em"><br>
+        <span style="text-align: center; display: inline; font-size: 20px; margin: 10px"></span>Heeleys:<input type="number" id="item26" name="item26" placeholder="Quantity" min="0" value="0" style="margin-left: 1em; width: 6em"><br>
+
+
+            <!---
+        <ul th:each="item: ${items}" id="item-list" style="list-style-type: none; text-align: center; display: inline; font-size: 20px; margin: 10px">
+            <li ><span th:text="${item.getName()}" style="display: inline"></span>:
+                <input type="number" th:name="${item.getId()}" placeholder="Quantity" min="0" style="margin-left: 1em; width: 6em">
+            </li>
+        </ul>
+        --->
+
+        <br><br>
+        <input type="submit" value="Submit" />
+    </form>
+</div>
+
+
+
+</body>
+</html>

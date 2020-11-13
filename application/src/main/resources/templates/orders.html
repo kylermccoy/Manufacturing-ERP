@@ -17,15 +17,16 @@
         <li style="display: inline; margin: 10px; padding: 10px"><a href="recalls">Recalls</a></li>
         <li style="display: inline; margin: 10px; padding: 10px"><a href="products">Products</a></li>
         <li style="display: inline; margin: 10px; padding: 10px"><a href="timesheet">Timesheet</a></li>
+        <li style="display: inline; margin: 10px; padding: 10px"><a href="logout">Logout</a></li>
     </ul><br><br>
 
     <!-- Orders section -->
     <h1 style="text-align: center">Orders</h1><br><br>
 
     <!-- Lists the orders in the queue -->
-    <ol id="product-list" style="text-align: center; display: inline; font-size: 20px; margin: 10px; padding: 10px">
-        <li th:each="order: ${orders}">ORDER#<span th:text="${order.getId()}" style="display: inline; padding-right: 35px"></span>
-        <a style="padding-right: 35px" th:href="@{/orders/{id}(id=${order.getId()})}">View Order</a>
+    <ol id="request-list" style="text-align: center; display: inline; font-size: 20px; margin: 10px; padding: 10px">
+        <li th:each="order: ${orders}">ORDER#<span th:text="${order.getId()}" style="display: inline; padding-right: 3em"></span>
+        <a style="padding-right: 3em" th:href="@{/orders/{id}(id=${order.getId()})}">View Order</a>
         <button th:id="${'order-' + order.getId()}" style="color: darkred">Delete Order</button></li>
     </ol>
 </body>
