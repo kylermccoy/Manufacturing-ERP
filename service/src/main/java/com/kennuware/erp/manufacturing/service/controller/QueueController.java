@@ -256,7 +256,7 @@ public class QueueController {
               stock.put("33633938-3334-6661-2d31-3734652d3131", component.getQuantity());
               json.put("stock", stock);
               ResponseEntity<JsonNode> response = RequestSender.postForObject(
-                      "http://demo-1602622154660.azurewebsites.net/api/transfer/parts/in?location=33633938-3334-6661-2d31-3734652d3131",
+                      "http://demo-1602622154660.azurewebsites.net/api/transfer/parts/in?location=MANUFACTURING",
                       json, JsonNode.class, session);
             }
           }
