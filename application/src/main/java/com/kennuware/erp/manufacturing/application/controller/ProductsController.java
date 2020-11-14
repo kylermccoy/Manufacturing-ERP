@@ -1,14 +1,19 @@
 package com.kennuware.erp.manufacturing.application.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.kennuware.erp.manufacturing.application.controller.util.RequestSender;
-import com.kennuware.erp.manufacturing.application.model.*;
-import com.kennuware.erp.manufacturing.application.util.RequestSender;
+import com.kennuware.erp.manufacturing.application.model.Item;
 import com.kennuware.erp.manufacturing.application.model.Product;
+import com.kennuware.erp.manufacturing.application.model.Recipe;
+import com.kennuware.erp.manufacturing.application.model.RecipeComponent;
+import com.kennuware.erp.manufacturing.application.util.RequestSender;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpSession;
@@ -46,7 +51,7 @@ public class ProductsController {
     }
 
     @GetMapping(path="/products/create")
-    String createProduct(Model model, HttpSession session){
+    String createProduct(){
         return "createProduct";
     }
 

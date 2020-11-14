@@ -7,6 +7,13 @@ $( document ).ready( function() {
 } );
 
 $( document ).ready( function() {
+  $("#skipForm").find("input[type='submit']").click(function() {
+    let minutes = $("#minutes").val();
+    sendSkipCommand(minutes);
+  })
+} );
+
+$( document ).ready( function() {
   function getTime() {
     $.ajax({
       url: "/process/getRemainingTime"
@@ -33,6 +40,15 @@ function sendProcessControlRequest(url) {
   $.ajax({
     url: url,
     type: 'GET'
+  })
+  .done(function() {location.reload()})
+  .fail(function() {console.log("fail")});
+}
+
+function sendSkipCommand(minutes) {
+  $.ajax({
+    url: "/process/skip?minutes=" + minutes,
+    type: 'POST'
   })
   .done(function() {location.reload()})
   .fail(function() {console.log("fail")});

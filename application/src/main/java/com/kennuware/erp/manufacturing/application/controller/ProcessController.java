@@ -8,12 +8,10 @@ import com.kennuware.erp.manufacturing.application.model.Request;
 import javax.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -84,8 +82,16 @@ public class ProcessController {
   }
 
   @PostMapping("/skip")
-  public void skipTime(@RequestParam long minutes, HttpSession session) {
-
+  @ResponseStatus(value = HttpStatus.OK)
+  public void skipTime(@RequestParam String minutes, HttpSession session) {
+    long mins = 0;
+    try {
+      mins = Long.parseLong(minutes);
+    } catch (NumberFormatException ignored) {
+      //TODO handle this better
+      return;
+    }
+    RequestSender.getForObject("http://localhost:8080/manufacturing/api/queue/skip?minutes=" + mins, ObjectNode.class, session);
   }
 
 }

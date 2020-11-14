@@ -48,7 +48,7 @@
         <button type="button" class="queue-action" id="stop" style="background-color: darkred; color: white">Stop Process</button>
         <br>
         <div>
-            <form th:action="@{/process/skip}">
+            <form id="skipForm" action="javascript:void(0);">
                 <label for="minutes">Minutes to skip</label><br>
                 <input type="text" id="minutes" name="minutes" value="0"><br>
                 <input type="submit" style="background-color: grey; color: white" value="skip">

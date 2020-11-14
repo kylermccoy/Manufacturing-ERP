@@ -15,12 +15,14 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 
 import javax.servlet.http.HttpSession;
+import javax.websocket.server.PathParam;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -161,6 +163,7 @@ public class QueueController {
         Queue q = queue.get();
         q.getRequestsInQueue().add(request);
         queueRepository.save(q);
+        queueManager.addNextRequest(queueManager.getNextRequest());
         success = true;
       } else {
         message = "Queue does not exist";
@@ -211,36 +214,13 @@ public class QueueController {
    */
   @GetMapping({"/skip", "/completeRequest"})
   @Operation(summary = "Skip current request in the manufacturing process")
-  ObjectNode skipCurrentRequest() {
-    ObjectNode node = mapper.createObjectNode();
-    boolean success = false;
-    String message = "";
-    Optional<Queue> queue = queueRepository.findByName(QUEUE_NAME);
-    if (queue.isPresent()) {
-      Queue q = queue.get();
-      List<Request> requestsInQueue = q.getRequestsInQueue();
-      if (requestsInQueue.isEmpty()) {
-        message = "No items in queue.";
-      } else {
-        Request skippedRequest = requestsInQueue.remove(0);
-        skippedRequest.setCompleted(true);
-        requestRepository.save(skippedRequest);
-        queueRepository.save(q);
-        success = true;
-
-      }
-    } else {
-      message = "Queue does not exist";
-    }
-
-    node.put("success", success);
-    node.put("message", message);
-    return node;
+  void skipTime(@RequestParam long minutes) {
+    queueManager.skipTime(minutes);
   }
 
 
   @GetMapping("/getRemainingTime")
-  public ObjectNode getRemainingTime() {
+  ObjectNode getRemainingTime() {
     return queueManager.getRemainingTimeMinutes();
   }
 

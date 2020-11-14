@@ -2,6 +2,17 @@ package com.kennuware.erp.manufacturing.service;
 
 import com.kennuware.erp.manufacturing.service.controller.QueueController;
 
+import com.kennuware.erp.manufacturing.service.model.Employee;
+import com.kennuware.erp.manufacturing.service.model.Item;
+import com.kennuware.erp.manufacturing.service.model.Product;
+import com.kennuware.erp.manufacturing.service.model.Queue;
+import com.kennuware.erp.manufacturing.service.model.Recipe;
+import com.kennuware.erp.manufacturing.service.model.RecipeComponent;
+import com.kennuware.erp.manufacturing.service.model.repository.EmployeeRepository;
+import com.kennuware.erp.manufacturing.service.model.repository.ItemRepository;
+import com.kennuware.erp.manufacturing.service.model.repository.ProductRepository;
+import com.kennuware.erp.manufacturing.service.model.repository.QueueRepository;
+import com.kennuware.erp.manufacturing.service.model.repository.RecipeRepository;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -10,8 +21,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.kennuware.erp.manufacturing.service.model.*;
-import com.kennuware.erp.manufacturing.service.model.repository.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;

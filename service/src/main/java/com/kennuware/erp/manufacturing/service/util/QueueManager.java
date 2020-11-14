@@ -9,20 +9,20 @@ import com.kennuware.erp.manufacturing.service.model.Request;
 import com.kennuware.erp.manufacturing.service.model.repository.CurrentQueueItemRepository;
 import com.kennuware.erp.manufacturing.service.model.repository.QueueRepository;
 import com.kennuware.erp.manufacturing.service.model.repository.RequestRepository;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.Timer;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 import org.springframework.stereotype.Component;
 
 @Component
 public class QueueManager {
 
   private Long currentID = -1L;
-  private final Timer timer;
-  private StatusTimerTask task;
+  private final ScheduledExecutorService executor;
+  private ScheduledFuture<?> task;
   private final QueueRepository queueRepository;
   private final RequestRepository requestRepository;
   private final CurrentQueueItemRepository currentItemRepository;
@@ -30,7 +30,7 @@ public class QueueManager {
 
   QueueManager(QueueRepository queueRepository, CurrentQueueItemRepository currentQueueItemRepository,
       RequestRepository requestRepository, ObjectMapper mapper) {
-    this.timer = new Timer();
+    this.executor = Executors.newScheduledThreadPool(1);
     this.queueRepository = queueRepository;
     this.currentItemRepository = currentQueueItemRepository;
     this.requestRepository = requestRepository;
@@ -47,17 +47,11 @@ public class QueueManager {
     if (request == null) {
       return;
     }
-    // do we got a current item?
+    // do we have a current item?
     if (!currentItemRepository.existsById(currentID)) {
-      if (!isRunning()) { // resuming
-        currentID = currentItemRepository.saveAndFlush(new CurrentQueueItem(request)).getId();
-        startTimerForTask();
-      }
+      currentID = currentItemRepository.saveAndFlush(new CurrentQueueItem(request)).getId();
+      startTimerForTask();
     }
-  }
-
-  public boolean isRunning() {
-    return task != null;
   }
 
   public synchronized void startTimerForTask() {
@@ -66,18 +60,12 @@ public class QueueManager {
       // queue not running, don't start
       return;
     }
-    task = new StatusTimerTask() {
-      @Override
-      void doWork() {
-        tickDown();
-      }
-    };
 
     Optional<CurrentQueueItem> current = currentItemRepository.findById(currentID);
     if (current.isEmpty()) {
       return;
     }
-    timer.scheduleAtFixedRate(task, 0, 60000); // every 60 seconds tick down
+    task = executor.scheduleAtFixedRate(this::tickDown, 1, 1, TimeUnit.MINUTES);
   }
 
   // this is unbelievably inefficient
@@ -90,19 +78,19 @@ public class QueueManager {
     CurrentQueueItem current = currentOptional.get();
     long remainingTime = current.getTimeRemaining();
     if (remainingTime <= 1) {
+      current.setTimeRemaining(0);
       completeTask();
     } else {
       current.setTimeRemaining(remainingTime - 1);
-      currentItemRepository.save(current);
     }
+    currentItemRepository.save(current);
   }
 
   public synchronized void stopCurrent() {
     if(currentID < 0) {
       return;
     }
-    timer.cancel();
-    task = null;
+    task.cancel(true);
   }
 
   public ObjectNode getRemainingTimeMinutes() {
@@ -138,7 +126,7 @@ public class QueueManager {
     req.setCompleted(true);
     requestRepository.save(req);
     currentID = -1L;
-    task = null;
+    task.cancel(true);
     addNextRequest(getNextRequest());
     //todo: notify others?
   }
@@ -150,7 +138,7 @@ public class QueueManager {
       return next.map(CurrentQueueItem::getRequest).orElse(null);
     }
     Optional<Queue> queue = queueRepository.findByName(QueueController.QUEUE_NAME);
-    if (queue.isPresent()) {
+    if (queue.isPresent() && queue.get().isRunning()) {
       List<Request> reqs = queue.get().getRequestsInQueue();
       Request r = reqs.size() > 0 ? queue.get().getRequestsInQueue().remove(0) : null;
       queueRepository.save(queue.get());
@@ -159,4 +147,26 @@ public class QueueManager {
     return null;
   }
 
+  public void skipTime(long minutes) {
+    stopCurrent();
+    long skipTime = minutes;
+    while (skipTime > 0) {
+      Optional<CurrentQueueItem> currentQueueItemOptional = currentItemRepository.findById(currentID);
+      if (currentQueueItemOptional.isEmpty()) {
+        return;
+      }
+      CurrentQueueItem current = currentQueueItemOptional.get();
+      long itemRemainingTime = current.getTimeRemaining();
+      if (skipTime >= itemRemainingTime) { // we have to do more than one item
+        skipTime -= itemRemainingTime;
+        current.setTimeRemaining(0);
+        completeTask();
+      } else { // only have to do one
+        current.setTimeRemaining(itemRemainingTime - skipTime);
+        skipTime = 0;
+      }
+      currentItemRepository.save(current);
+    }
+    startTimerForTask();
+  }
 }

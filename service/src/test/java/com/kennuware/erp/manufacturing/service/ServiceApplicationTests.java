@@ -1,20 +1,25 @@
 package com.kennuware.erp.manufacturing.service;
 
-import com.kennuware.erp.manufacturing.service.model.*;
-import com.kennuware.erp.manufacturing.service.model.repository.*;
+import com.kennuware.erp.manufacturing.service.model.Employee;
+import com.kennuware.erp.manufacturing.service.model.Item;
+import com.kennuware.erp.manufacturing.service.model.Product;
+import com.kennuware.erp.manufacturing.service.model.Queue;
+import com.kennuware.erp.manufacturing.service.model.Recipe;
+import com.kennuware.erp.manufacturing.service.model.RecipeComponent;
+import com.kennuware.erp.manufacturing.service.model.Request;
+import com.kennuware.erp.manufacturing.service.model.RequestType;
+import com.kennuware.erp.manufacturing.service.model.repository.EmployeeRepository;
+import com.kennuware.erp.manufacturing.service.model.repository.ItemRepository;
+import com.kennuware.erp.manufacturing.service.model.repository.ProductRepository;
+import com.kennuware.erp.manufacturing.service.model.repository.QueueRepository;
+import com.kennuware.erp.manufacturing.service.model.repository.RecipeComponentRepository;
+import com.kennuware.erp.manufacturing.service.model.repository.RecipeRepository;
+import com.kennuware.erp.manufacturing.service.model.repository.RequestRepository;
 import java.util.List;
-import org.aspectj.lang.annotation.Before;
-import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Example;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import javax.validation.constraints.AssertTrue;
-import javax.validation.constraints.Null;
-import java.util.ArrayList;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -127,7 +132,7 @@ class ServiceApplicationTests {
 	void getItemNameTest() {
 		itemRepo.save(item);
 		assertTrue(itemRepo.existsByName(item.getName()));
-		Assertions.assertEquals(itemRepo.getOne(item.getId()).getName(), "Paper");
+		assertEquals(itemRepo.getOne(item.getId()).getName(), "Paper");
 	}
 
 
