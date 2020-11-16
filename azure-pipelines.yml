@@ -14,7 +14,7 @@ jobs:
   - job: Build
     displayName: Build Maven Project
     steps:
-    - task: Maven@1
+    - task: Maven@2
       inputs:
         mavenPomFile: 'pom.xml'
         mavenOptions: '-Xmx3072m'
@@ -44,4 +44,6 @@ jobs:
       runOnce:
         deploy:
           steps:
-          - script: echo my first deployment
+          - task: ShellScript@2
+            inputs:
+              scriptPath: copyToProduction.sh
