@@ -102,6 +102,8 @@ public class LoadDatabase {
       motorItem.setId((long)25);
       Item heelysItem = new Item("Heelys");
       heelysItem.setId((long)26);
+      Item clipItem = new Item("Clip");
+      clipItem.setId((long)27);
 
       List<Item> items = Stream
           .of(usbInputItem, glassScreenItem, wristbandItem, motherboardItem, bioSensorItem,
@@ -111,7 +113,7 @@ public class LoadDatabase {
               lacesItem, bluetoothConnectorItem, smallBatteryItem, largeBatteryItem,
               syntheticLeatherItem, shoeSoleItem,
               laceTightenerItem, glassFramesItem, miniProjectorItem, microchipItem,
-              aluminumBandItem, motorItem, heelysItem)
+              aluminumBandItem, motorItem, heelysItem, clipItem)
           .filter(i -> !itemRepository.existsByName(i.getName()))
           .collect(Collectors.toList());
       log.info("Preloading Items: " +
@@ -300,8 +302,27 @@ public class LoadDatabase {
       jacketRecipe.setBuildInstructions(jacketInstructions);
       jacketRecipe.setId((long)9);
 
+      Recipe capeRecipe = new Recipe();
+      capeRecipe.setName("Smart Cape Recipe");
+      capeRecipe.setBuildTime(50);
+      List<String> capeInstructions = new ArrayList<>();
+      capeInstructions.add("Cut polyester fabric to cape size depending on the size given");
+      capeInstructions.add("Attach clips to the collar so that the user can wear the cape");
+      capeInstructions.add("Attach the bio-sensor to the back of the collar so that it can read vitals and acceleration");
+      capeInstructions.add("Attach the small battery to the collar and wire it to the bio-sensor");
+      capeInstructions.add("Attach the USB input to the battery for charging and bio-sensor to upload/download data");
+
+      RecipeComponent c_component1 = new RecipeComponent(polyesterFabricItem, 30);
+      RecipeComponent c_component2 = new RecipeComponent(bioSensorItem, 1);
+      RecipeComponent c_component3 = new RecipeComponent(smallBatteryItem, 1);
+      RecipeComponent c_component4 = new RecipeComponent(clipItem, 2);
+      RecipeComponent c_component5 = new RecipeComponent(usbInputItem, 1);
+      List<RecipeComponent> cComps = Arrays.asList(c_component1,c_component2,c_component3,c_component4,c_component5);
+      capeRecipe.setComponents(cComps);
+      capeRecipe.setId((long)10);
+
       List<Recipe> recipeList = Stream
-          .of(jacketRecipe, autoHeatingJacketRecipe, lightUpBootsRecipe, smartGlassesRecipe,
+          .of(capeRecipe, jacketRecipe, autoHeatingJacketRecipe, lightUpBootsRecipe, smartGlassesRecipe,
               smartHeadbandRecipe, smartHeelysRecipe, smartRingRecipe, smartWatchRecipe,
               tieThemselvesSneakersRecipe, watchScreenRecipe)
           .filter(r -> !recipeRepository.existsByName(r.getName()))
@@ -361,6 +382,11 @@ public class LoadDatabase {
       jacket.setName("Jacket");
       jacket.setRecipe(jacketRecipe);
       jacket.setId((long)9);
+
+      Product smartCape = new Product();
+      smartCape.setName("Smart Health Cape");
+      smartCape.setRecipe(capeRecipe);
+      smartCape.setId((long)10);
 
       List<Product> productList = Stream
           .of(smartWatch, smartHeadband,

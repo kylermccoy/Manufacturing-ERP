@@ -104,8 +104,8 @@ public class RequestController {
         skus_recall[0] = request.getProduct().getId().toString();
         quantities_recall[0] = (int)request.getQuantity();
         JsonNode response = rt.postForObject("http://demo-1602622154660.azurewebsites.net/api/transfer/products/out?sku="
-                        + Arrays.toString(skus_recall) + "&quantity="
-                        + Arrays.toString(quantities_recall) + "&location=MANUFACTURING",
+                        + skus_recall[0] + "&quantity="
+                        + quantities_recall[0] + "&location=MANUFACTURING",
                 null, JsonNode.class);
       }
       catch (NullPointerException ignored) {
