@@ -1,4 +1,4 @@
-package com.kennuware.erp.manufacturing.application.controller.util;
+package com.kennuware.erp.manufacturing.application.util;
 
 import com.kennuware.erp.manufacturing.application.model.Request;
 import com.kennuware.erp.manufacturing.application.model.RequestType;

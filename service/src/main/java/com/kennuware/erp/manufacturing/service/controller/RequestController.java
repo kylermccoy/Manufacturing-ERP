@@ -6,11 +6,13 @@ import com.kennuware.erp.manufacturing.service.model.Queue;
 import com.kennuware.erp.manufacturing.service.model.Request;
 import com.kennuware.erp.manufacturing.service.model.repository.QueueRepository;
 import com.kennuware.erp.manufacturing.service.model.repository.RequestRepository;
+import com.kennuware.erp.manufacturing.service.util.QueueManager;
 import java.util.List;
 import java.util.Optional;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import javax.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,18 +30,22 @@ public class RequestController {
   private final RequestRepository requestRepository; // Repository of requests
   private final QueueRepository queueRepository; // Queue repository
   private final ObjectMapper mapper; // Provides functionality for reading and writing JSON
+  private final QueueManager queueManager;
 
 
   /**
    * Creates a new instance of RequestController
+   *
    * @param requestRepository Repository of requests
    * @param queueRepository Queue repository
    * @param mapper Mapper
    */
-  RequestController(RequestRepository requestRepository, QueueRepository queueRepository, ObjectMapper mapper) {
+  RequestController(RequestRepository requestRepository, QueueRepository queueRepository,
+      ObjectMapper mapper, QueueManager queueManager) {
     this.requestRepository = requestRepository;
     this.queueRepository = queueRepository;
     this.mapper = mapper;
+    this.queueManager = queueManager;
   }
 
 
@@ -71,11 +77,13 @@ public class RequestController {
    */
   @PostMapping
   @Operation(summary = "Adds a request to the repository")
-  Request addRequest(@Parameter(description = "Request to be added") @RequestBody Request request) {
+  Request addRequest(@Parameter(description = "Request to be added") @RequestBody Request request,
+      HttpSession session) {
     Request newRequest = requestRepository.save(request);
     Queue q = queueRepository.findByName(QueueController.QUEUE_NAME).orElseThrow(() -> new GenericJSONException("Queue does not exist"));
     q.getRequestsInQueue().add(newRequest);
     queueRepository.save(q);
+    queueManager.addNextRequest(queueManager.getNextRequest());
     return newRequest;
   }
 

@@ -1,7 +1,5 @@
-package com.kennuware.erp.manufacturing.application.controller.util;
+package com.kennuware.erp.manufacturing.application.util;
 
-import java.util.Collections;
-import java.util.List;
 import javax.servlet.http.HttpSession;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;

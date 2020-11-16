@@ -6,6 +6,7 @@ import com.kennuware.erp.manufacturing.service.model.Request;
 import com.kennuware.erp.manufacturing.service.model.Queue;
 import com.kennuware.erp.manufacturing.service.model.repository.QueueRepository;
 import com.kennuware.erp.manufacturing.service.model.repository.RequestRepository;
+import com.kennuware.erp.manufacturing.service.util.QueueManager;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -13,12 +14,15 @@ import java.util.Optional;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 
+import javax.servlet.http.HttpSession;
+import javax.websocket.server.PathParam;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -29,11 +33,11 @@ public class QueueController {
 
   //TODO: probably refactor a lot of duplicate code
   //TODO: make better use of Optional.orElse
-  //TODO: Create a json error response object
 
   private final QueueRepository queueRepository; // Repository of queues
   private final RequestRepository requestRepository; // Repository of requests
   private final ObjectMapper mapper; // Provides functionality for reading and writing JSON
+  private final QueueManager queueManager;
 
 
   /**
@@ -42,10 +46,12 @@ public class QueueController {
    * @param requestRepository Repository of requests
    * @param mapper Mapper
    */
-  QueueController(QueueRepository queueRepository, RequestRepository requestRepository, ObjectMapper mapper) {
+  QueueController(QueueRepository queueRepository, RequestRepository requestRepository, ObjectMapper mapper,
+      QueueManager queueManager) {
     this.queueRepository = queueRepository;
     this.requestRepository = requestRepository;
     this.mapper = mapper;
+    this.queueManager = queueManager;
   }
 
 
@@ -79,6 +85,7 @@ public class QueueController {
       } else {
         q.setRunning(true);
         success = true;
+        queueManager.addNextRequest(queueManager.getNextRequest());
       }
       queueRepository.save(q);
     } else {
@@ -109,8 +116,10 @@ public class QueueController {
       } else {
         q.setRunning(false);
         success = true;
+        queueManager.stopCurrent();
       }
       queueRepository.save(q);
+
     } else {
       message = "Queue does not exist";
     }
@@ -135,7 +144,6 @@ public class QueueController {
     }
   }
 
-
   /**
    * Adds a request to the queue
    * @param request Request to be added
@@ -155,6 +163,7 @@ public class QueueController {
         Queue q = queue.get();
         q.getRequestsInQueue().add(request);
         queueRepository.save(q);
+        queueManager.addNextRequest(queueManager.getNextRequest());
         success = true;
       } else {
         message = "Queue does not exist";
@@ -205,34 +214,14 @@ public class QueueController {
    */
   @GetMapping({"/skip", "/completeRequest"})
   @Operation(summary = "Skip current request in the manufacturing process")
-  ObjectNode skipCurrentRequest() {
-    ObjectNode node = mapper.createObjectNode();
-    boolean success = false;
-    String message = "";
-    Optional<Queue> queue = queueRepository.findByName(QUEUE_NAME);
-    if (queue.isPresent()) {
-      Queue q = queue.get();
-      List<Request> requestsInQueue = q.getRequestsInQueue();
-      if (requestsInQueue.isEmpty()) {
-        message = "No items in queue.";
-      } else {
-        Request skippedRequest = requestsInQueue.remove(0);
-        skippedRequest.setCompleted(true);
-        requestRepository.save(skippedRequest);
-        queueRepository.save(q);
-        success = true;
-      }
-    } else {
-      message = "Queue does not exist";
-    }
+  void skipTime(@RequestParam long minutes) {
+    queueManager.skipTime(minutes);
+  }
 
-    /*
-     * Complete a product, deliver to inventory
-     */
 
-    node.put("success", success);
-    node.put("message", message);
-    return node;
+  @GetMapping("/getRemainingTime")
+  ObjectNode getRemainingTime() {
+    return queueManager.getRemainingTimeMinutes();
   }
 
 }

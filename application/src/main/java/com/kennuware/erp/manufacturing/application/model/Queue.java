@@ -12,4 +12,6 @@ public class Queue {
 
     private boolean running;    // Signifies if queue is running
 
+    private String timeLeft;
+
 }

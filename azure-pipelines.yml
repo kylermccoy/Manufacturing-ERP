@@ -14,9 +14,9 @@ jobs:
   - job: Build
     displayName: Build Maven Project
     steps:
-    - task: Maven@3
+    - task: Maven@2
       inputs:
-        mavenPomFile: 'application/pom.xml'
+        mavenPomFile: 'pom.xml'
         mavenOptions: '-Xmx3072m'
         javaHomeOption: 'JDKVersion'
         jdkVersionOption: '1.11'
@@ -24,19 +24,6 @@ jobs:
         publishJUnitResults: true
         testResultsFiles: '**/surefire-reports/TEST-*.xml'
         goals: 'verify'
-        options: '-DskipTests'
-    - task: Maven@1
-      inputs:
-        mavenPomFile: 'service/pom.xml'
-        publishJUnitResults: true
-        testResultsFiles: '**/surefire-reports/TEST-*.xml'
-        javaHomeOption: 'JDKVersion'
-        mavenOptions: '-Xmx3072m'
-        jdkVersionOption: '1.11'
-        jdkArchitectureOption: 'x64'
-        mavenVersionOption: 'Default'
-        goals: 'verify'
-        options: '-DskipTests'
     - task: CopyFiles@2
       displayName: 'Copy Files to artifact staging directory'
       inputs:
@@ -57,4 +44,13 @@ jobs:
       runOnce:
         deploy:
           steps:
-          - script: echo my first deployment
+            - task: Bash@3
+              inputs:
+                targetType: inline
+                script: |
+                  killall java
+                  find . -name $(Pipeline.Workspace)/*.jar -exec cp {} ~/manufacturing-erp \;
+                  rm ~/manufacturing-erp/*.java
+                  mv ~/manufacturing-erp/application-0.0.1-SNAPSHOT.jar application.jar
+                  mv ~/manufacturing-erp/service-0.0.1-SNAPSHOT.jar service.jar
+                  ~/manufacturing-erp/start

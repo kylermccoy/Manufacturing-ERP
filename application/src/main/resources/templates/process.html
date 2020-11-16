@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <script type="text/javascript" th:src="@{/js/actions.js}"></script>
+    <script type="text/javascript" th:src="@{/js/process.js}"></script>
 </head>
 <body>
 
@@ -21,21 +21,39 @@
 
     <!-- Status and current request in queue -->
     <h1 style="text-align: center">Status: <span th:text="${queueStatus}"></span></h1>
-    <h1 style="text-align: center">Current Request#: <span th:unless="${#lists.isEmpty(requests)}"><span th:text="${requests[0].getId()}"></span></span></h1><br>
+    <h1 style="text-align: center">
+        Current Request#: <span id="requestID"></span><br>
+        Remaining time: <span id="timeRemaining"></span>
+    </h1><br>
 
     <!-- List of requests in queue -->
     <div class="container" style="width: 30%; text-align: center">
         <h2 style="text-align: center">Requests to be Completed:</h2>
         <ol id="product-list" style="text-align: center; display: inline; font-size: 20px; margin: 10px; padding: 10px">
-            <li th:if="request" th:each="request: ${requests}"><span th:text="${request.getType()}" style="display: inline"></span>#<span th:text="${request.getId()}" style="display: inline; padding-right: 3em"></span><span th:text="${request.getProduct().getName()}" style="display: inline; padding-right: 3em"></span><span th:text="Quantity" style="display: inline"></span> = <span th:text="${request.getQuantity()}" style="display: inline"></span></li>
+            <li th:if="request" th:each="request: ${requests}">
+                <span th:text="${request.getType()}" style="display: inline"></span>
+                #
+                <span th:text="${request.getId()}" style="display: inline; padding-right: 25px"></span>
+                <span th:text="${request.getProduct().getName()}" style="display: inline; padding-right: 25px"></span>
+                <span th:text="Quantity" style="display: inline"></span>
+                =
+                <span th:text="${request.getQuantity()}" style="display: inline"></span>
+            </li>
         </ol><br><br>
     </div>
 
     <!-- Queue controls -->
     <div id="controls" style="text-align: center; color: white">
-        <button type="button" id="start" style="background-color: green; color: white">Start Process</button>
-        <button type="button" id="stop" style="background-color: darkred; color: white">Stop Process</button>
-        <button type="button" id="skip" style="background-color: grey; color: white">Skip Process</button>-->
+        <button type="button" class="queue-action" id="start" style="background-color: green; color: white">Start Process</button>
+        <button type="button" class="queue-action" id="stop" style="background-color: darkred; color: white">Stop Process</button>
+        <br>
+        <div>
+            <form id="skipForm" action="javascript:void(0);">
+                <label for="minutes">Minutes to skip</label><br>
+                <input type="text" id="minutes" name="minutes" value="0"><br>
+                <input type="submit" style="background-color: grey; color: white" value="skip">
+            </form>
+        </div>
     </div>
 
 </body>
