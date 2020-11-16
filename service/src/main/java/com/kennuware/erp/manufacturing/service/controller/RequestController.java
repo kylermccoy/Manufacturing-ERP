@@ -31,6 +31,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.constraints.Null;
+
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @Slf4j
@@ -109,6 +111,9 @@ public class RequestController {
                 null, JsonNode.class);
       }
       catch (NullPointerException ignored) {
+
+      }
+      catch (HttpClientErrorException e){
 
       }
     }

@@ -391,7 +391,7 @@ public class LoadDatabase {
       List<Product> productList = Stream
           .of(smartWatch, smartHeadband,
               lightUpBoots, autoHeatingJacket, tieThemselvesSneakers, smartGlasses, smartRing,
-              smartHeelys, watchScreen, jacket)
+              smartHeelys, watchScreen, jacket, smartCape)
           .filter(p -> !productRepository.existsByName(p.getName()))
           .collect(Collectors.toList());
 
