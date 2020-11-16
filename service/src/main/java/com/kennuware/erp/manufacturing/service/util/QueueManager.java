@@ -125,6 +125,7 @@ public class QueueManager {
     Request req = current.get().getRequest();
     req.setCompleted(true);
     requestRepository.save(req);
+    currentItemRepository.deleteById(currentID);
     currentID = -1L;
     task.cancel(true);
     addNextRequest(getNextRequest());
