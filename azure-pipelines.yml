@@ -33,25 +33,25 @@ jobs:
     - upload: $(Build.ArtifactStagingDirectory)
       artifact: drop
 
-  - deployment: VMDeploy
-    displayName: web
-    pool:
-      vmImage: 'Ubuntu-18.04'
-    environment:
-      name: VM
-      resourceType: VirtualMachine
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-            - task: Bash@3
-              inputs:
-                targetType: inline
-                script: |
-                  killall java
-                  ls -alR $(Pipeline.Workspace)
-                  find $(Pipeline.Workspace) -name \*.jar -exec cp {} ~/manufacturing-erp \;
-                  rm ~/manufacturing-erp/*.java
-                  mv ~/manufacturing-erp/application-0.0.1-SNAPSHOT.jar application.jar
-                  mv ~/manufacturing-erp/service-0.0.1-SNAPSHOT.jar service.jar
-                  ~/manufacturing-erp/start
+#  - deployment: VMDeploy
+#    displayName: web
+#    pool:
+#      vmImage: 'Ubuntu-18.04'
+#    environment:
+#      name: VM
+#      resourceType: VirtualMachine
+#    strategy:
+#      runOnce:
+#        deploy:
+#          steps:
+#            - task: Bash@3
+#              inputs:
+#                targetType: inline
+#                script: |
+#                  killall java
+#                  ls -alR $(Pipeline.Workspace)
+#                  find $(Pipeline.Workspace) -name \*.jar -exec cp {} ~/manufacturing-erp \;
+#                  rm ~/manufacturing-erp/*.java
+#                  mv ~/manufacturing-erp/application-0.0.1-SNAPSHOT.jar application.jar
+#                  mv ~/manufacturing-erp/service-0.0.1-SNAPSHOT.jar service.jar
+#                  ~/manufacturing-erp/start
