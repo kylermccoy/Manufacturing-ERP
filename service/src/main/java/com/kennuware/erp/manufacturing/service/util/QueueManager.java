@@ -174,8 +174,8 @@ public class QueueManager {
       } else { // only have to do one
         current.setTimeRemaining(itemRemainingTime - skipTime);
         skipTime = 0;
+        currentItemRepository.save(current);
       }
-      currentItemRepository.save(current);
     }
     startTimerForTask();
     return res;
