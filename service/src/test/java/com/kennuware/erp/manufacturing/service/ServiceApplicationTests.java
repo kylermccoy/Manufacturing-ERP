@@ -62,6 +62,7 @@ class ServiceApplicationTests {
 	@BeforeEach
 	void init() {
 		// Item initialization
+		item.setId(0L);
 		item.setName("Paper");
 
 		// RecipeComponent initialization
@@ -105,7 +106,7 @@ class ServiceApplicationTests {
 	 */
 	@Test
 	void addItemTest() {
-		itemRepo.save(item);
+		itemRepo.saveAndFlush(item);
 		assertTrue(itemRepo.existsByName(item.getName()));
 	}
 
@@ -115,7 +116,7 @@ class ServiceApplicationTests {
 	 */
 	@Test
 	void getItemTest() {
-		itemRepo.save(item);
+		itemRepo.saveAndFlush(item);
 		assertEquals(itemRepo.getOne(item.getId()), item);
 	}
 
@@ -125,7 +126,7 @@ class ServiceApplicationTests {
 	 */
 	@Test
 	void getItemNameTest() {
-		itemRepo.save(item);
+		itemRepo.saveAndFlush(item);
 		assertTrue(itemRepo.existsByName(item.getName()));
 		Assertions.assertEquals(itemRepo.getOne(item.getId()).getName(), "Paper");
 	}
@@ -140,8 +141,8 @@ class ServiceApplicationTests {
 	 */
 	@Test
 	void addRecipeComponentTest() {
-		itemRepo.save(item);
-		recipeComponentRepository.save(recipeComponent);
+		itemRepo.saveAndFlush(item);
+		recipeComponentRepository.saveAndFlush(recipeComponent);
 		assertTrue(recipeComponentRepository.existsById(recipeComponent.getId()));
 	}
 
@@ -151,8 +152,8 @@ class ServiceApplicationTests {
 	 */
 	@Test
 	void getRecipeComponentTest() {
-		itemRepo.save(item);
-		recipeComponentRepository.save(recipeComponent);
+		itemRepo.saveAndFlush(item);
+		recipeComponentRepository.saveAndFlush(recipeComponent);
 		assertEquals(recipeComponentRepository.getOne(recipeComponent.getId()), recipeComponent);
 	}
 
@@ -162,8 +163,8 @@ class ServiceApplicationTests {
 	 */
 	@Test
 	void getRecipeComponentQuantityTest() {
-		itemRepo.save(item);
-		recipeComponentRepository.save(recipeComponent);
+		itemRepo.saveAndFlush(item);
+		recipeComponentRepository.saveAndFlush(recipeComponent);
 		assertEquals(recipeComponentRepository.getOne(recipeComponent.getId()).getQuantity(), recipeComponent.getQuantity());
 	}
 
@@ -173,8 +174,8 @@ class ServiceApplicationTests {
 	 */
 	@Test
 	void getRecipeComponentItemTest() {
-		itemRepo.save(item);
-		recipeComponentRepository.save(recipeComponent);
+		itemRepo.saveAndFlush(item);
+		recipeComponentRepository.saveAndFlush(recipeComponent);
 		assertEquals(recipeComponentRepository.getOne(recipeComponent.getId()).getItem(), recipeComponent.getItem());
 	}
 
@@ -187,9 +188,9 @@ class ServiceApplicationTests {
 	 */
 	@Test
 	void addRecipeTest() {
-		itemRepo.save(item);
-		recipeComponentRepository.save(recipeComponent);
-		recipeRepository.save(recipe);
+		itemRepo.saveAndFlush(item);
+		recipeComponentRepository.saveAndFlush(recipeComponent);
+		recipeRepository.saveAndFlush(recipe);
 		assertTrue(recipeRepository.existsByName(recipe.getName()));
 	}
 
@@ -199,10 +200,10 @@ class ServiceApplicationTests {
 	 */
 	@Test
 	void getRecipeTest() {
-		itemRepo.save(item);
-		recipeComponentRepository.save(recipeComponent);
-		recipeRepository.save(recipe);
-		assertEquals(recipeRepository.getOne(recipe.getId()), recipe);
+		itemRepo.saveAndFlush(item);
+		recipeComponentRepository.saveAndFlush(recipeComponent);
+		recipeRepository.saveAndFlush(recipe);
+		assertEquals(recipeRepository.getOne(recipe.getId()).toString(), recipe.toString());
 	}
 
 
@@ -211,9 +212,9 @@ class ServiceApplicationTests {
 	 */
 	@Test
 	void getRecipeNameTest() {
-		itemRepo.save(item);
-		recipeComponentRepository.save(recipeComponent);
-		recipeRepository.save(recipe);
+		itemRepo.saveAndFlush(item);
+		recipeComponentRepository.saveAndFlush(recipeComponent);
+		recipeRepository.saveAndFlush(recipe);
 		assertEquals(recipeRepository.getOne(recipe.getId()).getName(), recipe.getName());
 	}
 
@@ -223,9 +224,9 @@ class ServiceApplicationTests {
 	 */
 	@Test
 	void getRecipeBuildTimeTest() {
-		itemRepo.save(item);
-		recipeComponentRepository.save(recipeComponent);
-		recipeRepository.save(recipe);
+		itemRepo.saveAndFlush(item);
+		recipeComponentRepository.saveAndFlush(recipeComponent);
+		recipeRepository.saveAndFlush(recipe);
 		assertEquals(recipeRepository.getOne(recipe.getId()).getBuildTime(), recipe.getBuildTime());
 	}
 
@@ -235,10 +236,10 @@ class ServiceApplicationTests {
 	 */
 	@Test
 	void getRecipeBuildInstructionsTest() {
-		itemRepo.save(item);
-		recipeComponentRepository.save(recipeComponent);
-		recipeRepository.save(recipe);
-		assertEquals(recipeRepository.getOne(recipe.getId()).getBuildInstructions(), recipe.getBuildInstructions());
+		itemRepo.saveAndFlush(item);
+		recipeComponentRepository.saveAndFlush(recipeComponent);
+		recipeRepository.saveAndFlush(recipe);
+		assertEquals(recipeRepository.getOne(recipe.getId()).getBuildInstructions().toString(), recipe.getBuildInstructions().toString());
 	}
 
 
@@ -247,10 +248,10 @@ class ServiceApplicationTests {
 	 */
 	@Test
 	void getRecipeComponentsFromRecipeTest() {
-		itemRepo.save(item);
-		recipeComponentRepository.save(recipeComponent);
-		recipeRepository.save(recipe);
-		assertEquals(recipeRepository.getOne(recipe.getId()).getComponents(), recipe.getComponents());
+		itemRepo.saveAndFlush(item);
+		recipeComponentRepository.saveAndFlush(recipeComponent);
+		recipeRepository.saveAndFlush(recipe);
+		assertEquals(recipeRepository.getOne(recipe.getId()).getComponents().toString(), recipe.getComponents().toString());
 	}
 
 
@@ -263,10 +264,10 @@ class ServiceApplicationTests {
 	 */
 	@Test
 	void addProductTest() {
-		itemRepo.save(item);
-		recipeComponentRepository.save(recipeComponent);
-		recipeRepository.save(recipe);
-		productRepo.save(product);
+		itemRepo.saveAndFlush(item);
+		recipeComponentRepository.saveAndFlush(recipeComponent);
+		recipeRepository.saveAndFlush(recipe);
+		productRepo.saveAndFlush(product);
 		assertTrue(productRepo.existsByName(product.getName()));
 	}
 
@@ -276,11 +277,11 @@ class ServiceApplicationTests {
 	 */
 	@Test
 	void getProductTest() {
-		itemRepo.save(item);
-		recipeComponentRepository.save(recipeComponent);
-		recipeRepository.save(recipe);
-		productRepo.save(product);
-		assertEquals(productRepo.getOne(product.getId()), product);
+		itemRepo.saveAndFlush(item);
+		recipeComponentRepository.saveAndFlush(recipeComponent);
+		recipeRepository.saveAndFlush(recipe);
+		productRepo.saveAndFlush(product);
+		assertEquals(productRepo.getOne(product.getId()).toString(), product.toString());
 	}
 
 
@@ -289,10 +290,10 @@ class ServiceApplicationTests {
 	 */
 	@Test
 	void getProductNameTest() {
-		itemRepo.save(item);
-		recipeComponentRepository.save(recipeComponent);
-		recipeRepository.save(recipe);
-		productRepo.save(product);
+		itemRepo.saveAndFlush(item);
+		recipeComponentRepository.saveAndFlush(recipeComponent);
+		recipeRepository.saveAndFlush(recipe);
+		productRepo.saveAndFlush(product);
 		assertEquals(productRepo.getOne(product.getId()).getName(), "Book");
 	}
 
@@ -302,11 +303,11 @@ class ServiceApplicationTests {
 	 */
 	@Test
 	void getProductRecipeTest() {
-		itemRepo.save(item);
-		recipeComponentRepository.save(recipeComponent);
-		recipeRepository.save(recipe);
-		productRepo.save(product);
-		assertEquals(productRepo.getOne(product.getId()).getRecipe(), product.getRecipe());
+		itemRepo.saveAndFlush(item);
+		recipeComponentRepository.saveAndFlush(recipeComponent);
+		recipeRepository.saveAndFlush(recipe);
+		productRepo.saveAndFlush(product);
+		assertEquals(productRepo.getOne(product.getId()).getRecipe().toString(), product.getRecipe().toString());
 	}
 
 
@@ -319,11 +320,11 @@ class ServiceApplicationTests {
 	 */
 	@Test
 	void addRequestTest() {
-		itemRepo.save(item);
-		recipeComponentRepository.save(recipeComponent);
-		recipeRepository.save(recipe);
-		productRepo.save(product);
-		requestRepo.save(request);
+		itemRepo.saveAndFlush(item);
+		recipeComponentRepository.saveAndFlush(recipeComponent);
+		recipeRepository.saveAndFlush(recipe);
+		productRepo.saveAndFlush(product);
+		requestRepo.saveAndFlush(request);
 		assertTrue(requestRepo.existsById(request.getId()));
 	}
 
@@ -333,11 +334,11 @@ class ServiceApplicationTests {
 	 */
 	@Test
 	void getRequestTest() {
-		itemRepo.save(item);
-		recipeComponentRepository.save(recipeComponent);
-		recipeRepository.save(recipe);
-		productRepo.save(product);
-		requestRepo.save(request);
+		itemRepo.saveAndFlush(item);
+		recipeComponentRepository.saveAndFlush(recipeComponent);
+		recipeRepository.saveAndFlush(recipe);
+		productRepo.saveAndFlush(product);
+		requestRepo.saveAndFlush(request);
 		assertEquals(requestRepo.getOne(request.getId()), request);
 	}
 
@@ -347,11 +348,11 @@ class ServiceApplicationTests {
 	 */
 	@Test
 	void getRequestType() {
-		itemRepo.save(item);
-		recipeComponentRepository.save(recipeComponent);
-		recipeRepository.save(recipe);
-		productRepo.save(product);
-		requestRepo.save(request);
+		itemRepo.saveAndFlush(item);
+		recipeComponentRepository.saveAndFlush(recipeComponent);
+		recipeRepository.saveAndFlush(recipe);
+		productRepo.saveAndFlush(product);
+		requestRepo.saveAndFlush(request);
 		assertEquals(requestRepo.getOne(request.getId()).getType(), request.getType());
 	}
 
@@ -361,11 +362,11 @@ class ServiceApplicationTests {
 	 */
 	@Test
 	void getRequestProduct() {
-		itemRepo.save(item);
-		recipeComponentRepository.save(recipeComponent);
-		recipeRepository.save(recipe);
-		productRepo.save(product);
-		requestRepo.save(request);
+		itemRepo.saveAndFlush(item);
+		recipeComponentRepository.saveAndFlush(recipeComponent);
+		recipeRepository.saveAndFlush(recipe);
+		productRepo.saveAndFlush(product);
+		requestRepo.saveAndFlush(request);
 		assertEquals(requestRepo.getOne(request.getId()).getProduct(), request.getProduct());
 	}
 
@@ -375,11 +376,11 @@ class ServiceApplicationTests {
 	 */
 	@Test
 	void getRequestQuantity() {
-		itemRepo.save(item);
-		recipeComponentRepository.save(recipeComponent);
-		recipeRepository.save(recipe);
-		productRepo.save(product);
-		requestRepo.save(request);
+		itemRepo.saveAndFlush(item);
+		recipeComponentRepository.saveAndFlush(recipeComponent);
+		recipeRepository.saveAndFlush(recipe);
+		productRepo.saveAndFlush(product);
+		requestRepo.saveAndFlush(request);
 		assertEquals(requestRepo.getOne(request.getId()).getQuantity(), request.getQuantity());
 	}
 
@@ -393,7 +394,7 @@ class ServiceApplicationTests {
 	 */
 	@Test
 	void addQueueTest() {
-		queueRepo.save(queue);
+		queueRepo.saveAndFlush(queue);
 		assertTrue(queueRepo.existsByName(queue.getName()));
 	}
 
@@ -403,7 +404,7 @@ class ServiceApplicationTests {
 	 */
 	@Test
 	void getQueueTest() {
-		queueRepo.save(queue);
+		queueRepo.saveAndFlush(queue);
 		assertEquals(queueRepo.getOne(queue.getName()), queue);
 	}
 
@@ -413,7 +414,7 @@ class ServiceApplicationTests {
 	 */
 	@Test
 	void getQueueNameTest() {
-		queueRepo.save(queue);
+		queueRepo.saveAndFlush(queue);
 		assertEquals(queueRepo.getOne(queue.getName()).getName(), queue.getName());
 	}
 
@@ -423,12 +424,12 @@ class ServiceApplicationTests {
 	 */
 	@Test
 	void addRequestToQueueTest() {
-		itemRepo.save(item);
-		recipeComponentRepository.save(recipeComponent);
-		recipeRepository.save(recipe);
-		productRepo.save(product);
-		requestRepo.save(request);
-		queueRepo.save(queue);
+		itemRepo.saveAndFlush(item);
+		recipeComponentRepository.saveAndFlush(recipeComponent);
+		recipeRepository.saveAndFlush(recipe);
+		productRepo.saveAndFlush(product);
+		requestRepo.saveAndFlush(request);
+		queueRepo.saveAndFlush(queue);
 		queueRepo.findByName(queue.getName()).get().setRequestsInQueue(Stream.of(requestRepo.getOne(request.getId())).collect(Collectors.toList()));
 		assertEquals(queueRepo.findByName(queue.getName()).get().getRequestsInQueue().get(0).getId(), request.getId());
 	}
@@ -439,12 +440,12 @@ class ServiceApplicationTests {
 	 */
 	@Test
 	void removeRequestFromQueueTest() {
-		itemRepo.save(item);
-		recipeComponentRepository.save(recipeComponent);
-		recipeRepository.save(recipe);
-		productRepo.save(product);
-		requestRepo.save(request);
-		queueRepo.save(queue);
+		itemRepo.saveAndFlush(item);
+		recipeComponentRepository.saveAndFlush(recipeComponent);
+		recipeRepository.saveAndFlush(recipe);
+		productRepo.saveAndFlush(product);
+		requestRepo.saveAndFlush(request);
+		queueRepo.saveAndFlush(queue);
 		queueRepo.findByName(queue.getName()).get().setRequestsInQueue(Stream.of(requestRepo.getOne(request.getId())).collect(Collectors.toList()));
 		queueRepo.findByName(queue.getName()).get().getRequestsInQueue().remove(request);
 		assertFalse(queueRepo.findByName(queue.getName()).get().getRequestsInQueue().contains(request));
@@ -460,7 +461,7 @@ class ServiceApplicationTests {
 	 */
 	@Test
 	void addEmployeeTest() {
-		employeeRepo.save(employee);
+		employeeRepo.saveAndFlush(employee);
 		assertTrue(employeeRepo.existsById(employee.getId()));
 	}
 
@@ -470,7 +471,7 @@ class ServiceApplicationTests {
 	 */
 	@Test
 	void getHoursWorkedTest() {
-		employeeRepo.save(employee);
+		employeeRepo.saveAndFlush(employee);
 		assertEquals(employeeRepo.getOne(employee.getId()).getHoursWorked(), employee.getHoursWorked());
 	}
 
@@ -480,7 +481,7 @@ class ServiceApplicationTests {
 	 */
 	@Test
 	void getEmployeeUsernameTest() {
-		employeeRepo.save(employee);
+		employeeRepo.saveAndFlush(employee);
 		assertEquals(employeeRepo.getOne(employee.getId()).getUsername(), employee.getUsername());
 	}
 
@@ -490,7 +491,7 @@ class ServiceApplicationTests {
 	 */
 	@Test
 	void getEmployeePasswordTest() {
-		employeeRepo.save(employee);
+		employeeRepo.saveAndFlush(employee);
 		assertEquals(employeeRepo.getOne(employee.getId()).getPassword(), employee.getPassword());
 	}
 
