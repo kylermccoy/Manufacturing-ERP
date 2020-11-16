@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.constraints.Null;
+import org.springframework.web.client.RestTemplate;
 
 @Slf4j
 @RestController
@@ -87,13 +88,14 @@ public class RequestController {
    */
   @PostMapping
   @Operation(summary = "Adds a request to the repository")
-  Request addRequest(@Parameter(description = "Request to be added") @RequestBody Request request,
-      HttpSession session) {
+  Request addRequest(@Parameter(description = "Request to be added") @RequestBody Request request) {
     Request newRequest = requestRepository.save(request);
     Queue q = queueRepository.findByName(QueueController.QUEUE_NAME).orElseThrow(() -> new GenericJSONException("Queue does not exist"));
     q.getRequestsInQueue().add(newRequest);
     queueRepository.save(q);
     queueManager.addNextRequest(queueManager.getNextRequest());
+
+    RestTemplate rt = new RestTemplate();
 
     if (request.getType() == RequestType.RECALL) {
       try {
@@ -101,12 +103,12 @@ public class RequestController {
         int[] quantities_recall = new int[1];
         skus_recall[0] = request.getProduct().getId().toString();
         quantities_recall[0] = (int)request.getQuantity();
-        ResponseEntity<JsonNode> response = RequestSender.postForObject("http://demo-1602622154660.azurewebsites.net/api/transfer/products/out?sku="
+        JsonNode response = rt.postForObject("http://demo-1602622154660.azurewebsites.net/api/transfer/products/out?sku="
                         + Arrays.toString(skus_recall) + "&quantity="
                         + Arrays.toString(quantities_recall) + "&location=MANUFACTURING",
-                null, JsonNode.class, session);
+                null, JsonNode.class);
       }
-      catch (NullPointerException e) {
+      catch (NullPointerException ignored) {
 
       }
     }
@@ -119,12 +121,12 @@ public class RequestController {
           skus.add(Long.toString(component.getItem().getId()));
           quantities.add((int)component.getQuantity());
         }
-        ResponseEntity<JsonNode> response = RequestSender.postForObject("http://demo-1602622154660.azurewebsites.net/api/transfer/parts/out?sku="
+        JsonNode response = rt.postForObject("http://demo-1602622154660.azurewebsites.net/api/transfer/parts/out?sku="
                         + Arrays.toString(skus.toArray()) + "&quantity="
                         + Arrays.toString(quantities.toArray()) + "&location=MANUFACTURING",
-                null, JsonNode.class, session);
+                null, JsonNode.class);
       }
-      catch (NullPointerException e) {
+      catch (NullPointerException ignored) {
 
       }
     }

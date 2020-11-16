@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
+import org.springframework.web.client.RestTemplate;
 
 @RestController
 @RequestMapping(path = "/queue")
@@ -224,38 +225,42 @@ public class QueueController {
   @GetMapping({"/skip", "/completeRequest"})
   @Operation(summary = "Skip current request in the manufacturing process")
   void skipTime(@RequestParam long minutes) {
-    queueManager.skipTime(minutes);
-    if (skippedRequest.getType() == RequestType.ORDER) {
-      try {
-        JSONObject json_order = new JSONObject();
-        json_order.put("sku", skippedRequest.getProduct().getId());
-        json_order.put("name", skippedRequest.getProduct().getName());
-        json_order.put("refurbished", false);
-        json_order.put("warehouseId", "33633938-3334-6661-2d31-3734652d3131");
-        ResponseEntity<JsonNode> response = RequestSender.postForObject("http://demo-1602622154660.azurewebsites.net/api/transfer/products/in?location=MANUFACTURING",
-            json_order, JsonNode.class, session);
-      }
-      catch (NullPointerException | JSONException e) {
+    List<Request> skipped = queueManager.skipTime(minutes);
+    RestTemplate restTemplate = new RestTemplate();
 
-      }
-    }
-    else if (skippedRequest.getType() == RequestType.RECALL) {
-      try {
-        List<RecipeComponent> recipeComponents = skippedRequest.getProduct().getRecipe().getComponents();
-        for (RecipeComponent component : recipeComponents) {
-          JSONObject json = new JSONObject();
-          JSONObject stock = new JSONObject();
-          json.put("upc", component.getItem().getId());
-          stock.put("33633938-3334-6661-2d31-3734652d3131", component.getQuantity());
-          json.put("stock", stock);
-          ResponseEntity<JsonNode> response = RequestSender.postForObject(
-              "http://demo-1602622154660.azurewebsites.net/api/transfer/parts/in?location=MANUFACTURING",
-              json, JsonNode.class, session);
+    for (Request skippedRequest: skipped) {
+      if (skippedRequest.getType() == RequestType.ORDER) {
+        try {
+          JSONObject json_order = new JSONObject();
+          json_order.put("sku", skippedRequest.getProduct().getId());
+          json_order.put("name", skippedRequest.getProduct().getName());
+          json_order.put("refurbished", false);
+          json_order.put("warehouseId", "33633938-3334-6661-2d31-3734652d3131");
+          JsonNode response = restTemplate.postForObject("http://demo-1602622154660.azurewebsites.net/api/transfer/products/in?location=MANUFACTURING",
+              json_order, JsonNode.class);
+        }
+        catch (NullPointerException | JSONException ignored) {
+
         }
       }
-      catch (NullPointerException | JSONException e) {
+      else if (skippedRequest.getType() == RequestType.RECALL) {
+        try {
+          List<RecipeComponent> recipeComponents = skippedRequest.getProduct().getRecipe().getComponents();
+          for (RecipeComponent component : recipeComponents) {
+            JSONObject json = new JSONObject();
+            JSONObject stock = new JSONObject();
+            json.put("upc", component.getItem().getId());
+            stock.put("33633938-3334-6661-2d31-3734652d3131", component.getQuantity());
+            json.put("stock", stock);
+            JsonNode response = restTemplate.postForObject(
+                "http://demo-1602622154660.azurewebsites.net/api/transfer/parts/in?location=MANUFACTURING",
+                json, JsonNode.class);
+          }
+        }
+        catch (NullPointerException | JSONException ignored) {
 
-      }
+        }
+    }
     }
   }
 
