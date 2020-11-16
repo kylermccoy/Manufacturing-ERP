@@ -9,6 +9,8 @@ import com.kennuware.erp.manufacturing.service.model.Request;
 import com.kennuware.erp.manufacturing.service.model.repository.CurrentQueueItemRepository;
 import com.kennuware.erp.manufacturing.service.model.repository.QueueRepository;
 import com.kennuware.erp.manufacturing.service.model.repository.RequestRepository;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Executors;
@@ -148,19 +150,26 @@ public class QueueManager {
     return null;
   }
 
-  public void skipTime(long minutes) {
+  /**
+   * Skips a certain amount of minutes, possibly skipping multiple items
+   * @param minutes the amount of time to skip
+   * @return the requests that were completed due to the skip
+   */
+  public List<Request> skipTime(long minutes) {
+    List<Request> res = new ArrayList<>();
     stopCurrent();
     long skipTime = minutes;
     while (skipTime > 0) {
       Optional<CurrentQueueItem> currentQueueItemOptional = currentItemRepository.findById(currentID);
       if (currentQueueItemOptional.isEmpty()) {
-        return;
+        return res;
       }
       CurrentQueueItem current = currentQueueItemOptional.get();
       long itemRemainingTime = current.getTimeRemaining();
       if (skipTime >= itemRemainingTime) { // we have to do more than one item
         skipTime -= itemRemainingTime;
         current.setTimeRemaining(0);
+        res.add(current.getRequest());
         completeTask();
       } else { // only have to do one
         current.setTimeRemaining(itemRemainingTime - skipTime);
@@ -169,5 +178,6 @@ public class QueueManager {
       currentItemRepository.save(current);
     }
     startTimerForTask();
+    return res;
   }
 }

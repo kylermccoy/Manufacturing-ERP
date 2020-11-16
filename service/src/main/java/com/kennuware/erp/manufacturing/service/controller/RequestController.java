@@ -1,19 +1,26 @@
 package com.kennuware.erp.manufacturing.service.controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.kennuware.erp.manufacturing.service.model.Queue;
-import com.kennuware.erp.manufacturing.service.model.Request;
+import com.kennuware.erp.manufacturing.service.model.*;
 import com.kennuware.erp.manufacturing.service.model.repository.QueueRepository;
 import com.kennuware.erp.manufacturing.service.model.repository.RequestRepository;
 import com.kennuware.erp.manufacturing.service.util.QueueManager;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
+import com.kennuware.erp.manufacturing.service.util.RequestSender;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import javax.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +28,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpSession;
+import javax.validation.constraints.Null;
+import org.springframework.web.client.RestTemplate;
 
 @Slf4j
 @RestController
@@ -77,13 +88,49 @@ public class RequestController {
    */
   @PostMapping
   @Operation(summary = "Adds a request to the repository")
-  Request addRequest(@Parameter(description = "Request to be added") @RequestBody Request request,
-      HttpSession session) {
+  Request addRequest(@Parameter(description = "Request to be added") @RequestBody Request request) {
     Request newRequest = requestRepository.save(request);
     Queue q = queueRepository.findByName(QueueController.QUEUE_NAME).orElseThrow(() -> new GenericJSONException("Queue does not exist"));
     q.getRequestsInQueue().add(newRequest);
     queueRepository.save(q);
     queueManager.addNextRequest(queueManager.getNextRequest());
+
+    RestTemplate rt = new RestTemplate();
+
+    if (request.getType() == RequestType.RECALL) {
+      try {
+        String[] skus_recall = new String[1];
+        int[] quantities_recall = new int[1];
+        skus_recall[0] = request.getProduct().getId().toString();
+        quantities_recall[0] = (int)request.getQuantity();
+        JsonNode response = rt.postForObject("http://demo-1602622154660.azurewebsites.net/api/transfer/products/out?sku="
+                        + Arrays.toString(skus_recall) + "&quantity="
+                        + Arrays.toString(quantities_recall) + "&location=MANUFACTURING",
+                null, JsonNode.class);
+      }
+      catch (NullPointerException ignored) {
+
+      }
+    }
+    else if (request.getType() == RequestType.ORDER) {
+      try {
+        List<RecipeComponent> recipeComponents = request.getProduct().getRecipe().getComponents();
+        ArrayList<String> skus = new ArrayList<>();
+        ArrayList<Integer> quantities = new ArrayList<>();
+        for (RecipeComponent component : recipeComponents) {
+          skus.add(Long.toString(component.getItem().getId()));
+          quantities.add((int)component.getQuantity());
+        }
+        JsonNode response = rt.postForObject("http://demo-1602622154660.azurewebsites.net/api/transfer/parts/out?sku="
+                        + Arrays.toString(skus.toArray()) + "&quantity="
+                        + Arrays.toString(quantities.toArray()) + "&location=MANUFACTURING",
+                null, JsonNode.class);
+      }
+      catch (NullPointerException ignored) {
+
+      }
+    }
+
     return newRequest;
   }
 
@@ -125,5 +172,5 @@ public class RequestController {
     response.put("message", message);
     return response;
   }
-  
+
 }

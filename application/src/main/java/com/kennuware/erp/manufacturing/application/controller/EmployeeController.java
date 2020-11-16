@@ -53,9 +53,7 @@ public class EmployeeController {
         ObjectNode json = mapper.createObjectNode();
         json.put("user", user);
         json.put("pass", pass);
-        ResponseEntity<Boolean> response1 = RequestSender.postForObject("http://ec2-184-73-13-89.compute-1.amazonaws.com:8080/api/v1/hr/login?username="
-                + user + "&password="
-                + pass + "&departmentType=MANUFACTURING", null, boolean.class, session);
+        ResponseEntity<Boolean> response1 = RequestSender.postForObject("http://localhost:8080/manufacturing/api/employees/authenticate", json, boolean.class, session );
         HttpHeaders headers = response1.getHeaders();
         List<String> cookieList = headers.getOrDefault("Set-Cookie", Collections.emptyList());
         if (!cookieList.isEmpty()) {
@@ -128,12 +126,7 @@ public class EmployeeController {
             model.addAttribute("success", response.getBody());
             model.addAttribute("failure", false);
             return "timesheet";
-        }catch (NumberFormatException ex){
-            model.addAttribute("success", false);
-            model.addAttribute("failure", true);
-            return "timesheet";
-        }
-        catch (NullPointerException e){
+        }catch (NumberFormatException | NullPointerException ex){
             model.addAttribute("success", false);
             model.addAttribute("failure", true);
             return "timesheet";

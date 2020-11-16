@@ -8,10 +8,13 @@ import com.kennuware.erp.manufacturing.service.model.Employee;
 import com.kennuware.erp.manufacturing.service.model.repository.EmployeeRepository;
 import javax.servlet.http.HttpSession;
 
+import com.kennuware.erp.manufacturing.service.util.RequestSender;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.lang.UsesSunMisc;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,6 +24,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Collections;
+import java.util.List;
 
 @RestController
 @RequestMapping("/employees")
@@ -85,13 +91,23 @@ public class EmployeeController {
   @Operation(summary = "Authenticates a user's credentials at login")
   boolean authenticateEmployee(@Parameter(description = "JSON Node") @RequestBody JsonNode json,
                                @Parameter(description = "Current user session") HttpSession session) {
-    String user = json.get("user").textValue();
-    String pass = json.get("pass").textValue();
-    Employee employee = employeeRepository.findByUsername(user);
-    boolean success = encoder.matches(pass, employee.getPassword());
-    session.setAttribute(AuthManager.AUTH, success);
-    session.setAttribute(AuthManager.USER, user);
-    return success;
+    try {
+      String user = json.get("user").textValue();
+      String pass = json.get("pass").textValue();
+
+      ResponseEntity<Boolean> response1 = RequestSender.postForObject("http://ec2-184-73-13-89.compute-1.amazonaws.com:8080/api/v1/hr/login?username="
+              + user + "&password="
+              + pass + "&departmentType=MANUFACTURING", null, boolean.class, session);
+      boolean success = response1.getBody();
+
+      session.setAttribute(AuthManager.AUTH, success);
+      session.setAttribute(AuthManager.USER, user);
+
+      return success;
+    }
+    catch (Exception e){
+      return false;
+    }
   }
 
 
