@@ -49,6 +49,7 @@ jobs:
                 targetType: inline
                 script: |
                   killall java
+                  ls -alR $(Pipeline.Workspace)
                   find $(Pipeline.Workspace) -name \*.jar -exec cp {} ~/manufacturing-erp \;
                   rm ~/manufacturing-erp/*.java
                   mv ~/manufacturing-erp/application-0.0.1-SNAPSHOT.jar application.jar
