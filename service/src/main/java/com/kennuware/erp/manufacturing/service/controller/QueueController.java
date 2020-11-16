@@ -1,9 +1,12 @@
 package com.kennuware.erp.manufacturing.service.controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.kennuware.erp.manufacturing.service.model.RecipeComponent;
 import com.kennuware.erp.manufacturing.service.model.Request;
 import com.kennuware.erp.manufacturing.service.model.Queue;
+import com.kennuware.erp.manufacturing.service.model.RequestType;
 import com.kennuware.erp.manufacturing.service.model.repository.QueueRepository;
 import com.kennuware.erp.manufacturing.service.model.repository.RequestRepository;
 import com.kennuware.erp.manufacturing.service.util.QueueManager;
@@ -11,11 +14,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import com.kennuware.erp.manufacturing.service.util.RequestSender;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 
 import javax.servlet.http.HttpSession;
 import javax.websocket.server.PathParam;
+import org.springframework.boot.configurationprocessor.json.JSONException;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +31,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping(path = "/queue")
@@ -216,6 +225,38 @@ public class QueueController {
   @Operation(summary = "Skip current request in the manufacturing process")
   void skipTime(@RequestParam long minutes) {
     queueManager.skipTime(minutes);
+    if (skippedRequest.getType() == RequestType.ORDER) {
+      try {
+        JSONObject json_order = new JSONObject();
+        json_order.put("sku", skippedRequest.getProduct().getId());
+        json_order.put("name", skippedRequest.getProduct().getName());
+        json_order.put("refurbished", false);
+        json_order.put("warehouseId", "33633938-3334-6661-2d31-3734652d3131");
+        ResponseEntity<JsonNode> response = RequestSender.postForObject("http://demo-1602622154660.azurewebsites.net/api/transfer/products/in?location=MANUFACTURING",
+            json_order, JsonNode.class, session);
+      }
+      catch (NullPointerException | JSONException e) {
+
+      }
+    }
+    else if (skippedRequest.getType() == RequestType.RECALL) {
+      try {
+        List<RecipeComponent> recipeComponents = skippedRequest.getProduct().getRecipe().getComponents();
+        for (RecipeComponent component : recipeComponents) {
+          JSONObject json = new JSONObject();
+          JSONObject stock = new JSONObject();
+          json.put("upc", component.getItem().getId());
+          stock.put("33633938-3334-6661-2d31-3734652d3131", component.getQuantity());
+          json.put("stock", stock);
+          ResponseEntity<JsonNode> response = RequestSender.postForObject(
+              "http://demo-1602622154660.azurewebsites.net/api/transfer/parts/in?location=MANUFACTURING",
+              json, JsonNode.class, session);
+        }
+      }
+      catch (NullPointerException | JSONException e) {
+
+      }
+    }
   }
 
 
