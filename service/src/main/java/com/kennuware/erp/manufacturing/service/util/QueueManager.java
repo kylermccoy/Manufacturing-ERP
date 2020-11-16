@@ -4,9 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.kennuware.erp.manufacturing.service.controller.QueueController;
 import com.kennuware.erp.manufacturing.service.model.CurrentQueueItem;
+import com.kennuware.erp.manufacturing.service.model.Product;
 import com.kennuware.erp.manufacturing.service.model.Queue;
 import com.kennuware.erp.manufacturing.service.model.Request;
 import com.kennuware.erp.manufacturing.service.model.repository.CurrentQueueItemRepository;
+import com.kennuware.erp.manufacturing.service.model.repository.ProductRepository;
 import com.kennuware.erp.manufacturing.service.model.repository.QueueRepository;
 import com.kennuware.erp.manufacturing.service.model.repository.RequestRepository;
 import java.util.ArrayList;
@@ -27,15 +29,17 @@ public class QueueManager {
   private ScheduledFuture<?> task;
   private final QueueRepository queueRepository;
   private final RequestRepository requestRepository;
+  private final ProductRepository productRepository;
   private final CurrentQueueItemRepository currentItemRepository;
   private final ObjectMapper mapper;
 
   QueueManager(QueueRepository queueRepository, CurrentQueueItemRepository currentQueueItemRepository,
-      RequestRepository requestRepository, ObjectMapper mapper) {
+      RequestRepository requestRepository, ProductRepository productRepository, ObjectMapper mapper) {
     this.executor = Executors.newScheduledThreadPool(1);
     this.queueRepository = queueRepository;
     this.currentItemRepository = currentQueueItemRepository;
     this.requestRepository = requestRepository;
+    this.productRepository = productRepository;
     this.mapper = mapper;
   }
 
@@ -51,7 +55,8 @@ public class QueueManager {
     }
     // do we have a current item?
     if (!currentItemRepository.existsById(currentID)) {
-      currentID = currentItemRepository.saveAndFlush(new CurrentQueueItem(request)).getId();
+      Product p = productRepository.getOne(request.getProduct().getId());
+      currentID = currentItemRepository.saveAndFlush(new CurrentQueueItem(request, p)).getId();
       startTimerForTask();
     }
   }

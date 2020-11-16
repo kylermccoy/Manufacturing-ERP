@@ -26,9 +26,9 @@ public class CurrentQueueItem {
   private Request request;
   private long timeRemaining;
 
-  public CurrentQueueItem(Request request) {
+  public CurrentQueueItem(Request request, Product p) {
     this.request = request;
-    this.timeRemaining = request.getQuantity() * request.getProduct().getRecipe().getBuildTime();
+    this.timeRemaining = request.getQuantity() * p.getRecipe().getBuildTime();
   }
 
 }

@@ -239,7 +239,7 @@ public class QueueController {
           JsonNode response = restTemplate.postForObject("http://demo-1602622154660.azurewebsites.net/api/transfer/products/in?location=MANUFACTURING",
               json_order, JsonNode.class);
         }
-        catch (NullPointerException | JSONException ignored) {
+        catch (Exception ignored) {
 
         }
       }
@@ -257,7 +257,7 @@ public class QueueController {
                 json, JsonNode.class);
           }
         }
-        catch (NullPointerException | JSONException ignored) {
+        catch (Exception ignored) {
 
         }
     }

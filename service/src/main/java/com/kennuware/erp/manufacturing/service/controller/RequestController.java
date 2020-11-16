@@ -94,7 +94,7 @@ public class RequestController {
     Request newRequest = requestRepository.save(request);
     Queue q = queueRepository.findByName(QueueController.QUEUE_NAME).orElseThrow(() -> new GenericJSONException("Queue does not exist"));
     q.getRequestsInQueue().add(newRequest);
-    queueRepository.save(q);
+    queueRepository.saveAndFlush(q);
     queueManager.addNextRequest(queueManager.getNextRequest());
 
     RestTemplate rt = new RestTemplate();
@@ -110,10 +110,7 @@ public class RequestController {
                         + quantities_recall[0] + "&location=MANUFACTURING",
                 null, JsonNode.class);
       }
-      catch (NullPointerException ignored) {
-
-      }
-      catch (HttpClientErrorException e){
+      catch (Exception ignored) {
 
       }
     }
@@ -131,7 +128,7 @@ public class RequestController {
                         + Arrays.toString(quantities.toArray()) + "&location=MANUFACTURING",
                 null, JsonNode.class);
       }
-      catch (NullPointerException ignored) {
+      catch (Exception ignored) {
 
       }
     }
