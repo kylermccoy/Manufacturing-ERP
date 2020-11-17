@@ -111,7 +111,7 @@ public class RequestController {
                 null, JsonNode.class);
       }
       catch (Exception ignored) {
-
+        ignored.printStackTrace();
       }
     }
     else if (request.getType() == RequestType.ORDER) {
@@ -129,7 +129,7 @@ public class RequestController {
                 null, JsonNode.class);
       }
       catch (Exception ignored) {
-
+        ignored.printStackTrace();
       }
     }
 

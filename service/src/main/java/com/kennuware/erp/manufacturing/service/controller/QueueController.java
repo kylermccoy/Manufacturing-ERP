@@ -240,7 +240,7 @@ public class QueueController {
               json_order, JsonNode.class);
         }
         catch (Exception ignored) {
-
+          ignored.printStackTrace();
         }
       }
       else if (skippedRequest.getType() == RequestType.RECALL) {
@@ -258,7 +258,7 @@ public class QueueController {
           }
         }
         catch (Exception ignored) {
-
+          ignored.printStackTrace();
         }
     }
     }
