@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.kennuware.erp.manufacturing.service.model.*;
 import com.kennuware.erp.manufacturing.service.model.repository.QueueRepository;
+import com.kennuware.erp.manufacturing.service.model.repository.RecipeRepository;
 import com.kennuware.erp.manufacturing.service.model.repository.RequestRepository;
 import com.kennuware.erp.manufacturing.service.util.QueueManager;
 
@@ -33,6 +34,7 @@ import javax.servlet.http.HttpSession;
 import javax.validation.constraints.Null;
 
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 @Slf4j
@@ -44,6 +46,7 @@ public class RequestController {
   private final QueueRepository queueRepository; // Queue repository
   private final ObjectMapper mapper; // Provides functionality for reading and writing JSON
   private final QueueManager queueManager;
+  private final RecipeRepository recipeRepository;
 
 
   /**
@@ -54,11 +57,12 @@ public class RequestController {
    * @param mapper Mapper
    */
   RequestController(RequestRepository requestRepository, QueueRepository queueRepository,
-      ObjectMapper mapper, QueueManager queueManager) {
+      ObjectMapper mapper, QueueManager queueManager, RecipeRepository recipeRepository) {
     this.requestRepository = requestRepository;
     this.queueRepository = queueRepository;
     this.mapper = mapper;
     this.queueManager = queueManager;
+    this.recipeRepository = recipeRepository;
   }
 
 
@@ -111,25 +115,28 @@ public class RequestController {
                 null, JsonNode.class);
       }
       catch (Exception ignored) {
-        ignored.printStackTrace();
+
       }
     }
     else if (request.getType() == RequestType.ORDER) {
       try {
-        List<RecipeComponent> recipeComponents = request.getProduct().getRecipe().getComponents();
+        Optional<Recipe> recipeOptional = recipeRepository.findById(request.getId());
+        if (recipeOptional.isEmpty()) {
+          return null;
+        }
+        List<RecipeComponent> recipeComponents = recipeOptional.get().getComponents();
         ArrayList<String> skus = new ArrayList<>();
         ArrayList<Integer> quantities = new ArrayList<>();
         for (RecipeComponent component : recipeComponents) {
           skus.add(Long.toString(component.getItem().getId()));
           quantities.add((int)component.getQuantity());
         }
-        JsonNode response = rt.postForObject("http://demo-1602622154660.azurewebsites.net/api/transfer/parts/out?sku="
+        ObjectNode response = rt.postForObject("http://demo-1602622154660.azurewebsites.net/api/transfer/parts/out?sku="
                         + Arrays.toString(skus.toArray()) + "&quantity="
                         + Arrays.toString(quantities.toArray()) + "&location=MANUFACTURING",
-                null, JsonNode.class);
-      }
-      catch (Exception ignored) {
-        ignored.printStackTrace();
+                null, ObjectNode.class);
+      } catch (RestClientException e) {
+        e.printStackTrace();
       }
     }
 
