@@ -247,14 +247,14 @@ public class QueueController {
         try {
           List<RecipeComponent> recipeComponents = skippedRequest.getProduct().getRecipe().getComponents();
           for (RecipeComponent component : recipeComponents) {
-            JSONObject json = new JSONObject();
-            JSONObject stock = new JSONObject();
+            ObjectNode json = mapper.createObjectNode();
+            ObjectNode stock = mapper.createObjectNode();
             json.put("upc", component.getItem().getId());
             stock.put("33633938-3334-6661-2d31-3734652d3131", component.getQuantity());
             json.put("stock", stock);
-            JsonNode response = restTemplate.postForObject(
+            ObjectNode response = restTemplate.postForObject(
                 "http://demo-1602622154660.azurewebsites.net/api/transfer/parts/in?location=MANUFACTURING",
-                json, JsonNode.class);
+                json, ObjectNode.class);
           }
         }
         catch (Exception ignored) {
