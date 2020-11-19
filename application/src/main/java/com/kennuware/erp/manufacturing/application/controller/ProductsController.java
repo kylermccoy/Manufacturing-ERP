@@ -5,15 +5,20 @@ import com.kennuware.erp.manufacturing.application.model.Item;
 import com.kennuware.erp.manufacturing.application.model.Product;
 import com.kennuware.erp.manufacturing.application.model.Recipe;
 import com.kennuware.erp.manufacturing.application.model.RecipeComponent;
+import com.kennuware.erp.manufacturing.application.model.Request;
 import com.kennuware.erp.manufacturing.application.util.RequestSender;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpSession;
@@ -263,6 +268,13 @@ public class ProductsController {
     @PostMapping(path = "products/request")
     String requestProducts(Long productID, int quantity) {
         return null;
+    }
+
+    @DeleteMapping("/products/{id}")
+    @ResponseStatus(value = HttpStatus.OK)
+    void deleteProduct(@PathVariable long id) {
+        RestTemplate rt = new RestTemplate();
+        rt.delete("http://localhost:8080/manufacturing/api/products/" + id);
     }
 
 }

@@ -24,7 +24,7 @@
     <h1 style="text-align: center">Orders</h1><br><br>
 
     <!-- Lists the orders in the queue -->
-    <ol id="request-list" style="text-align: center; display: inline; font-size: 20px; margin: 10px; padding: 10px">
+    <ol id="order-list" style="text-align: center; display: inline; font-size: 20px; margin: 10px; padding: 10px">
         <li th:each="order: ${orders}">ORDER#<span th:text="${order.getId()}" style="display: inline; padding-right: 3em"></span>
         <a style="padding-right: 3em" th:href="@{/orders/{id}(id=${order.getId()})}">View Order</a>
         <button th:id="${'order-' + order.getId()}" style="color: darkred">Delete Order</button></li>

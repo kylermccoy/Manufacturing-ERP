@@ -6,13 +6,17 @@ import com.kennuware.erp.manufacturing.application.model.Request;
 import com.kennuware.erp.manufacturing.application.model.RequestType;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.servlet.http.HttpSession;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.client.RestTemplate;
 
 @Controller
 public class OrdersController {
@@ -51,5 +55,12 @@ public class OrdersController {
         model.addAttribute("orderStatus", orderStatus);
         model.addAttribute("order", order);
         return "order";
+    }
+
+    @DeleteMapping("/orders/{id}")
+    @ResponseStatus(value = HttpStatus.OK)
+    void deleteProduct(@PathVariable long id) {
+        RestTemplate rt = new RestTemplate();
+        rt.delete("http://localhost:8080/manufacturing/api/requests/" + id);
     }
 }
