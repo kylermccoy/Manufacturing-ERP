@@ -114,8 +114,18 @@ public class RequestController {
                         + quantities_recall[0] + "&location=MANUFACTURING",
                 null, JsonNode.class);
       }
-      catch (Exception ignored) {
+      catch (HttpClientErrorException e){
+        try {
+          if (e.getMessage().contains("BAD_REQUEST")) {
+            System.out.println("Inventory doesn't have enough products to complete this request!");
+          }
+        }
+        catch (NullPointerException ex){
 
+        }
+      }
+      catch (Exception ignored) {
+        ignored.printStackTrace();
       }
     }
     else if (request.getType() == RequestType.ORDER) {
@@ -131,11 +141,24 @@ public class RequestController {
           skus.add(Long.toString(component.getItem().getId()));
           quantities.add((int)component.getQuantity());
         }
-        ObjectNode response = rt.postForObject("http://demo-1602622154660.azurewebsites.net/api/transfer/parts/out?location=MANUFACTURING&upc="
-                        + Arrays.toString(skus.toArray()) + "&quantity="
-                        + Arrays.toString(quantities.toArray()),
-                null, ObjectNode.class);
-      } catch (RestClientException e) {
+        for (int i = 0; i < recipeComponents.size(); i++) {
+          ObjectNode response = rt.postForObject("http://demo-1602622154660.azurewebsites.net/api/transfer/parts/out?location=MANUFACTURING&upc="
+                          + skus.get(i) + "&quantity="
+                          + quantities.get(i),
+                  null, ObjectNode.class);
+        }
+      }
+      catch (HttpClientErrorException e){
+        try {
+          if (e.getMessage().contains("BAD_REQUEST")) {
+            System.out.println("Inventory doesn't have enough parts to complete this request!");
+          }
+        }
+        catch (NullPointerException ex){
+
+        }
+      }
+      catch (RestClientException e) {
         e.printStackTrace();
       }
     }
