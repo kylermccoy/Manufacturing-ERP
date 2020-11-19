@@ -120,7 +120,7 @@ public class RequestController {
     }
     else if (request.getType() == RequestType.ORDER) {
       try {
-        Optional<Recipe> recipeOptional = recipeRepository.findById(request.getId());
+        Optional<Recipe> recipeOptional = recipeRepository.findById(request.getProduct().getId());
         if (recipeOptional.isEmpty()) {
           return null;
         }
@@ -131,9 +131,9 @@ public class RequestController {
           skus.add(Long.toString(component.getItem().getId()));
           quantities.add((int)component.getQuantity());
         }
-        ObjectNode response = rt.postForObject("http://demo-1602622154660.azurewebsites.net/api/transfer/parts/out?sku="
+        ObjectNode response = rt.postForObject("http://demo-1602622154660.azurewebsites.net/api/transfer/parts/out?location=MANUFACTURING&upc="
                         + Arrays.toString(skus.toArray()) + "&quantity="
-                        + Arrays.toString(quantities.toArray()) + "&location=MANUFACTURING",
+                        + Arrays.toString(quantities.toArray()),
                 null, ObjectNode.class);
       } catch (RestClientException e) {
         e.printStackTrace();
