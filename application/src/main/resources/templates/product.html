@@ -23,7 +23,7 @@
 <h1 style="text-align: center"><span th:text="${product.getName()}"></span></h1><br><br>
 
 <!-- List of components -->
-<div class="container" style="width: 30%; text-align: center; font-size: 22px">
+<div class="container" style="width: 70%; text-align: center; font-size: 22px">
     <h2 style="text-align: center">Recipe:</h2>
     <ul id="product-list" style="text-align: center; display: inline; font-size: 20px; margin: 10px; padding: 10px; list-style-type: none">
         <li th:each="component: ${product.getRecipe().getComponents()}">

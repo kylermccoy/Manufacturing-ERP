@@ -23,7 +23,7 @@
     <h1 style="text-align: center">RECALL#<span th:text="${recall.getId()}"></span></h1><br><br>
 
     <!-- Recall order status and product list -->
-    <div class="container" style="width: 30%; text-align: center">
+    <div class="container" style="width: 70%; text-align: center">
         <h2 style="text-align: center">Status: <stan th:text="${recallStatus}"></stan></h2>
         <h2 style="text-align: center">Product List:</h2>
         <ul th:each="product: ${recall.getProduct()}" style="text-align: center; display: inline; font-size: 20px; list-style-type: none">
